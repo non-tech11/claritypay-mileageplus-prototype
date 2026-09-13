@@ -1,0 +1,63 @@
+/**
+ * Regulated copy lives here and only here. Never free-type disclosures
+ * in components — import these constants.
+ */
+
+export const LENDER_DISCLOSURE =
+  "Loans provided by Demo Bank, Member FDIC, serviced by ClarityPay, Inc. " +
+  "Rates from 0–29.99% APR based on creditworthiness. Checking eligibility " +
+  "uses a soft credit inquiry and will not affect your credit score. " +
+  "Illustrative terms for prototype purposes only.";
+
+export const POWERED_BY = "Powered by ClarityPay";
+
+export const STATEMENT_FOOTER =
+  "Loans provided by Demo Bank, serviced by ClarityPay.";
+
+export const SOFT_PULL_NOTE = "Checking eligibility won't affect your credit score";
+
+export const DECLINE_HEADLINE = "We couldn't offer a plan today";
+
+export const DECLINE_BODY =
+  "This doesn't affect your credit score, and you can still complete this " +
+  "booking with another payment method.";
+
+export const ADVERSE_ACTION_LINK_TEXT =
+  "You'll receive a notice explaining this decision (adverse action notice)";
+
+export const LATE_FEE_DISCLOSURE =
+  "A late fee of up to $7 may apply after a 10-day grace period, as set out in your loan agreement.";
+
+export const REWARD_RETRY_NOTE =
+  "We'll post these within 72 hours — no action needed.";
+
+export const MILES_TIMING_BASE =
+  "Base miles are earned by flying and post after travel completes, per MileagePlus program rules.";
+
+export const MILES_TIMING_BONUS =
+  "Bonus miles post after your first on-time payment clears.";
+
+export const MILES_TIMING_REVERSAL =
+  "Both are reversed if the booking is cancelled.";
+
+/** Per-screen prototype notes — the "voiceover" for interviewers. */
+export const PROTOTYPE_NOTES: Record<string, string> = {
+  search:
+    "Discovery placement: one light monthly-price line per fare, and a single loyalty chip on the fare most likely to be financed. Deliberately no heavy loyalty sell here — discovery earns attention, checkout earns conversion.",
+  cart:
+    "The monthly figure matches the one on search (consistency builds trust). The plan sheet shows miles are identical across terms — we do not reward taking on longer debt. Traveller 2 sets up the multi-member edge case.",
+  checkout:
+    "Wallet placement: pay-over-time sits below card, above PayPal. United has no other pay-later provider in this mock, so no adjacency conflict. ClarityPay appears only as a micro-tag — the lender shows up where the law requires, nowhere else.",
+  prequal:
+    "Inline application, no redirect. Phone + last-4 SSN, soft pull only. The lender disclosure is a shared constant, not free-typed. The persona switcher (header) decides the outcome.",
+  offer:
+    "Plan selection with miles breakdown and explicit timing: base miles post after travel (United's rules), bonus after first on-time payment (ClarityPay-funded). Autopay defaults on — best repayment behaviour, best miles outcome.",
+  declined:
+    "Soft decline: no reason codes beyond the legal minimum, adverse-action notice by mail, and a one-tap fallback to card — nothing re-entered. The loyalty line adjusts to base miles only: bonus rewards financing, base rewards flying.",
+  confirmation:
+    "Miles shown with honest statuses (pending / posted / reversed) rather than a single inflated number. A traveller without a MileagePlus number gets a 30-day retro-credit prompt.",
+  account:
+    "Post-purchase servicing under United's brand. Loan health and miles status live together — the customer never has to learn that two companies are involved.",
+  loan:
+    "Every miles movement is a ledger line with a reason. The simulator panel below exercises the edge cases: cancellations, partial refunds, redeemed-then-cancelled netting, delinquency freeze/reverse, and loyalty-API failure.",
+};
