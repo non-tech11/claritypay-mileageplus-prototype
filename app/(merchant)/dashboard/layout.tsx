@@ -9,6 +9,16 @@ import {
   Gift,
   Table2,
 } from "lucide-react";
+import { PrototypeNotes } from "@/components/PrototypeNotes";
+import { ClarityPayMark } from "@/components/ClarityPayMark";
+
+const NOTE_KEY: Record<string, string> = {
+  "/dashboard": "dashboard",
+  "/dashboard/transactions": "dashboard-transactions",
+  "/dashboard/rewards": "dashboard-rewards",
+  "/dashboard/exceptions": "dashboard-exceptions",
+  "/dashboard/data": "dashboard-data",
+};
 
 const NAV = [
   { href: "/dashboard", label: "Overview", icon: Gauge },
@@ -32,8 +42,8 @@ export default function DashboardLayout({
     <div className="flex min-h-[calc(100vh-32px)] bg-slate-100">
       <aside className="hidden w-56 shrink-0 flex-col border-r border-slate-200 bg-white p-4 sm:flex">
         <p className="text-sm font-bold text-slate-800">United Loyalty Financing</p>
-        <p className="mb-6 text-[10px] text-slate-400">
-          Merchant portal · <span className="font-semibold">ClarityPay</span>
+        <p className="mb-6 flex items-center gap-1 text-[10px] text-slate-400">
+          Merchant portal · <ClarityPayMark />
         </p>
         <nav className="space-y-1" aria-label="Dashboard">
           {NAV.map(({ href, label, icon: Icon }) => (
@@ -66,7 +76,10 @@ export default function DashboardLayout({
             </Link>
           ))}
         </nav>
-        <main className="p-4 sm:p-6">{children}</main>
+        <main className="px-4 pb-0 pt-4 sm:px-6 sm:pt-6">
+          {children}
+          {NOTE_KEY[pathname] && <PrototypeNotes screen={NOTE_KEY[pathname]} />}
+        </main>
       </div>
     </div>
   );

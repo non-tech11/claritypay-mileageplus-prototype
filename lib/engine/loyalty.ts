@@ -4,10 +4,10 @@ import type {
   Traveller,
 } from "../types";
 
-let entryCounter = 0;
 export function nextEntryId(): string {
-  entryCounter += 1;
-  return `ME-${Date.now().toString(36)}-${entryCounter}`;
+  // Random suffix, not a module counter — module state resets on dev
+  // recompile, which produced colliding ids.
+  return `ME-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 export const DEFAULT_CONFIG: MerchantConfig = {

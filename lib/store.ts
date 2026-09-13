@@ -34,10 +34,14 @@ export function replaceLoan(updated: Loan): void {
   store.loans = store.loans.map((l) => (l.id === updated.id ? updated : l));
 }
 
-let seq = 1100;
+/** Derived from the store, not a module counter — module state resets on
+ * dev recompile and would hand out duplicate ids. */
 export function nextLoanId(): string {
-  seq += 1;
-  return `LN-${seq}`;
+  const max = getStore().loans.reduce((m, l) => {
+    const n = Number(l.id.replace("LN-", ""));
+    return Number.isFinite(n) ? Math.max(m, n) : m;
+  }, 1100);
+  return `LN-${max + 1}`;
 }
 
 export function nextOfferId(): string {

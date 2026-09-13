@@ -8,7 +8,7 @@ import { PROTOTYPE_NOTES } from "@/lib/copy";
  * Persistent collapsible drawer at the bottom of every customer screen —
  * the interviewer's voiceover: what product decision each screen shows.
  */
-export function PrototypeNotes({ screen }: { screen: keyof typeof PROTOTYPE_NOTES }) {
+export function PrototypeNotes({ screen }: { screen: string }) {
   const [open, setOpen] = useState(false);
   const note = PROTOTYPE_NOTES[screen];
   if (!note) return null;

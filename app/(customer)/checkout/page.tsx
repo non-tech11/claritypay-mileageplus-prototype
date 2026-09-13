@@ -6,7 +6,8 @@ import { CreditCard, Loader2, ShieldCheck, Wallet } from "lucide-react";
 import { loadDraft, saveDraft, type BookingDraft } from "@/lib/booking";
 import { postJson } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
-import { LENDER_DISCLOSURE, POWERED_BY, SOFT_PULL_NOTE } from "@/lib/copy";
+import { LENDER_DISCLOSURE, SOFT_PULL_NOTE } from "@/lib/copy";
+import { ClarityPayMark } from "@/components/ClarityPayMark";
 import { PrototypeNotes } from "@/components/PrototypeNotes";
 import { ErrorRetry } from "@/components/ErrorRetry";
 import { useScopeToast } from "@/components/Toast";
@@ -140,8 +141,8 @@ export default function CheckoutPage() {
               <span className="text-slate-500"> · from ${monthly.toFixed(0)}/mo</span>
             )}
             <span style={{ color: "var(--brand)" }}> · earn {theme.unit}</span>
-            <span className="mt-0.5 block text-[10px] font-normal text-slate-400">
-              {POWERED_BY}
+            <span className="mt-0.5 flex items-center gap-1 text-[10px] font-normal text-slate-400">
+              Powered by <ClarityPayMark muted />
             </span>
           </span>,
           <ShieldCheck size={18} aria-hidden />
@@ -198,9 +199,12 @@ export default function CheckoutPage() {
               <ErrorRetry message={error} onRetry={submitPrequal} />
             </div>
           )}
-          <p className="mt-3 text-[9px] leading-relaxed text-slate-400">
-            {LENDER_DISCLOSURE}
-          </p>
+          <div className="mt-3">
+            <ClarityPayMark muted />
+            <p className="mt-1 text-[9px] leading-relaxed text-slate-400">
+              {LENDER_DISCLOSURE}
+            </p>
+          </div>
           <button
             className="btn-primary mt-3 flex items-center justify-center gap-2"
             onClick={submitPrequal}

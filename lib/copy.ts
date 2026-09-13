@@ -60,4 +60,14 @@ export const PROTOTYPE_NOTES: Record<string, string> = {
     "Post-purchase servicing under United's brand. Loan health and miles status live together — the customer never has to learn that two companies are involved.",
   loan:
     "Every miles movement is a ledger line with a reason. The simulator panel below exercises the edge cases: cancellations, partial refunds, redeemed-then-cancelled netting, delinquency freeze/reverse, and loyalty-API failure.",
+  dashboard:
+    "United's internal view — deliberately neutral, not customer-branded. Every tile is tagged primary / diagnostic / guardrail so the team reads growth and risk together; the callout shows how the same take-rate rise can be healthy or unhealthy.",
+  "dashboard-transactions":
+    "One row per financed booking with the miles state alongside the loan state. Row click opens the full ledger — ops can answer 'where are my miles?' without touching ClarityPay's systems.",
+  "dashboard-rewards":
+    "The program is config, not code: bonus rate, cap, hold period and DPD thresholds are editable here and apply to checkout on next load. That's the white-label promise — same rails, per-merchant economics.",
+  "dashboard-exceptions":
+    "Loyalty failures never block lending. This queue is where posting failures, pending reversals, negative balances and unmatched loyalty numbers wait for a retry or a human.",
+  "dashboard-data":
+    "The trust boundary in one table: credit data never leaves ClarityPay, miles balances never leave MileagePlus, United shares booking context only. This is the answer to 'what does the lender see about my members?'",
 };

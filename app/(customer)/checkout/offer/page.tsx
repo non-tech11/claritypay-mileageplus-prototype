@@ -7,6 +7,7 @@ import { loadDraft, saveDraft, type BookingDraft } from "@/lib/booking";
 import { postJson, useApi } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
 import { usePersona } from "@/lib/use-persona";
+import { tierForProgress } from "@/lib/theme";
 import {
   MILES_TIMING_BASE,
   MILES_TIMING_BONUS,
@@ -131,7 +132,7 @@ export default function OfferPage() {
         ) : (
           <LoyaltyCard
             variant="compact"
-            tierName={persona.tier}
+            tierName={tierForProgress(theme, persona.tierProgress).name}
             balance={persona.milesBalance}
             pendingLine={
               preview.data

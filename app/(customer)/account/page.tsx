@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { useApi } from "@/lib/api-client";
 import { usePersona } from "@/lib/use-persona";
 import { useTheme } from "@/app/theme-context";
+import { tierForProgress, tierNudge } from "@/lib/theme";
 import { LoyaltyCard } from "@/components/LoyaltyCard";
 import { MilesPill } from "@/components/MilesPill";
 import { PrototypeNotes } from "@/components/PrototypeNotes";
@@ -31,10 +32,10 @@ export default function AccountPage() {
       <div className="mb-4">
         <LoyaltyCard
           variant="full"
-          tierName={persona.tier}
+          tierName={tierForProgress(theme, persona.tierProgress).name}
           balance={persona.milesBalance}
           progress={persona.tierProgress}
-          nudge={`Fly 3 more segments or earn $1,240 more ${theme.qualifyingLabel} to keep ${persona.tier}`}
+          nudge={tierNudge(theme, persona.tierProgress)}
           pendingLine={`1,860 ${theme.unit} pending — post after travel on Oct 12`}
           ctaLabel="Redeem"
         />

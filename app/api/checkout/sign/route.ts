@@ -13,6 +13,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "loan not found" }, { status: 404 });
   }
 
+  // Idempotent: re-signing an already-signed loan must not duplicate miles.
+  if (loan.pnr && loan.ledger.length > 0) {
+    return NextResponse.json({
+      pnr: loan.pnr,
+      confirmation: {
+        loanId: loan.id,
+        nextPaymentDate: loan.schedule[0]?.dueDate,
+        nextPaymentAmount: loan.schedule[0]?.amount,
+      },
+    });
+  }
+
   const store = getStore();
   const config = store.config;
   const today = new Date().toISOString().slice(0, 10);

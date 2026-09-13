@@ -44,3 +44,28 @@ export const THEMES: Record<string, ThemeConfig> = {
 export function getTheme(merchant?: string | null): ThemeConfig {
   return THEMES[merchant ?? "united"] ?? THEMES.united;
 }
+
+/** Tier for a given qualifying progress, per the active theme's ladder. */
+export function tierForProgress(theme: ThemeConfig, progress: number) {
+  return (
+    [...theme.tiers].reverse().find((t) => progress >= t.threshold) ??
+    theme.tiers[0]
+  );
+}
+
+/** Next tier above the given progress, or null at the top. */
+export function nextTierFor(theme: ThemeConfig, progress: number) {
+  return theme.tiers.find((t) => t.threshold > progress) ?? null;
+}
+
+/** One-line nudge under the loyalty card top row, theme-aware. */
+export function tierNudge(theme: ThemeConfig, progress: number): string {
+  const current = tierForProgress(theme, progress);
+  const next = nextTierFor(theme, progress);
+  if (theme.merchantId === "united") {
+    return `Fly 3 more segments or earn $1,240 more ${theme.qualifyingLabel} to keep ${current.name}`;
+  }
+  return next
+    ? `Earn ${(next.threshold - progress).toLocaleString()} more ${theme.qualifyingLabel} to reach ${next.name}`
+    : `You've reached ${current.name} — the top tier`;
+}

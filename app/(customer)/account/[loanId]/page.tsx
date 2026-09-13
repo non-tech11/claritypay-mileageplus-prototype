@@ -6,6 +6,7 @@ import { postJson, useApi } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
 import { LATE_FEE_DISCLOSURE, STATEMENT_FOOTER } from "@/lib/copy";
 import { MilesPill } from "@/components/MilesPill";
+import { ClarityPayMark } from "@/components/ClarityPayMark";
 import { PrototypeNotes } from "@/components/PrototypeNotes";
 import { CardSkeleton } from "@/components/Skeleton";
 import { ErrorRetry } from "@/components/ErrorRetry";
@@ -172,7 +173,9 @@ export default function LoanDetailPage({
             </li>
           ))}
         </ul>
-        <p className="mt-2 text-[9px] text-slate-400">{STATEMENT_FOOTER}</p>
+        <p className="mt-2 flex items-center gap-1 text-[9px] text-slate-400">
+          {STATEMENT_FOOTER} <ClarityPayMark muted />
+        </p>
       </section>
 
       {/* Edge-case simulator */}
