@@ -8,6 +8,7 @@ import { postJson } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
 import { LENDER_DISCLOSURE, SOFT_PULL_NOTE } from "@/lib/copy";
 import { ClarityPayMark } from "@/components/ClarityPayMark";
+import { buildPlans } from "@/lib/engine/loan";
 import { PrototypeNotes } from "@/components/PrototypeNotes";
 import { ErrorRetry } from "@/components/ErrorRetry";
 import { useScopeToast } from "@/components/Toast";
@@ -48,6 +49,11 @@ export default function CheckoutPage() {
   if (!draft?.fare) return null;
   const multiplier = draft.travellers.length > 1 ? 2 : 1;
   const total = Number((draft.fare.total * multiplier).toFixed(2));
+  // Label for a plan picked in the cart sheet (illustrative prime ladder;
+  // real terms confirmed by the prequal).
+  const selectedPlanLabel = draft.selectedPlanId
+    ? buildPlans(total, "prime").find((p) => p.id === draft.selectedPlanId)?.label ?? null
+    : null;
 
   const submitPrequal = async () => {
     const fare = draft.fare;
@@ -165,6 +171,12 @@ export default function CheckoutPage() {
         >
           <h2 className="text-sm font-bold">Quick eligibility check</h2>
           <p className="mt-0.5 text-[11px] text-emerald-700">{SOFT_PULL_NOTE}</p>
+          {selectedPlanLabel && (
+            <p className="mt-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-[11px] text-slate-600">
+              Plan chosen: <strong>{selectedPlanLabel}</strong> — confirmed
+              after the eligibility check.
+            </p>
+          )}
           <div className="mt-3 space-y-3">
             <div>
               <label className="label" htmlFor="phone">

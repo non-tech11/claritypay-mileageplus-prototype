@@ -40,7 +40,12 @@ export default function OfferPage() {
       return;
     }
     setDraft(d);
-    setPlanId(d.selectedPlanId ?? d.plans[Math.min(1, d.plans.length - 1)]?.id ?? d.plans[0]?.id ?? "");
+    // Carry the plan picked in the cart sheet, but only if the approved
+    // offer actually includes it (near-prime ladders are shorter).
+    const carried = d.plans.some((p) => p.id === d.selectedPlanId)
+      ? d.selectedPlanId
+      : null;
+    setPlanId(carried ?? d.plans[Math.min(1, d.plans.length - 1)]?.id ?? d.plans[0]?.id ?? "");
   }, [router]);
 
   const multiplier = draft && draft.travellers.length > 1 ? 2 : 1;

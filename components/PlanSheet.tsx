@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { X } from "lucide-react";
 import { useTheme } from "@/app/theme-context";
 import { useApi } from "@/lib/api-client";
@@ -23,16 +24,23 @@ export function PlanSheet({
   fare,
   travellers,
   onClose,
+  selectedPlanId,
+  onSelect,
 }: {
   amount: number;
   fare: number;
   travellers: number;
   onClose: () => void;
+  /** Currently chosen plan (from the booking draft), if any. */
+  selectedPlanId?: string | null;
+  /** Called with the chosen plan id when the user continues. */
+  onSelect?: (planId: string) => void;
 }) {
   const theme = useTheme();
   const preview = useApi<PreviewResponse>(
     `/api/loyalty/preview?amount=${amount}&fare=${fare}&travellers=${travellers}`
   );
+  const [picked, setPicked] = useState<string | null>(selectedPlanId ?? null);
   // Illustrative pre-eligibility plans (prime ladder); real terms come
   // from prequal at checkout.
   const plans = buildPlans(amount, "prime");
@@ -66,34 +74,62 @@ export function PlanSheet({
           <CardSkeleton lines={4} />
         ) : (
           <>
-            <div className="space-y-2">
-              {plans.map((p) => (
-                <div
-                  key={p.id}
-                  className="flex items-center justify-between rounded-xl border border-slate-200 px-3 py-2.5"
-                >
-                  <div>
-                    <p className="text-sm font-semibold">
-                      ${p.installmentAmount.toFixed(2)}
-                      <span className="font-normal text-slate-500">
-                        {p.intervalDays === 14 ? " / 2 wks" : " / mo"}
-                      </span>
-                    </p>
-                    <p className="text-[11px] text-slate-500">
-                      {p.label} · {p.apr}% APR · ${p.totalCost.toFixed(2)} total
-                    </p>
-                  </div>
-                  {miles !== null && (
-                    <p
-                      className="text-right text-[11px] font-semibold"
-                      style={{ color: "var(--brand)" }}
-                    >
-                      {miles.toLocaleString()} {theme.unit}
-                    </p>
-                  )}
-                </div>
-              ))}
+            <div className="space-y-2" role="radiogroup" aria-label="Payment plans">
+              {plans.map((p) => {
+                const isSelected = picked === p.id;
+                return (
+                  <button
+                    key={p.id}
+                    role="radio"
+                    aria-checked={isSelected}
+                    onClick={() => setPicked(p.id)}
+                    className={`flex w-full items-center justify-between rounded-xl border bg-white px-3 py-2.5 text-left transition ${
+                      isSelected ? "border-2" : "border-slate-200"
+                    }`}
+                    style={isSelected ? { borderColor: "var(--brand)" } : undefined}
+                  >
+                    <div>
+                      <p className="text-sm font-semibold">
+                        ${p.installmentAmount.toFixed(2)}
+                        <span className="font-normal text-slate-500">
+                          {p.intervalDays === 14 ? " / 2 wks" : " / mo"}
+                        </span>
+                      </p>
+                      <p className="text-[11px] text-slate-500">
+                        {p.label} · {p.apr}% APR · ${p.totalCost.toFixed(2)} total
+                      </p>
+                    </div>
+                    <span className="flex flex-col items-end gap-1">
+                      {miles !== null && (
+                        <span
+                          className="text-right text-[11px] font-semibold"
+                          style={{ color: "var(--brand)" }}
+                        >
+                          {miles.toLocaleString()} {theme.unit}
+                        </span>
+                      )}
+                      {isSelected && (
+                        <span
+                          className="rounded-full px-2 py-0.5 text-[10px] font-bold text-white"
+                          style={{ background: "var(--brand)" }}
+                        >
+                          Selected
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+            {onSelect && (
+              <button
+                className="btn-primary mt-3"
+                disabled={!picked}
+                onClick={() => picked && onSelect(picked)}
+              >
+                Continue with this plan
+              </button>
+            )}
             <p className="mt-3 rounded-lg bg-slate-100 px-3 py-2 text-[11px] text-slate-600">
               {theme.unit.charAt(0).toUpperCase() + theme.unit.slice(1)} are the
               same on every plan — choosing a longer term never earns more.

@@ -43,27 +43,35 @@ export default function CartPage() {
 
   if (!fare) return null;
 
+  const buildTravellers = () => [
+    {
+      id: persona.id,
+      name: persona.name,
+      mileagePlusNumber: persona.mileagePlusNumber,
+      isPayer: true,
+    },
+    ...(twoTravellers
+      ? [
+          {
+            id: "alex",
+            name: "Alex",
+            mileagePlusNumber: alexMp.trim() || null,
+            isPayer: false,
+          },
+        ]
+      : []),
+  ];
+
   const continueToPayment = () => {
-    saveDraft({
-      travellers: [
-        {
-          id: persona.id,
-          name: persona.name,
-          mileagePlusNumber: persona.mileagePlusNumber,
-          isPayer: true,
-        },
-        ...(twoTravellers
-          ? [
-              {
-                id: "alex",
-                name: "Alex",
-                mileagePlusNumber: alexMp.trim() || null,
-                isPayer: false,
-              },
-            ]
-          : []),
-      ],
-    });
+    saveDraft({ travellers: buildTravellers() });
+    router.push("/checkout");
+  };
+
+  // Picking a plan in the sheet carries the choice into checkout: the
+  // pay-over-time option comes pre-expanded and, after approval, the
+  // offer screen pre-selects this plan.
+  const selectPlan = (planId: string) => {
+    saveDraft({ travellers: buildTravellers(), selectedPlanId: planId });
     router.push("/checkout");
   };
 
@@ -175,6 +183,8 @@ export default function CartPage() {
           fare={fare.fare * multiplier}
           travellers={multiplier}
           onClose={() => setSheetOpen(false)}
+          selectedPlanId={loadDraft().selectedPlanId}
+          onSelect={selectPlan}
         />
       )}
       <PrototypeNotes screen="cart" />
