@@ -5,6 +5,7 @@ import { getTheme } from "@/lib/theme";
 import { ThemeProvider } from "./theme-context";
 import { ToastProvider } from "@/components/Toast";
 import { DemoBar } from "@/components/DemoBar";
+import { ApiLogPanel } from "@/components/ApiLogPanel";
 import { ThemeSync } from "@/components/ThemeSync";
 import { Suspense } from "react";
 
@@ -41,7 +42,8 @@ export default async function RootLayout({
               <ThemeSync activeThemeId={theme.merchantId} />
             </Suspense>
             <DemoBar />
-            {children}
+            <div className="api-panel-offset">{children}</div>
+            <ApiLogPanel />
           </ToastProvider>
         </ThemeProvider>
       </body>

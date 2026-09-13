@@ -1,4 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <circle cx="16" cy="16" r="16" fill="#0033A0"/>
-  <path d="M6 20 L26 12 L22 16 L26 20 L20 18 L14 22 Z" fill="#B39B6D"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="40" fill="#ffffff"/>
+  <defs>
+    <mask id="cp-slots">
+      <rect width="200" height="200" fill="white"/>
+      <rect x="74" y="44" width="126" height="40" rx="20" fill="black"/>
+      <rect x="0" y="116" width="126" height="40" rx="20" fill="black"/>
+    </mask>
+  </defs>
+  <g mask="url(#cp-slots)" fill="#0A5CDB">
+    <circle cx="76" cy="64" r="56"/>
+    <circle cx="124" cy="136" r="56"/>
+  </g>
 </svg>

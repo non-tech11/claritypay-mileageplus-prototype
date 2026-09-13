@@ -14,7 +14,9 @@ inside United's checkout. Three surfaces in one Next.js app:
    exceptions queue, and a data map.
 
 Plus a real mock API (24 Next.js route handlers) listed at `GET /api` and
-browsable with "Try it" buttons at `/api-docs`.
+browsable with "Try it" buttons at `/api-docs` — and a **live API panel**
+docked to the right of the prototype (screens ≥ 1280px) that shows every
+request the UI makes in real time, with expandable request/response JSON.
 
 ## Run it
 

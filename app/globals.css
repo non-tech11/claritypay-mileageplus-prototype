@@ -18,6 +18,14 @@ body {
   @apply bg-slate-100 text-slate-900 antialiased;
 }
 
+/* Content shifts left when the live API panel is docked (≥ xl only). */
+@media (min-width: 1280px) {
+  .api-panel-offset {
+    padding-right: var(--api-panel-w, 0px);
+    transition: padding-right 0.2s ease;
+  }
+}
+
 /* Visible focus for keyboard users everywhere. */
 :focus-visible {
   outline: 2px solid var(--brand);
