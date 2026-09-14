@@ -6,7 +6,7 @@ import { CreditCard, Loader2, ShieldCheck, Wallet } from "lucide-react";
 import { loadDraft, saveDraft, type BookingDraft } from "@/lib/booking";
 import { postJson } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
-import { LENDER_DISCLOSURE, SOFT_PULL_NOTE } from "@/lib/copy";
+import { LENDER_DISCLOSURE_POINTS, SOFT_PULL_NOTE } from "@/lib/copy";
 import { ClarityPayMark } from "@/components/ClarityPayMark";
 import { buildPlans } from "@/lib/engine/loan";
 import { PrototypeNotes } from "@/components/PrototypeNotes";
@@ -217,9 +217,21 @@ export default function CheckoutPage() {
           )}
           <div className="mt-3">
             <ClarityPayMark muted />
-            <p className="mt-1 text-[9px] leading-relaxed text-slate-400">
-              {LENDER_DISCLOSURE}
-            </p>
+            <ul className="mt-1.5 space-y-1 text-[9px] leading-relaxed">
+              {LENDER_DISCLOSURE_POINTS.map((p) => (
+                <li
+                  key={p.text}
+                  className={`flex gap-1.5 ${
+                    p.emphasis
+                      ? "text-[10px] font-semibold text-emerald-700"
+                      : "text-slate-400"
+                  }`}
+                >
+                  <span aria-hidden>{p.emphasis ? "✓" : "·"}</span>
+                  <span>{p.text}</span>
+                </li>
+              ))}
+            </ul>
           </div>
           {approvedResult ? (
             <div className="mt-3 rounded-xl border border-emerald-300 bg-emerald-50 p-3">

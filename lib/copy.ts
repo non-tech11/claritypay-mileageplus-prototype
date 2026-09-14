@@ -3,11 +3,21 @@
  * in components — import these constants.
  */
 
-export const LENDER_DISCLOSURE =
-  "Loans provided by Demo Bank, Member FDIC, serviced by ClarityPay, Inc. " +
-  "Rates from 0–29.99% APR based on creditworthiness. Checking eligibility " +
-  "uses a soft credit inquiry and will not affect your credit score. " +
-  "Illustrative terms for prototype purposes only.";
+/**
+ * Lender disclosure as ordered points. The soft-inquiry point leads and is
+ * emphasised in the UI — it answers the customer's biggest hesitation.
+ */
+export const LENDER_DISCLOSURE_POINTS: { text: string; emphasis?: boolean }[] = [
+  {
+    text: "Checking eligibility uses a soft credit inquiry — it will not affect your credit score.",
+    emphasis: true,
+  },
+  { text: "Loans provided by Demo Bank, Member FDIC, serviced by ClarityPay, Inc." },
+  { text: "Rates from 0–29.99% APR based on creditworthiness." },
+  { text: "Illustrative terms for prototype purposes only." },
+];
+
+export const LENDER_DISCLOSURE = LENDER_DISCLOSURE_POINTS.map((p) => p.text).join(" ");
 
 export const POWERED_BY = "Powered by ClarityPay";
 
