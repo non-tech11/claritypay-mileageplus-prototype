@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { loadDraft, saveDraft, type BookingDraft } from "@/lib/booking";
 import { postJson, useApi } from "@/lib/api-client";
+import { BONUS_FARE_TIER } from "@/lib/engine/loyalty";
 import { useTheme } from "@/app/theme-context";
 import { usePersona } from "@/lib/use-persona";
 import { tierForProgress } from "@/lib/theme";
@@ -102,6 +103,10 @@ export default function OfferPage() {
   const base = preview.data?.totalBase ?? 0;
   const chosenMiles = preview.data?.perPlan.find((x) => x.planId === planId);
   const bonus = chosenMiles?.bonus ?? 0;
+  // Bonus talk only where a bonus exists on this fare — anywhere else it
+  // just confuses ("0% plans add no bonus" on a fare that never bonuses).
+  const bonusFare = draft.fare.id === BONUS_FARE_TIER;
+  const maxBonus = Math.max(0, ...(preview.data?.perPlan.map((x) => x.financingTotal) ?? [0]));
 
   return (
     <div className="flex min-h-full flex-col">
@@ -166,19 +171,19 @@ export default function OfferPage() {
                 </p>
               </div>
               <span className="flex flex-col items-end gap-1">
-                {miles && (
+                {miles && bonusFare && (
                   <span
                     className="text-[11px] font-semibold"
                     style={{ color: miles.financingTotal > 0 ? "var(--brand)" : "#94a3b8" }}
                     title={
                       miles.financingTotal > 0
                         ? undefined
-                        : `Bonus ${theme.unit} apply on Economy Plus fares with a monthly payment plan — you still earn your base ${theme.unit}`
+                        : `Bonus ${theme.unit} come with monthly plans — you still earn ${base.toLocaleString()} ${theme.unit}`
                     }
                   >
                     {miles.financingTotal > 0
                       ? `+${miles.financingTotal.toLocaleString()} bonus ${theme.unit}`
-                      : `base ${theme.unit} only`}
+                      : `no bonus ${theme.unit}`}
                   </span>
                 )}
                 {planId === p.id && (
@@ -206,12 +211,10 @@ export default function OfferPage() {
             pendingLine={
               preview.data
                 ? bonus > 0
-                  ? `You'll earn ${base.toLocaleString()} base + ${bonus.toLocaleString()} bonus = ${(base + bonus).toLocaleString()} ${theme.unit}`
-                  : `You'll earn ${base.toLocaleString()} base ${theme.unit}${
-                    (chosenMiles?.apr ?? 0) > 0
-                      ? " — the bonus is an Economy Plus benefit"
-                      : " — 0% plans add no bonus"
-                  }`
+                  ? `You'll earn ${base.toLocaleString()} ${theme.unit} + ${bonus.toLocaleString()} bonus = ${(base + bonus).toLocaleString()} total`
+                  : bonusFare && maxBonus > 0
+                    ? `You'll earn ${base.toLocaleString()} ${theme.unit} — monthly plans add ${maxBonus.toLocaleString()} bonus ${theme.unit}`
+                    : `You'll earn ${base.toLocaleString()} ${theme.unit} on this trip`
                 : "Calculating your earn…"
             }
           />
@@ -244,7 +247,7 @@ export default function OfferPage() {
                 <p className="text-xs font-bold text-slate-800">
                   After your flight
                   <span className="ml-1.5" style={{ color: "var(--brand)" }}>
-                    +{base.toLocaleString()} base {theme.unit}
+                    +{base.toLocaleString()} {theme.unit}
                   </span>
                 </p>
                 <p className="text-[10px] text-slate-500">{MILES_TIMING_BASE}</p>

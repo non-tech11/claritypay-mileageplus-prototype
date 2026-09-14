@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       amount: basePer,
       status: "pending",
       reason: t.mileagePlusNumber
-        ? `Base earn — posts after travel on ${loan.trip.travelDate}`
+        ? `Earned on this trip — posts after your flight on ${loan.trip.travelDate}`
         : `Held for retro-credit — add a MileagePlus number within ${config.retroCreditWindowDays} days`,
       date: today,
     });

@@ -7,6 +7,7 @@ import { useApi } from "@/lib/api-client";
 import { CardSkeleton } from "./Skeleton";
 import { ErrorRetry } from "./ErrorRetry";
 import { buildPlans } from "@/lib/engine/loan";
+import { BONUS_FARE_TIER } from "@/lib/engine/loyalty";
 
 export interface PlanMilesLine {
   planId: string;
@@ -62,6 +63,9 @@ export function PlanSheet({
     preview.data?.perPlan.find((p) => p.planId === id) ?? null;
   const pickedPlan = picked ? plans.find((p) => p.id === picked) : null;
   const pickedMiles = picked ? perPlan(picked) : null;
+  // Bonus labels only on the fare that actually bonuses — on other fares
+  // every row would read the same and just add noise.
+  const bonusFare = fareId === BONUS_FARE_TIER;
 
   return (
     <div
@@ -124,19 +128,19 @@ export function PlanSheet({
                       </p>
                     </div>
                     <span className="flex flex-col items-end gap-1">
-                      {miles && (
+                      {miles && bonusFare && (
                         <span
                           className="text-right text-[11px] font-semibold"
                           style={{ color: miles.financingTotal > 0 ? "var(--brand)" : "#94a3b8" }}
                           title={
                             miles.financingTotal > 0
                               ? undefined
-                              : `Bonus ${theme.unit} apply on Economy Plus fares with a monthly payment plan — you still earn your base ${theme.unit}`
+                              : `Bonus ${theme.unit} come with monthly plans — you still earn ${(preview.data?.totalBase ?? 0).toLocaleString()} ${theme.unit}`
                           }
                         >
                           {miles.financingTotal > 0
                             ? `+${miles.financingTotal.toLocaleString()} bonus ${theme.unit}`
-                            : `base ${theme.unit} only`}
+                            : `no bonus ${theme.unit}`}
                         </span>
                       )}
                       {isSelected && (

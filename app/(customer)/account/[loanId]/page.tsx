@@ -211,7 +211,7 @@ export default function LoanDetailPage({
               <li key={e.id} className="flex items-center justify-between gap-2 text-xs">
                 <span className="font-semibold">
                   +{e.amount.toLocaleString()}{" "}
-                  {e.type === "bonus_earn" ? "bonus" : "base"} {theme.unit}
+                  {e.type === "bonus_earn" ? `bonus ${theme.unit}` : theme.unit}
                   <span className="ml-1 font-normal text-slate-400">
                     · {e.travellerName}
                     {e.status === "pending" &&

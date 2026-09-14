@@ -171,8 +171,8 @@ export default function MilesPage() {
               ))}
               {unlocked.length === 0 && (
                 <li className="py-2 text-xs text-slate-400">
-                  {unitCap} land here after your flight (base) and after your
-                  final payment (bonus).
+                  {unitCap} land here after your flight — bonus {theme.unit}{" "}
+                  after your final payment.
                 </li>
               )}
             </ul>
@@ -200,8 +200,8 @@ export default function MilesPage() {
           </section>
 
           <p className="text-[10px] text-slate-400">
-            Base {theme.unit} arrive after your flight. Bonus {theme.unit}{" "}
-            arrive after your final payment. Cancelling a booking takes back
+            {unitCap} arrive after your flight; bonus {theme.unit} arrive
+            after your final payment. Cancelling a booking takes back
             anything still on the way — never a cash charge.
           </p>
         </div>

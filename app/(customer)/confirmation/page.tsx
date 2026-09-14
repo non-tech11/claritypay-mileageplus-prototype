@@ -97,13 +97,10 @@ function ConfirmationInner() {
           Your {theme.programName} {theme.unit}
         </h2>
         {cardFallback ? (
-          <div className="flex items-center justify-between text-xs">
-            <span>
-              {(draft.fare.fare * multiplier * 5).toLocaleString()} base{" "}
-              {theme.unit} — post after travel
-            </span>
-            <MilesPill status="pending" />
-          </div>
+          <p className="text-xs text-slate-500">
+            No {theme.unit} on this booking — {theme.unit} come with a{" "}
+            {theme.programName} payment plan.
+          </p>
         ) : loan ? (
           <ul className="space-y-2">
             {loan.ledger.map((e) => (
@@ -111,12 +108,11 @@ function ConfirmationInner() {
                 <span>
                   {e.amount.toLocaleString()}{" "}
                   {e.type === "bonus_earn"
-                    ? "bonus"
+                    ? `bonus ${theme.unit}`
                     : e.type === "miles_back_earn"
                       ? `${theme.unit} back`
-                      : "base"}{" "}
-                  {e.type === "miles_back_earn" ? "" : theme.unit} —{" "}
-                  {e.travellerName}
+                      : theme.unit}{" "}
+                  — {e.travellerName}
                 </span>
                 <MilesPill status={e.status} />
               </li>

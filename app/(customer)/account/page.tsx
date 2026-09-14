@@ -45,7 +45,7 @@ export default function AccountPage() {
           </li>
           <li>
             · <Link href="/account/LN-1003" className="underline" style={{ color: "var(--brand)" }}>Delinquent (32 DPD)</Link>{" "}
-            — late fee, bonus held; base untouched
+            — late fee, bonus on hold; trip miles untouched
           </li>
           <li className="text-slate-400">
             Every loan page has a simulator: cancellation, partial refund,

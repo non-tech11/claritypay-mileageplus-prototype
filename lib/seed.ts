@@ -125,7 +125,7 @@ function seedLoans(): Loan[] {
         type: "base_earn",
         amount: 1860,
         status: "pending",
-        reason: "Base earn on fare — posts after travel on 2026-10-12",
+        reason: "Earned on this trip — posts after your flight on 2026-10-12",
         date: "2026-08-14",
       },
       {
@@ -256,7 +256,7 @@ function seedLoans(): Loan[] {
         type: "base_earn",
         amount: 1320,
         status: "posted",
-        reason: "Base earn — travel completed 2026-08-20",
+        reason: "Earned on this trip — travel completed 2026-08-20",
         date: "2026-08-21",
       },
       {

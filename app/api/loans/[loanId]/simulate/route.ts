@@ -52,8 +52,8 @@ export async function POST(
       });
       message =
         newDpd >= store.config.dpdReverseThreshold
-          ? `Now ${newDpd} DPD — bonus miles reversed. Base miles untouched — only the bonus is at risk in delinquency.`
-          : `Now ${newDpd} DPD — bonus miles held. Base miles untouched. Trigger again to reach 60 DPD.`;
+          ? `Now ${newDpd} DPD — bonus miles reversed. Trip miles untouched — only the bonus is at risk in delinquency.`
+          : `Now ${newDpd} DPD — bonus miles held. Trip miles untouched. Trigger again to reach 60 DPD.`;
       break;
     }
 
@@ -173,7 +173,7 @@ export async function POST(
                     travellerId: "alex",
                     travellerName: "Alex",
                     amount: e.amount - half,
-                    reason: "Base earn share — add a MileagePlus number to receive",
+                    reason: "Your share of the trip miles — add a MileagePlus number to receive",
                   },
                 ]
               : [e]
@@ -184,7 +184,7 @@ export async function POST(
       replaceLoan(res.loan);
       message = `Alex cancelled. $${res.refundAmount.toFixed(
         2
-      )} refunded pro-rata, loan re-amortised, Alex's base miles reversed. Payer keeps the bonus — it rewards the financed booking, not headcount.`;
+      )} refunded pro-rata, loan re-amortised, Alex's trip miles reversed. Payer keeps the bonus — it rewards the financed booking, not headcount.`;
       break;
     }
 
