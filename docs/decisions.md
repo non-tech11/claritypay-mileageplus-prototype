@@ -8,7 +8,7 @@
 
 4. **Bonus goes to the payer only; base goes to every traveller.** One loan, one borrower, one bonus. Base miles are earned by flying and split per traveller with a MileagePlus number; travellers without one get a 30-day retro-credit window instead of silently losing the earn.
 
-5. **Base and bonus have different owners and different lifecycles.** Base miles are United's (post after travel, reversed only if the flight is refunded — delinquency never touches them). Bonus miles are ClarityPay-funded (post after first on-time instalment, held at 30 DPD, reversed at 60 DPD or on cancellation, never reversed after full repayment).
+5. **Base and financing miles have different owners and different lifecycles.** Base miles are United's — credited after the flight, reversed only if the flight is refunded, and delinquency never touches them. Financing miles (miles back + bonus) are ClarityPay-funded and credit **when the plan completes** — completion rewards repayment, there is nothing to claw back mid-loan, and a cured delinquency simply restores them to pending (held at 30 DPD, reversed at 60).
 
 6. **No cash clawback for miles, ever.** Redeemed-then-cancelled reverses what the balance covers and books the shortfall as a "miles owed" line that nets against future earning. Converting a loyalty problem into a surprise charge would poison both brands.
 

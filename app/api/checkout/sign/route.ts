@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
           type: "miles_back_earn",
           amount: funded.milesBack,
           status: "pending",
-          reason: `Miles back on financed amount (${loan.trip.fareLabel} rate) — posts after first on-time payment`,
+          reason: `Miles back on financed amount (${loan.trip.fareLabel} rate) — credits after your final payment`,
           date: today,
         });
       }
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
           type: "bonus_earn",
           amount: funded.bonus,
           status: "pending",
-          reason: "Economy Plus pay-over-time bonus — posts after first on-time payment",
+          reason: "Economy Plus pay-over-time bonus — credits after your final payment",
           date: today,
         });
       }

@@ -38,8 +38,8 @@ const FIELDS: {
   },
   {
     key: "bonusPostDelayDays",
-    label: "Hold period (days after first payment)",
-    hint: "Bonus posts this many days after the first on-time instalment",
+    label: "Posting delay (days after final payment)",
+    hint: "Financing miles credit this many days after the plan completes",
   },
   {
     key: "dpdFreezeThreshold",

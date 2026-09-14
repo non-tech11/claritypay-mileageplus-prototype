@@ -32,10 +32,10 @@ export const REWARD_RETRY_NOTE =
   "We'll post these within 72 hours — no action needed.";
 
 export const MILES_TIMING_BASE =
-  "Base miles are earned by flying and post after travel completes, per MileagePlus program rules.";
+  "Base miles are earned by flying and are credited after your flight, per MileagePlus program rules.";
 
 export const MILES_TIMING_BONUS =
-  "Miles back and bonus miles post after your first on-time payment clears.";
+  "Miles back and bonus miles are credited when your payment plan completes — after your final payment.";
 
 export const MILES_TIMING_REVERSAL =
   "Both are reversed if the booking is cancelled.";
@@ -51,7 +51,7 @@ export const PROTOTYPE_NOTES: Record<string, string> = {
   prequal:
     "Inline application, no redirect. Phone + last-4 SSN, soft pull only. The lender disclosure is a shared constant, not free-typed. The persona switcher (header) decides the outcome.",
   offer:
-    "One plan is recommended, each shows its own financing miles (0% earns none), and timing is explicit: base miles post after travel (United's rules), miles back + bonus after first on-time payment (ClarityPay-funded). Autopay defaults on.",
+    "One plan is recommended, each shows its own financing miles (0% earns none), and timing is explicit: base miles credit after the flight (United's rules), miles back + bonus credit when the plan completes (ClarityPay-funded — completion rewards repayment). Autopay defaults on.",
   declined:
     "Soft decline: no reason codes beyond the legal minimum, adverse-action notice by mail, and a one-tap fallback to card — nothing re-entered. The loyalty line adjusts to base miles only: bonus rewards financing, base rewards flying.",
   confirmation:

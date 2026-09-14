@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { findLoan, replaceLoan } from "@/lib/store";
 
 /**
- * Pay the next open instalment. Bringing the account current releases
- * held bonus miles; the first paid instalment posts a pending bonus.
+ * Pay the next open instalment. Financing miles (miles back + bonus)
+ * credit only when the plan completes — the final payment posts them.
+ * Bringing a delinquent account current restores held miles to pending.
  */
 export async function POST(
   _req: Request,
@@ -31,27 +32,24 @@ export async function POST(
   );
 
   let ledger = loan.ledger;
-  const firstPayment = loan.schedule.every((s) => s.status !== "paid");
-  if (firstPayment || (!anyLate && loan.dpd > 0)) {
-    ledger = ledger.map((e) => {
-      if (e.type !== "bonus_earn" && e.type !== "miles_back_earn") return e;
-      if (e.status === "pending") {
-        return {
-          ...e,
-          status: "posted" as const,
-          reason: "Posted after first on-time payment",
-        };
-      }
-      if (e.status === "held" && !anyLate) {
-        return {
-          ...e,
-          status: "posted" as const,
-          reason: "Released — account brought current",
-        };
-      }
-      return e;
-    });
-  }
+  ledger = ledger.map((e) => {
+    if (e.type !== "bonus_earn" && e.type !== "miles_back_earn") return e;
+    if (allPaid && (e.status === "pending" || e.status === "held")) {
+      return {
+        ...e,
+        status: "posted" as const,
+        reason: "Credited — payment plan completed",
+      };
+    }
+    if (!allPaid && e.status === "held" && !anyLate) {
+      return {
+        ...e,
+        status: "pending" as const,
+        reason: "Restored — account brought current; credits when the plan completes",
+      };
+    }
+    return e;
+  });
 
   const updated = {
     ...loan,

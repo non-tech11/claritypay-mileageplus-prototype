@@ -105,10 +105,26 @@ export default function OfferPage() {
 
   return (
     <div className="flex min-h-full flex-col">
-      <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
-        <BadgeCheck size={14} aria-hidden /> You&apos;re approved for ${total.toFixed(2)}
-      </p>
-      <h1 className="mb-3 text-base font-bold">Choose your plan</h1>
+      <section
+        aria-label="Approval"
+        className="mb-4 overflow-hidden rounded-2xl p-4 text-center text-white shadow-md"
+        style={{
+          background:
+            "linear-gradient(135deg, #047857 0%, #059669 55%, #10b981 100%)",
+        }}
+      >
+        <span className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
+          <BadgeCheck size={28} aria-hidden />
+        </span>
+        <h1 className="text-lg font-black tracking-tight">
+          You&apos;re approved, {persona.name}!
+        </h1>
+        <p className="mt-0.5 text-2xl font-black">${total.toFixed(2)}</p>
+        <p className="text-[11px] opacity-90">
+          available for this trip · soft check only, your credit score is untouched
+        </p>
+      </section>
+      <h2 className="mb-3 text-base font-bold">Choose your plan</h2>
       {nearPrime && (
         <p className="mb-2 rounded-lg bg-slate-100 px-3 py-2 text-[11px] text-slate-600">
           Based on your profile, shorter terms are available. APRs shown are

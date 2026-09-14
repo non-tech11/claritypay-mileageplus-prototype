@@ -34,9 +34,7 @@ function FareCard({
     `/api/offers/estimate?amount=${fare.total}`
   );
   const preview = useApi<PreviewResponse>(
-    highlight
-      ? `/api/loyalty/preview?amount=${fare.total}&fare=${fare.fare}&travellers=1&fareTier=${fare.id}`
-      : null
+    `/api/loyalty/preview?amount=${fare.total}&fare=${fare.fare}&travellers=1&fareTier=${fare.id}`
   );
 
   return (
@@ -64,16 +62,28 @@ function FareCard({
           ) : null}
         </div>
       </div>
-      {highlight && preview.data && (
-        <div className="mt-2">
-          <LoyaltyCard
-            variant="chip"
-            tierName=""
-            balance={0}
-            chipText={`Earn up to ${preview.data.totalBase.toLocaleString()} ${theme.unit} · up to +${preview.data.maxFinancingMiles.toLocaleString()} more if you pay over time`}
-          />
-        </div>
-      )}
+      {preview.data &&
+        (highlight ? (
+          <div className="mt-2">
+            <LoyaltyCard
+              variant="chip"
+              tierName=""
+              balance={0}
+              chipText={`Earn up to ${preview.data.totalBase.toLocaleString()} ${theme.unit} · up to +${preview.data.maxFinancingMiles.toLocaleString()} more if you pay over time`}
+            />
+          </div>
+        ) : (
+          <p className="mt-2 text-[11px] text-slate-500">
+            Earn {preview.data.totalBase.toLocaleString()} {theme.unit}
+            {preview.data.maxFinancingMiles > 0 && (
+              <>
+                {" "}
+                · +{preview.data.maxFinancingMiles.toLocaleString()} back when
+                you pay over time
+              </>
+            )}
+          </p>
+        ))}
       <button onClick={onSelect} className="btn-primary mt-3">
         Select
       </button>

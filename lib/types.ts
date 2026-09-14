@@ -153,7 +153,7 @@ export interface MerchantConfig {
    * incentive.
    */
   milesBackPer100: Record<string, number>;
-  /** Days after first on-time instalment before bonus posts. */
+  /** Days after the final instalment clears before financing miles credit. */
   bonusPostDelayDays: number;
   /** DPD at which bonus miles freeze. */
   dpdFreezeThreshold: number;
