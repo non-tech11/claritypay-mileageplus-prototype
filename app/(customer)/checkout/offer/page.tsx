@@ -170,11 +170,18 @@ export default function OfferPage() {
                   {p.label} · {p.apr}% APR · ${p.totalCost.toFixed(2)} total
                 </p>
               </div>
-              <span className="flex shrink-0 flex-col items-end gap-1">
-                {miles && bonusFare && (
+              <span className="flex shrink-0 flex-col items-end gap-0.5">
+                {miles && (
                   <span
                     className="whitespace-nowrap text-[11px] font-semibold"
-                    style={{ color: miles.financingTotal > 0 ? "var(--brand)" : "#94a3b8" }}
+                    style={{ color: "var(--brand)" }}
+                  >
+                    Earn {(base + miles.financingTotal).toLocaleString()} {theme.unit}
+                  </span>
+                )}
+                {miles && bonusFare && (
+                  <span
+                    className="whitespace-nowrap text-[10px] text-slate-400"
                     title={
                       miles.financingTotal > 0
                         ? undefined
@@ -182,7 +189,7 @@ export default function OfferPage() {
                     }
                   >
                     {miles.financingTotal > 0
-                      ? `+${miles.financingTotal.toLocaleString()} bonus ${theme.unit}`
+                      ? `incl. ${miles.financingTotal.toLocaleString()} bonus`
                       : `no bonus ${theme.unit}`}
                   </span>
                 )}
