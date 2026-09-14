@@ -119,9 +119,14 @@ with one recommended plan.
 - **Booking economics**: $1,000 illustrative AOV financed; 6% merchant fee;
   ~5% cost of funds; 2% expected credit loss; miles transfer price 1.1¢,
   member-perceived value 1.3¢. See the unit-economics table on `/dashboard`.
-- **Earn model**: base 5 mi/$ of fare (excl. taxes) is United's normal earn;
-  financing miles (miles back + Economy Plus bonus) are funded from merchant
-  economics and only on APR-bearing plans — a 0% plan is already subsidised.
+- **Funding**: ClarityPay funds **all** reward miles shown in the prototype,
+  purchasing them from the airline at the transfer price — the cobrand-card
+  model. The member's normal flying miles are the airline's own programme
+  and sit outside this product. The customer never sees the funder: the
+  reward carries the airline's brand end to end.
+- **Earn model**: trip miles at 5 mi/$ of fare (excl. taxes) on every
+  financed booking; the bonus (Economy Plus + monthly plans only) credits at
+  plan completion — a 0% plan is already subsidised.
 - **Credit**: three illustrative profiles (prime / near-prime / thin) stand
   in for underwriting; APRs 0–24.99% are illustrative, not priced.
 - **Repeat behaviour**: members who redeem earned miles rebook at ~1.4× the

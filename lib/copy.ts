@@ -61,7 +61,7 @@ export const PROTOTYPE_NOTES: Record<string, string> = {
   prequal:
     "Inline application, no redirect. Phone + last-4 SSN, soft pull only. The lender disclosure is a shared constant, not free-typed. The persona switcher (header) decides the outcome.",
   offer:
-    "One plan is recommended. Bonus labels appear only on the bonus-eligible fare (elsewhere they would be noise), and timing is explicit: miles credit after the flight, the bonus credits when the plan completes (ClarityPay-funded — completion rewards repayment). Every plan earns the trip miles. Autopay defaults on.",
+    "One plan is recommended. Bonus labels appear only on the bonus-eligible fare (elsewhere they would be noise), and timing is explicit: miles credit after the flight, the bonus credits when the plan completes — completion rewards repayment. Every plan earns the trip miles; the funder is never named to the customer. Autopay defaults on.",
   declined:
     "Soft decline: no reason codes beyond the legal minimum, adverse-action notice by mail, and a one-tap fallback to card — nothing re-entered. The loyalty line is honest about the trade-off: miles are a payment-plan benefit, so the card fallback earns none.",
   confirmation:

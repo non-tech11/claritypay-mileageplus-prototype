@@ -100,7 +100,8 @@ export default function OverviewPage() {
         </h2>
         <p className="mb-3 text-xs text-slate-500">
           How the variables connect on a $1,000 Economy Plus booking, 12-month
-          plan. Reward cost scales with the controls on the Rewards page.
+          plan. ClarityPay funds all reward miles, purchased from the airline
+          at the transfer price — cost scales with the Rewards page controls.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[520px] text-left text-xs">
@@ -110,7 +111,8 @@ export default function OverviewPage() {
                 ["Interest income (14.99% APR, 12mo)", "borne by customer", "+$82.00", "revenue"],
                 ["Cost of funds", "~5% on outstanding balance", "−$27.00", "cost"],
                 ["Expected credit loss", "2.0% of principal", "−$20.00", "cost"],
-                ["Reward cost — bonus miles", "2,500 mi × 1.1¢ transfer price", "−$27.50", "cost"],
+                ["Reward cost — trip miles", "4,500 mi × 1.1¢ purchased from airline", "−$49.50", "cost"],
+                ["Reward cost — bonus miles", "3,000 mi × 1.1¢ purchased from airline", "−$33.00", "cost"],
                 ["Servicing & ops", "per-loan allocation", "−$8.00", "cost"],
               ].map(([label, note, value, kind]) => (
                 <tr key={label} className="border-b border-slate-100">
@@ -133,19 +135,21 @@ export default function OverviewPage() {
                   before repeat-purchase lift
                 </td>
                 <td className="py-2 text-right text-sm font-bold text-emerald-700">
-                  +$59.50
+                  +$4.50
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         <p className="mt-2 rounded-lg bg-slate-50 px-3 py-2 text-[11px] text-slate-600">
-          The loop pays twice: a member who redeems earned miles rebooks at
-          ~1.4× the rate of a card payer (illustrative), so reward cost is
-          partly an acquisition spend for the next booking. Levers: take rate
-          moves revenue linearly; loss rate and reward cost move margin — if
-          30+ DPD rises 1pt, contribution drops ~$10, which is why the
-          delinquency guardrail freezes the reward spend first.
+          Reward funding is the largest cost line, so per-booking margin is
+          thin by design — the case rests on the repeat-purchase lift: a
+          member who redeems earned miles rebooks at ~1.4× the rate of a card
+          payer (illustrative), making reward cost partly an acquisition
+          spend for the next booking. Levers: each 1 mi/$ off the trip-miles
+          earn rate adds ~$9.90 of contribution; take rate moves revenue
+          linearly; if 30+ DPD rises 1pt, contribution drops ~$10, which is
+          why the delinquency guardrail freezes the reward spend first.
         </p>
       </section>
 
