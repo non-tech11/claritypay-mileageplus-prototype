@@ -94,6 +94,62 @@ export default function OverviewPage() {
         <SvgLineChart points={data.gmvSeries} />
       </section>
 
+      <section className="rounded-xl border border-slate-200 bg-white p-4">
+        <h2 className="text-sm font-bold text-slate-800">
+          Unit economics — one financed booking (illustrative)
+        </h2>
+        <p className="mb-3 text-xs text-slate-500">
+          How the variables connect on a $1,000 Economy Plus booking, 12-month
+          plan. Reward cost scales with the controls on the Rewards page.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] text-left text-xs">
+            <tbody>
+              {[
+                ["Merchant fee to ClarityPay", "6.0% of booking", "+$60.00", "revenue"],
+                ["Interest income (14.99% APR, 12mo)", "borne by customer", "+$82.00", "revenue"],
+                ["Cost of funds", "~5% on outstanding balance", "−$27.00", "cost"],
+                ["Expected credit loss", "2.0% of principal", "−$20.00", "cost"],
+                ["Reward cost — miles back", "2,000 mi × 1.1¢ transfer price", "−$22.00", "cost"],
+                ["Reward cost — bonus", "500 mi × 1.1¢", "−$5.50", "cost"],
+                ["Servicing & ops", "per-loan allocation", "−$8.00", "cost"],
+              ].map(([label, note, value, kind]) => (
+                <tr key={label} className="border-b border-slate-100">
+                  <td className="py-1.5 pr-2 font-medium text-slate-700">{label}</td>
+                  <td className="py-1.5 pr-2 text-slate-400">{note}</td>
+                  <td
+                    className={`py-1.5 text-right font-semibold ${
+                      kind === "revenue" ? "text-emerald-700" : "text-slate-700"
+                    }`}
+                  >
+                    {value}
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td className="py-2 pr-2 text-sm font-bold text-slate-900">
+                  Contribution per financed booking
+                </td>
+                <td className="py-2 pr-2 text-[11px] text-slate-400">
+                  before repeat-purchase lift
+                </td>
+                <td className="py-2 text-right text-sm font-bold text-emerald-700">
+                  +$59.50
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 rounded-lg bg-slate-50 px-3 py-2 text-[11px] text-slate-600">
+          The loop pays twice: a member who redeems earned miles rebooks at
+          ~1.4× the rate of a card payer (illustrative), so reward cost is
+          partly an acquisition spend for the next booking. Levers: take rate
+          moves revenue linearly; loss rate and reward cost move margin — if
+          30+ DPD rises 1pt, contribution drops ~$10, which is why the
+          delinquency guardrail freezes the reward spend first.
+        </p>
+      </section>
+
       <section className="grid gap-3 sm:grid-cols-2">
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
           <h3 className="flex items-center gap-1.5 text-sm font-bold text-emerald-800">

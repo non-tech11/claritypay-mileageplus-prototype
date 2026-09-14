@@ -114,6 +114,31 @@ of both financing types, no-clawback-after-repayment, redeemed-then-cancelled
 netting, full/partial cancellation math, re-amortisation, plan-ladder shape
 with one recommended plan.
 
+## Assumptions (stated, per the brief)
+
+- **Booking economics**: $1,000 illustrative AOV financed; 6% merchant fee;
+  ~5% cost of funds; 2% expected credit loss; miles transfer price 1.1¢,
+  member-perceived value 1.3¢. See the unit-economics table on `/dashboard`.
+- **Earn model**: base 5 mi/$ of fare (excl. taxes) is United's normal earn;
+  financing miles (miles back + Economy Plus bonus) are funded from merchant
+  economics and only on APR-bearing plans — a 0% plan is already subsidised.
+- **Credit**: three illustrative profiles (prime / near-prime / thin) stand
+  in for underwriting; APRs 0–24.99% are illustrative, not priced.
+- **Repeat behaviour**: members who redeem earned miles rebook at ~1.4× the
+  rate of card payers (assumed, not measured).
+
+**Data I'd request first, and why it changes the recommendation:**
+
+1. **Incremental take rate by fare tier** — if financing shifts Basic buyers
+   up to Economy Plus, the bonus concentration on Economy Plus is right; if
+   not, spread the miles-back rates flatter.
+2. **Reversal/refund rate on financed vs card bookings** — sets the bonus
+   hold window; a high early-cancel rate argues for unlock-at-travel.
+3. **Redemption-to-rebooking elasticity** — the repeat-purchase lift is the
+   whole case for reward spend; if it's below ~1.15×, cut the earn rate.
+4. **DPD curves by credit tier** — calibrates the 30/60 freeze/reverse
+   thresholds and whether near-prime should earn the bonus at all.
+
 ## Known limitations
 
 - **In-memory state** — resets on serverless cold start / server restart.
