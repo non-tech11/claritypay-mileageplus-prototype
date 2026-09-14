@@ -105,8 +105,7 @@ function ConfirmationInner() {
           <ul className="space-y-2">
             {loan.ledger.length === 0 && (
               <li className="text-xs text-slate-500">
-                No {theme.unit} on this plan — the 0% rate is the reward.
-                Monthly plans earn {theme.unit}.
+                No {theme.unit} activity on this booking.
               </li>
             )}
             {loan.ledger.map((e) => (

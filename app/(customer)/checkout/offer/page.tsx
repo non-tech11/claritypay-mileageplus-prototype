@@ -184,13 +184,6 @@ export default function OfferPage() {
                       </span>
                     )}
                   </>
-                ) : miles ? (
-                  <span
-                    className="whitespace-nowrap text-[10px] text-slate-400"
-                    title={`The 0% rate is the reward on this plan — monthly plans earn ${theme.unit}`}
-                  >
-                    no {theme.unit} — 0% is the reward
-                  </span>
                 ) : null}
                 {planId === p.id && (
                   <span
@@ -220,7 +213,7 @@ export default function OfferPage() {
                   ? `You'll earn ${base.toLocaleString()} ${theme.unit} + ${bonus.toLocaleString()} bonus = ${(base + bonus).toLocaleString()} total`
                   : chosenTotal > 0
                     ? `You'll earn ${chosenTotal.toLocaleString()} ${theme.unit} on this trip`
-                    : `No ${theme.unit} on the 0% plan — monthly plans earn ${bestTotal.toLocaleString()}`
+                    : `Monthly plans earn up to ${bestTotal.toLocaleString()} ${theme.unit} on this trip`
                 : "Calculating your earn…"
             }
           />

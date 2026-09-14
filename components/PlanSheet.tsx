@@ -140,13 +140,6 @@ export function PlanSheet({
                             </span>
                           )}
                         </>
-                      ) : miles ? (
-                        <span
-                          className="whitespace-nowrap text-[10px] text-slate-400"
-                          title={`The 0% rate is the reward on this plan — monthly plans earn ${theme.unit}`}
-                        >
-                          no {theme.unit} — 0% is the reward
-                        </span>
                       ) : null}
                       {isSelected && (
                         <span
