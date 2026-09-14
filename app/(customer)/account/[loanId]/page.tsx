@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useState } from "react";
+import Link from "next/link";
 import { CalendarClock, FileText, FlaskConical, Loader2 } from "lucide-react";
 import { postJson, useApi } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
@@ -17,7 +18,7 @@ const INSTALMENT_STYLE: Record<string, string> = {
   paid: "text-emerald-700",
   due: "text-slate-600",
   late: "text-red-700 font-semibold",
-  cancelled: "text-slate-400 line-through",
+  cancelled: "text-slate-400",
   refunded: "text-blue-700",
 };
 
@@ -131,31 +132,41 @@ export default function LoanDetailPage({
         </ul>
       </section>
 
-      {/* Miles ledger */}
+      {/* Earn summary — the full ledger lives in My miles. */}
       <section className="card mb-3">
         <h2 className="mb-2 text-sm font-bold">
-          {theme.programName} {theme.unit} ledger
+          {theme.unit.charAt(0).toUpperCase() + theme.unit.slice(1)} on this trip
         </h2>
         <ul className="space-y-2">
-          {loan.ledger.map((e) => (
-            <li key={e.id} className="text-xs">
-              <div className="flex items-center justify-between gap-2">
-                <span className={e.amount < 0 ? "font-semibold text-red-700" : "font-semibold"}>
-                  {e.amount > 0 ? "+" : ""}
-                  {e.amount.toLocaleString()} {theme.unit}
-                  <span className="ml-1 font-normal text-slate-500">
-                    · {e.type.replace(/_/g, " ")} · {e.travellerName}
+          {loan.ledger
+            .filter((e) => e.type === "base_earn" || e.type === "bonus_earn")
+            .map((e) => (
+              <li key={e.id} className="flex items-center justify-between gap-2 text-xs">
+                <span className="font-semibold">
+                  +{e.amount.toLocaleString()}{" "}
+                  {e.type === "bonus_earn" ? "bonus" : "base"} {theme.unit}
+                  <span className="ml-1 font-normal text-slate-400">
+                    · {e.travellerName}
+                    {e.status === "pending" &&
+                      (e.type === "base_earn"
+                        ? ` · unlocks after travel`
+                        : ` · unlocks after final payment`)}
                   </span>
                 </span>
-                <MilesPill status={e.status} />
-              </div>
-              <p className="mt-0.5 text-[10px] text-slate-400">{e.reason}</p>
-            </li>
-          ))}
+                <MilesPill status={e.status} customer />
+              </li>
+            ))}
           {loan.ledger.length === 0 && (
-            <li className="text-xs text-slate-400">No miles activity yet.</li>
+            <li className="text-xs text-slate-400">No {theme.unit} activity yet.</li>
           )}
         </ul>
+        <Link
+          href="/account/miles"
+          className="mt-2 inline-block text-xs font-semibold underline"
+          style={{ color: "var(--brand)" }}
+        >
+          View all activity in My {theme.unit} →
+        </Link>
       </section>
 
       {/* Documents */}

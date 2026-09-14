@@ -5,8 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { useApi } from "@/lib/api-client";
 import { usePersona } from "@/lib/use-persona";
 import { useTheme } from "@/app/theme-context";
-import { tierForProgress, tierNudge } from "@/lib/theme";
-import { LoyaltyCard } from "@/components/LoyaltyCard";
+import { AccountTabs } from "@/components/AccountTabs";
 import { MilesPill } from "@/components/MilesPill";
 import { PrototypeNotes } from "@/components/PrototypeNotes";
 import { CardSkeleton } from "@/components/Skeleton";
@@ -28,18 +27,7 @@ export default function AccountPage() {
   return (
     <div className="flex min-h-full flex-col">
       <h1 className="mb-3 text-base font-bold">My trips &amp; payments</h1>
-
-      <div className="mb-4">
-        <LoyaltyCard
-          variant="full"
-          tierName={tierForProgress(theme, persona.tierProgress).name}
-          balance={persona.milesBalance}
-          progress={persona.tierProgress}
-          nudge={tierNudge(theme, persona.tierProgress)}
-          pendingLine={`1,860 ${theme.unit} pending — post after travel on Oct 12`}
-          ctaLabel="Redeem"
-        />
-      </div>
+      <AccountTabs active="trips" />
 
       {/* Scenario guide so the servicing edge cases are discoverable. */}
       <div className="mb-3 rounded-lg border border-dashed border-slate-300 bg-white px-3 py-2">
@@ -110,7 +98,7 @@ export default function AccountPage() {
                     </p>
                     {bonus && (
                       <p className="mt-1 flex items-center gap-1.5 text-[11px] text-slate-500">
-                        Bonus {theme.unit}: <MilesPill status={bonus.status} />
+                        Bonus {theme.unit}: <MilesPill status={bonus.status} customer />
                       </p>
                     )}
                   </div>

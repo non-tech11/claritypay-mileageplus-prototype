@@ -8,7 +8,8 @@ const STYLES: Record<MilesStatus, string> = {
   pending_retry: "bg-blue-50 text-blue-700 border-blue-300",
 };
 
-const LABELS: Record<MilesStatus, string> = {
+/** Operational labels — merchant dashboard and API views. */
+const OPS_LABELS: Record<MilesStatus, string> = {
   pending: "pending",
   posted: "posted",
   held: "held",
@@ -16,12 +17,27 @@ const LABELS: Record<MilesStatus, string> = {
   pending_retry: "pending — retrying",
 };
 
-export function MilesPill({ status }: { status: MilesStatus }) {
+/** Customer-facing labels — the unlock metaphor. */
+const CUSTOMER_LABELS: Record<MilesStatus, string> = {
+  pending: "unlocking soon",
+  posted: "unlocked",
+  held: "on hold",
+  reversed: "removed",
+  pending_retry: "unlocking soon — retrying",
+};
+
+export function MilesPill({
+  status,
+  customer = false,
+}: {
+  status: MilesStatus;
+  customer?: boolean;
+}) {
   return (
     <span
-      className={`inline-block rounded-full border px-2 py-0.5 text-[11px] font-medium ${STYLES[status]}`}
+      className={`inline-block whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium ${STYLES[status]}`}
     >
-      {LABELS[status]}
+      {(customer ? CUSTOMER_LABELS : OPS_LABELS)[status]}
     </span>
   );
 }

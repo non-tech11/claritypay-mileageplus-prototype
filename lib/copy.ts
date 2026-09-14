@@ -57,7 +57,9 @@ export const PROTOTYPE_NOTES: Record<string, string> = {
   confirmation:
     "Miles shown with honest statuses (pending / posted / reversed) rather than a single inflated number. A traveller without a MileagePlus number gets a 30-day retro-credit prompt.",
   account:
-    "Post-purchase servicing under United's brand. Loan health and miles status live together — the customer never has to learn that two companies are involved.",
+    "Post-purchase servicing under United's brand. Trips carry a compact earn summary; the full miles story lives in its own tab — the customer never has to learn that two companies are involved.",
+  miles:
+    "The miles hub uses the unlock metaphor: base miles unlock after travel, bonus miles unlock after the final payment, and cancellations deduct whatever was still unlocking soon. One place to answer 'where are my miles?'",
   loan:
     "Every miles movement is a ledger line with a reason. The simulator panel below exercises the edge cases: cancellations, partial refunds, redeemed-then-cancelled netting, delinquency freeze/reverse, and loyalty-API failure.",
   dashboard:
