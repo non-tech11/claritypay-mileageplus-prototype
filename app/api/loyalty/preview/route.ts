@@ -62,6 +62,6 @@ export async function GET(req: NextRequest) {
     perPlan,
     maxFinancingMiles: best,
     note:
-      "0% APR plans earn no bonus — the subsidised rate is the incentive. APR plans earn a bonus (rate varies by fare tier, Economy Plus highest), identical on every APR term.",
+      "0% APR plans earn no bonus — the subsidised rate is the incentive. The pay-over-time bonus is an Economy Plus benefit, identical on every APR term.",
   });
 }

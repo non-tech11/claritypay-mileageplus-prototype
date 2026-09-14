@@ -94,39 +94,31 @@ export default function RewardsPage() {
           <CardSkeleton lines={6} />
         ) : (
           <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
-            <fieldset className="rounded-lg border border-slate-200 p-3">
-              <legend className="px-1 text-[11px] font-bold text-slate-600">
-                Bonus miles per $100 financed (APR plans only)
-              </legend>
-              <div className="grid grid-cols-3 gap-2">
-                {(["basic", "economy", "economy-plus"] as const).map((tier) => (
-                  <div key={tier}>
-                    <label className="label capitalize" htmlFor={`mb-${tier}`}>
-                      {tier.replace("-", " ")}
-                    </label>
-                    <input
-                      id={`mb-${tier}`}
-                      type="number"
-                      min={0}
-                      className="input"
-                      value={form.milesBackPer100?.[tier] ?? ""}
-                      onChange={(e) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          milesBackPer100: {
-                            ...(prev.milesBackPer100 ?? {}),
-                            [tier]: Number(e.target.value),
-                          },
-                        }))
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-              <p className="mt-1 text-[10px] text-slate-400">
-                Differentiated by fare tier; 0% APR plans always earn none.
+            <div>
+              <label className="label" htmlFor="mb-economy-plus">
+                Bonus miles per $100 financed (Economy Plus)
+              </label>
+              <input
+                id="mb-economy-plus"
+                type="number"
+                min={0}
+                className="input"
+                value={form.milesBackPer100?.["economy-plus"] ?? ""}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    milesBackPer100: {
+                      ...(prev.milesBackPer100 ?? {}),
+                      "economy-plus": Number(e.target.value),
+                    },
+                  }))
+                }
+              />
+              <p className="mt-0.5 text-[10px] text-slate-400">
+                The bonus is an Economy Plus benefit on APR plans only — other
+                fare tiers and 0% plans earn base miles alone.
               </p>
-            </fieldset>
+            </div>
             {FIELDS.map((f) => (
               <div key={f.key}>
                 <label className="label" htmlFor={f.key}>

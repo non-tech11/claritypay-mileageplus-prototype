@@ -41,6 +41,31 @@ export default function AccountPage() {
         />
       </div>
 
+      {/* Scenario guide so the servicing edge cases are discoverable. */}
+      <div className="mb-3 rounded-lg border border-dashed border-slate-300 bg-white px-3 py-2">
+        <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+          Prototype: servicing scenarios
+        </p>
+        <ul className="mt-1 space-y-0.5 text-[11px] text-slate-500">
+          <li>
+            · <Link href="/account/LN-1001" className="underline" style={{ color: "var(--brand)" }}>On-track loan</Link>{" "}
+            — healthy schedule, bonus pending until the plan completes
+          </li>
+          <li>
+            · <Link href="/account/LN-1002" className="underline" style={{ color: "var(--brand)" }}>Cancelled &amp; refunded</Link>{" "}
+            — refund to original method, miles reversed
+          </li>
+          <li>
+            · <Link href="/account/LN-1003" className="underline" style={{ color: "var(--brand)" }}>Delinquent (32 DPD)</Link>{" "}
+            — late fee, bonus held; base untouched
+          </li>
+          <li className="text-slate-400">
+            Every loan page has a simulator: cancellation, partial refund,
+            redeemed-then-cancelled, missed payments, reward failure.
+          </li>
+        </ul>
+      </div>
+
       {error ? (
         <ErrorRetry message={error} onRetry={retry} />
       ) : loading ? (

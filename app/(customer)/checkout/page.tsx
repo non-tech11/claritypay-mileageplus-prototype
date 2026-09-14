@@ -226,6 +226,24 @@ export default function CheckoutPage() {
             {submitting && <Loader2 size={14} className="animate-spin" aria-hidden />}
             {submitting ? "Checking eligibility…" : "Continue and agree"}
           </button>
+          <div className="mt-3 rounded-lg border border-dashed border-slate-300 px-3 py-2">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+              Prototype: outcomes
+            </p>
+            <p className="mt-0.5 text-[10px] text-slate-400">
+              The persona in the toolbar decides the decision — Priya/Marcus
+              approve, Dana declines. Or jump straight to it:
+            </p>
+            <button
+              className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
+              onClick={() => {
+                saveDraft({ declined: true, offerId: null, plans: [] });
+                router.push("/checkout/declined");
+              }}
+            >
+              Preview the decline path →
+            </button>
+          </div>
         </section>
       )}
       <PrototypeNotes screen={selected === "payovertime" ? "prequal" : "checkout"} />

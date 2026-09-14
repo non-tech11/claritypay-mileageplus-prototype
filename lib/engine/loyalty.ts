@@ -37,11 +37,10 @@ export function reversalTypeFor(
 }
 
 /**
- * Financing-funded miles for a booking, per plan:
+ * Pay-over-time bonus for a booking, per plan. Strictly Economy Plus:
+ * other fare tiers earn base miles only, whatever the plan.
  * - 0% APR plans earn nothing — the subsidised rate is the incentive.
- * - APR plans earn miles back per $100 financed, rate differentiated by
- *   fare tier (config.milesBackPer100).
- * - The flat bonus applies only to the Economy Plus tier, capped.
+ * - Economy Plus + APR plan: per-$100 rate + flat extra, capped.
  * Same for every APR-bearing term: longer debt earns no more.
  */
 export function financingMiles(
@@ -50,16 +49,15 @@ export function financingMiles(
   apr: number,
   config: MerchantConfig
 ): { milesBack: number; bonus: number } {
-  if (apr <= 0) return { milesBack: 0, bonus: 0 };
+  if (apr <= 0 || fareId !== BONUS_FARE_TIER) {
+    return { milesBack: 0, bonus: 0 };
+  }
   const hundreds = Math.floor(amountFinanced / 100);
   const milesBack = hundreds * (config.milesBackPer100[fareId] ?? 0);
-  const bonus =
-    fareId === BONUS_FARE_TIER
-      ? Math.min(
-          config.bonusFlatPerBooking + hundreds * config.bonusPer100Financed,
-          config.bonusCapPerBooking
-        )
-      : 0;
+  const bonus = Math.min(
+    config.bonusFlatPerBooking + hundreds * config.bonusPer100Financed,
+    config.bonusCapPerBooking
+  );
   return { milesBack, bonus };
 }
 

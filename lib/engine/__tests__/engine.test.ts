@@ -92,22 +92,14 @@ describe("financing miles (miles back + bonus)", () => {
     expect(f12.bonus).toBe(500);
   });
 
-  it("gives the flat bonus only on Economy Plus; other tiers get miles back only", () => {
+  it("is strictly an Economy Plus benefit — other tiers earn nothing extra", () => {
     const economy = financingMiles(337.2, "economy", 14.99, DEFAULT_CONFIG);
-    expect(economy.bonus).toBe(0);
-    expect(economy.milesBack).toBe(3 * 150);
+    expect(economy.bonus + economy.milesBack).toBe(0);
     const basic = financingMiles(262.6, "basic", 14.99, DEFAULT_CONFIG);
-    expect(basic.bonus).toBe(0);
-    expect(basic.milesBack).toBe(2 * 100);
-  });
-
-  it("differentiates the miles-back rate by fare tier, ascending", () => {
-    const amount = 400;
-    const rates = ["basic", "economy", "economy-plus"].map(
-      (tier) => financingMiles(amount, tier, 14.99, DEFAULT_CONFIG).milesBack
-    );
-    expect(rates[0]).toBeLessThan(rates[1]);
-    expect(rates[1]).toBeLessThan(rates[2]);
+    expect(basic.bonus + basic.milesBack).toBe(0);
+    const plus = financingMiles(416.8, "economy-plus", 14.99, DEFAULT_CONFIG);
+    // Per-$100 rate (4 x 200) + flat 500 = 1,300 total bonus.
+    expect(plus.milesBack + plus.bonus).toBe(1300);
   });
 
   it("caps the Economy Plus bonus per booking", () => {

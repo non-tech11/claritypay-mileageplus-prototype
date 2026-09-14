@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BadgeCheck, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
+import {
+  BadgeCheck,
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+  Plane,
+  Trophy,
+} from "lucide-react";
 import { loadDraft, saveDraft, type BookingDraft } from "@/lib/booking";
 import { postJson, useApi } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
@@ -195,7 +202,11 @@ export default function OfferPage() {
               preview.data
                 ? bonus > 0
                   ? `You'll earn ${base.toLocaleString()} base + ${bonus.toLocaleString()} bonus = ${(base + bonus).toLocaleString()} ${theme.unit}`
-                  : `You'll earn ${base.toLocaleString()} base ${theme.unit} — this 0% plan adds no bonus`
+                  : `You'll earn ${base.toLocaleString()} base ${theme.unit}${
+                    (chosenMiles?.apr ?? 0) > 0
+                      ? " — the bonus is an Economy Plus benefit"
+                      : " — 0% plans add no bonus"
+                  }`
                 : "Calculating your earn…"
             }
           />
@@ -210,11 +221,56 @@ export default function OfferPage() {
           {timingOpen ? <ChevronUp size={12} aria-hidden /> : <ChevronDown size={12} aria-hidden />}
         </button>
         {timingOpen && (
-          <ul className="mt-1 space-y-1 rounded-lg bg-slate-100 px-3 py-2 text-[11px] text-slate-600">
-            <li>· {MILES_TIMING_BASE}</li>
-            <li>· {MILES_TIMING_BONUS}</li>
-            <li>· {MILES_TIMING_REVERSAL}</li>
-          </ul>
+          <div
+            className="mt-2 rounded-xl border p-3"
+            style={{
+              borderColor: "var(--accent)",
+              background: "color-mix(in srgb, var(--accent) 12%, white)",
+            }}
+          >
+            <ol className="relative ml-3.5 space-y-4 border-l-2 pl-5" style={{ borderColor: "var(--accent)" }}>
+              <li className="relative">
+                <span
+                  className="absolute -left-[31px] top-0 flex h-6 w-6 items-center justify-center rounded-full text-slate-900"
+                  style={{ background: "var(--accent)" }}
+                >
+                  <Plane size={13} aria-hidden />
+                </span>
+                <p className="text-xs font-bold text-slate-800">
+                  After your flight
+                  <span className="ml-1.5" style={{ color: "var(--brand)" }}>
+                    +{base.toLocaleString()} base {theme.unit}
+                  </span>
+                </p>
+                <p className="text-[10px] text-slate-500">{MILES_TIMING_BASE}</p>
+              </li>
+              {bonus > 0 && (
+                <li className="relative">
+                  <span
+                    className="absolute -left-[31px] top-0 flex h-6 w-6 items-center justify-center rounded-full text-slate-900"
+                    style={{ background: "var(--accent)" }}
+                  >
+                    <Trophy size={13} aria-hidden />
+                  </span>
+                  <p className="text-xs font-bold text-slate-800">
+                    After your final payment
+                    <span className="ml-1.5" style={{ color: "var(--brand)" }}>
+                      +{bonus.toLocaleString()} bonus {theme.unit}
+                    </span>
+                  </p>
+                  <p className="text-[10px] text-slate-500">{MILES_TIMING_BONUS}</p>
+                </li>
+              )}
+            </ol>
+            {bonus > 0 && (
+              <p className="mt-3 rounded-lg bg-white/70 px-2.5 py-1.5 text-center text-xs font-bold text-slate-800">
+                {(base + bonus).toLocaleString()} {theme.unit} toward your next trip ✈
+              </p>
+            )}
+            <p className="mt-1.5 text-center text-[10px] text-slate-400">
+              {MILES_TIMING_REVERSAL}
+            </p>
+          </div>
         )}
       </div>
 
