@@ -159,7 +159,7 @@ export default function OfferPage() {
                   Recommended
                 </span>
               )}
-              <div>
+              <div className="min-w-0">
                 <p className="text-sm font-bold">
                   ${p.installmentAmount.toFixed(2)}
                   <span className="font-normal text-slate-500">
@@ -170,10 +170,10 @@ export default function OfferPage() {
                   {p.label} · {p.apr}% APR · ${p.totalCost.toFixed(2)} total
                 </p>
               </div>
-              <span className="flex flex-col items-end gap-1">
+              <span className="flex shrink-0 flex-col items-end gap-1">
                 {miles && bonusFare && (
                   <span
-                    className="text-[11px] font-semibold"
+                    className="whitespace-nowrap text-[11px] font-semibold"
                     style={{ color: miles.financingTotal > 0 ? "var(--brand)" : "#94a3b8" }}
                     title={
                       miles.financingTotal > 0

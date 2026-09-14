@@ -169,7 +169,7 @@ export default function LoanDetailPage({
 
       {scheduleOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40"
+          className="api-panel-offset fixed inset-0 z-50 flex items-end justify-center bg-black/40"
           role="dialog"
           aria-modal="true"
           aria-label="Payment schedule"

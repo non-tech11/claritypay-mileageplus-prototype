@@ -133,7 +133,7 @@ export default function TransactionsPage() {
       {/* Ledger drawer */}
       {selected && (
         <div
-          className="fixed inset-0 z-50 flex justify-end bg-black/30"
+          className="api-panel-offset fixed inset-0 z-50 flex justify-end bg-black/30"
           role="dialog"
           aria-modal="true"
           aria-label={`Ledger for ${selected.pnr}`}
