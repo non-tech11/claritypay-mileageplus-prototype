@@ -73,15 +73,24 @@ function FareCard({
             />
           </div>
         ) : (
-          <p className="mt-2 text-[11px] text-slate-500">
-            Earn {preview.data.totalBase.toLocaleString()} {theme.unit}
-            {preview.data.maxFinancingMiles > 0 && (
-              <>
-                {" "}
-                · +{preview.data.maxFinancingMiles.toLocaleString()} bonus when
-                you pay over time
-              </>
-            )}
+          <p className="mt-2">
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold"
+              style={{
+                borderColor: "var(--brand)",
+                color: "var(--brand)",
+                background: "color-mix(in srgb, var(--brand) 7%, white)",
+              }}
+            >
+              <span
+                className="inline-block h-1.5 w-1.5 rounded-full"
+                style={{ background: "var(--accent)" }}
+                aria-hidden
+              />
+              Earn {preview.data.totalBase.toLocaleString()} {theme.unit}
+              {preview.data.maxFinancingMiles > 0 &&
+                ` · +${preview.data.maxFinancingMiles.toLocaleString()} bonus paying over time`}
+            </span>
           </p>
         ))}
       <button onClick={onSelect} className="btn-primary mt-3">
