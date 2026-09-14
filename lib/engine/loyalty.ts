@@ -80,14 +80,15 @@ export interface MilesPreviewLine {
   travellerId: string;
   travellerName: string;
   baseMiles: number;
+  /** Single customer-facing bonus: tier rate + Economy Plus extra, merged. */
   bonusMiles: number;
-  milesBack: number;
   hasLoyaltyNumber: boolean;
 }
 
 /**
- * Full preview: base to each traveller; financing-funded miles (miles back
- * + bonus) to the payer only, per the chosen plan's APR and fare tier.
+ * Full preview: base to each traveller; the bonus (one number — tier-rate
+ * earn plus the Economy Plus extra) to the payer only, per the chosen
+ * plan's APR and fare tier. Customers see exactly two reward types.
  */
 export function previewMiles(
   fareExclTaxes: number,
@@ -110,8 +111,7 @@ export function previewMiles(
     travellerId: t.id,
     travellerName: t.name,
     baseMiles: basePer,
-    bonusMiles: t.isPayer ? funded.bonus : 0,
-    milesBack: t.isPayer ? funded.milesBack : 0,
+    bonusMiles: t.isPayer ? funded.bonus + funded.milesBack : 0,
     hasLoyaltyNumber: !!t.mileagePlusNumber,
   }));
 }

@@ -39,16 +39,18 @@ export async function GET(req: NextRequest) {
 
   const ladder =
     persona.creditProfile === "thin" ? "prime" : persona.creditProfile;
+  // Customer-facing model has exactly two reward types: base and bonus.
+  // The bonus merges the tier-rate earn and the Economy Plus extra.
   const perPlan = buildPlans(amount, ladder).map((p) => {
     const funded = financingMiles(amount, fareTier, p.apr, config);
+    const bonus = funded.milesBack + funded.bonus;
     return {
       planId: p.id,
       label: p.label,
       apr: p.apr,
       recommended: !!p.recommended,
-      milesBack: funded.milesBack,
-      bonus: funded.bonus,
-      financingTotal: funded.milesBack + funded.bonus,
+      bonus,
+      financingTotal: bonus,
     };
   });
   const best = Math.max(...perPlan.map((p) => p.financingTotal));
@@ -60,6 +62,6 @@ export async function GET(req: NextRequest) {
     perPlan,
     maxFinancingMiles: best,
     note:
-      "0% APR plans earn no financing miles — the subsidised rate is the incentive. APR plans earn miles back (rate varies by fare tier); the Economy Plus bonus is identical on every APR term.",
+      "0% APR plans earn no bonus — the subsidised rate is the incentive. APR plans earn a bonus (rate varies by fare tier, Economy Plus highest), identical on every APR term.",
   });
 }

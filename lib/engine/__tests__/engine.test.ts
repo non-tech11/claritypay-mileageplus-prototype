@@ -117,7 +117,7 @@ describe("financing miles (miles back + bonus)", () => {
     expect(funded.bonus).toBe(1000);
   });
 
-  it("routes financing miles to the payer only; base splits across travellers", () => {
+  it("routes the bonus to the payer only; base splits across travellers", () => {
     const preview = previewMiles(
       744,
       833.6,
@@ -129,21 +129,19 @@ describe("financing miles (miles back + bonus)", () => {
     );
     const payer = preview.find((p) => p.travellerId === "priya")!;
     const other = preview.find((p) => p.travellerId === "alex")!;
-    expect(payer.bonusMiles).toBe(500);
-    expect(payer.milesBack).toBe(8 * 200);
+    // Customer-facing bonus is one number: tier rate + Economy Plus extra.
+    expect(payer.bonusMiles).toBe(500 + 8 * 200);
     expect(other.bonusMiles).toBe(0);
-    expect(other.milesBack).toBe(0);
     expect(payer.baseMiles).toBe(other.baseMiles);
     expect(payer.baseMiles).toBe(Math.round((744 * 5) / 2));
   });
 });
 
 describe("decline path", () => {
-  it("yields base miles only — no financing miles when not financed", () => {
+  it("yields base miles only — no bonus when not financed", () => {
     const preview = previewMiles(372, 416.8, [priya], DEFAULT_CONFIG, false);
     expect(preview[0].baseMiles).toBe(1860);
     expect(preview[0].bonusMiles).toBe(0);
-    expect(preview[0].milesBack).toBe(0);
   });
 });
 

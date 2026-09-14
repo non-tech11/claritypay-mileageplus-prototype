@@ -13,7 +13,6 @@ export interface PlanMilesLine {
   label: string;
   apr: number;
   recommended: boolean;
-  milesBack: number;
   bonus: number;
   financingTotal: number;
 }

@@ -110,8 +110,7 @@ export default function OverviewPage() {
                 ["Interest income (14.99% APR, 12mo)", "borne by customer", "+$82.00", "revenue"],
                 ["Cost of funds", "~5% on outstanding balance", "−$27.00", "cost"],
                 ["Expected credit loss", "2.0% of principal", "−$20.00", "cost"],
-                ["Reward cost — miles back", "2,000 mi × 1.1¢ transfer price", "−$22.00", "cost"],
-                ["Reward cost — bonus", "500 mi × 1.1¢", "−$5.50", "cost"],
+                ["Reward cost — bonus miles", "2,500 mi × 1.1¢ transfer price", "−$27.50", "cost"],
                 ["Servicing & ops", "per-loan allocation", "−$8.00", "cost"],
               ].map(([label, note, value, kind]) => (
                 <tr key={label} className="border-b border-slate-100">

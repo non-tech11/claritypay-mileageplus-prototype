@@ -21,7 +21,6 @@ interface PlanMilesLine {
   planId: string;
   apr: number;
   recommended: boolean;
-  milesBack: number;
   bonus: number;
   financingTotal: number;
 }
@@ -95,13 +94,7 @@ export default function OfferPage() {
 
   const base = preview.data?.totalBase ?? 0;
   const chosenMiles = preview.data?.perPlan.find((x) => x.planId === planId);
-  const milesBack = chosenMiles?.milesBack ?? 0;
   const bonus = chosenMiles?.bonus ?? 0;
-  const earnParts = [
-    `${base.toLocaleString()} base`,
-    ...(milesBack > 0 ? [`${milesBack.toLocaleString()} ${theme.unit} back`] : []),
-    ...(bonus > 0 ? [`${bonus.toLocaleString()} bonus`] : []),
-  ];
 
   return (
     <div className="flex min-h-full flex-col">
@@ -200,9 +193,9 @@ export default function OfferPage() {
             balance={persona.milesBalance}
             pendingLine={
               preview.data
-                ? milesBack + bonus > 0
-                  ? `You'll earn ${earnParts.join(" + ")} = ${(base + milesBack + bonus).toLocaleString()} ${theme.unit}`
-                  : `You'll earn ${base.toLocaleString()} base ${theme.unit} — this 0% plan adds none`
+                ? bonus > 0
+                  ? `You'll earn ${base.toLocaleString()} base + ${bonus.toLocaleString()} bonus = ${(base + bonus).toLocaleString()} ${theme.unit}`
+                  : `You'll earn ${base.toLocaleString()} base ${theme.unit} — this 0% plan adds no bonus`
                 : "Calculating your earn…"
             }
           />

@@ -55,33 +55,20 @@ export async function POST(req: NextRequest) {
         : `Held for retro-credit — add a MileagePlus number within ${config.retroCreditWindowDays} days`,
       date: today,
     });
-    if (t.isPayer) {
-      if (funded.milesBack > 0) {
-        ledger.push({
-          id: nextEntryId(),
-          loanId: loan.id,
-          travellerId: t.id,
-          travellerName: t.name,
-          type: "miles_back_earn",
-          amount: funded.milesBack,
-          status: "pending",
-          reason: `Miles back on financed amount (${loan.trip.fareLabel} rate) — credits after your final payment`,
-          date: today,
-        });
-      }
-      if (funded.bonus > 0) {
-        ledger.push({
-          id: nextEntryId(),
-          loanId: loan.id,
-          travellerId: t.id,
-          travellerName: t.name,
-          type: "bonus_earn",
-          amount: funded.bonus,
-          status: "pending",
-          reason: "Economy Plus pay-over-time bonus — credits after your final payment",
-          date: today,
-        });
-      }
+    // One customer-facing bonus entry: tier-rate earn + Economy Plus extra.
+    const totalBonus = funded.milesBack + funded.bonus;
+    if (t.isPayer && totalBonus > 0) {
+      ledger.push({
+        id: nextEntryId(),
+        loanId: loan.id,
+        travellerId: t.id,
+        travellerName: t.name,
+        type: "bonus_earn",
+        amount: totalBonus,
+        status: "pending",
+        reason: `Pay-over-time bonus (${loan.trip.fareLabel} rate) — credits after your final payment`,
+        date: today,
+      });
     }
   }
 

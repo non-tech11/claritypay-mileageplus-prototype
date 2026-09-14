@@ -23,8 +23,8 @@ const FIELDS: {
 }[] = [
   {
     key: "bonusFlatPerBooking",
-    label: "Bonus miles per financed booking",
-    hint: "Economy Plus + APR plans only; identical across APR terms",
+    label: "Extra flat bonus — Economy Plus",
+    hint: "Added on top of the tier rate; APR plans only, same on every term",
   },
   {
     key: "bonusPer100Financed",
@@ -96,7 +96,7 @@ export default function RewardsPage() {
           <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
             <fieldset className="rounded-lg border border-slate-200 p-3">
               <legend className="px-1 text-[11px] font-bold text-slate-600">
-                Miles back per $100 financed (APR plans only)
+                Bonus miles per $100 financed (APR plans only)
               </legend>
               <div className="grid grid-cols-3 gap-2">
                 {(["basic", "economy", "economy-plus"] as const).map((tier) => (

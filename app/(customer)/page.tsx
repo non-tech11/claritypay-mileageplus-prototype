@@ -78,7 +78,7 @@ function FareCard({
             {preview.data.maxFinancingMiles > 0 && (
               <>
                 {" "}
-                · +{preview.data.maxFinancingMiles.toLocaleString()} back when
+                · +{preview.data.maxFinancingMiles.toLocaleString()} bonus when
                 you pay over time
               </>
             )}
