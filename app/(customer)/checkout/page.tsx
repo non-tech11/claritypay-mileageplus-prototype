@@ -75,6 +75,7 @@ export default function CheckoutPage() {
           destination: "EWR",
           travelDate: "2026-10-12",
           fareLabel: fare.label,
+          fareId: fare.id,
           fare: fare.fare * multiplier,
           taxes: fare.taxes * multiplier,
         },

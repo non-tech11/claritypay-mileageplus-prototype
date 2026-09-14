@@ -41,6 +41,8 @@ export interface Plan {
   apr: number;
   installmentAmount: number;
   totalCost: number;
+  /** One plan per ladder is surfaced as the recommended default. */
+  recommended?: boolean;
 }
 
 export type Decision = "approved" | "declined";
@@ -67,8 +69,10 @@ export interface Instalment {
 export type MilesEntryType =
   | "base_earn"
   | "bonus_earn"
+  | "miles_back_earn"
   | "base_reversal"
   | "bonus_reversal"
+  | "miles_back_reversal"
   | "redemption"
   | "miles_owed"
   | "retro_credit";
@@ -110,6 +114,8 @@ export interface Trip {
   destination: string;
   travelDate: string;
   fareLabel: string;
+  /** Fare tier id (basic | economy | economy-plus) — drives miles-back rate. */
+  fareId?: string;
   /** Fare portion excl. taxes (base miles accrue on this). */
   fare: number;
   taxes: number;
@@ -136,11 +142,17 @@ export interface Loan {
 }
 
 export interface MerchantConfig {
-  /** Flat bonus miles per financed booking. */
+  /** Flat bonus miles per financed booking (Economy Plus only, APR plans only). */
   bonusFlatPerBooking: number;
   /** Additional bonus miles per $100 financed. */
   bonusPer100Financed: number;
   bonusCapPerBooking: number;
+  /**
+   * Miles back per $100 financed on APR-bearing plans, differentiated by
+   * fare tier. 0% APR plans earn none — the 0% subsidy is already the
+   * incentive.
+   */
+  milesBackPer100: Record<string, number>;
   /** Days after first on-time instalment before bonus posts. */
   bonusPostDelayDays: number;
   /** DPD at which bonus miles freeze. */

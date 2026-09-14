@@ -34,7 +34,7 @@ export async function POST(
   const firstPayment = loan.schedule.every((s) => s.status !== "paid");
   if (firstPayment || (!anyLate && loan.dpd > 0)) {
     ledger = ledger.map((e) => {
-      if (e.type !== "bonus_earn") return e;
+      if (e.type !== "bonus_earn" && e.type !== "miles_back_earn") return e;
       if (e.status === "pending") {
         return {
           ...e,

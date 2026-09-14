@@ -14,6 +14,7 @@ export const DEFAULT_CONFIG: MerchantConfig = {
   bonusFlatPerBooking: 500,
   bonusPer100Financed: 0,
   bonusCapPerBooking: 1000,
+  milesBackPer100: { basic: 100, economy: 150, "economy-plus": 200 },
   bonusPostDelayDays: 1,
   dpdFreezeThreshold: 30,
   dpdReverseThreshold: 60,
@@ -21,18 +22,45 @@ export const DEFAULT_CONFIG: MerchantConfig = {
   retroCreditWindowDays: 30,
 };
 
+/** Fare tier that qualifies for the flat pay-over-time bonus. */
+export const BONUS_FARE_TIER = "economy-plus";
+
+/** Ledger entry types funded by ClarityPay (vs the airline's base earn). */
+export const FINANCING_EARN_TYPES = ["bonus_earn", "miles_back_earn"] as const;
+
+export function reversalTypeFor(
+  earnType: string
+): "bonus_reversal" | "miles_back_reversal" | "base_reversal" {
+  if (earnType === "miles_back_earn") return "miles_back_reversal";
+  if (earnType === "base_earn") return "base_reversal";
+  return "bonus_reversal";
+}
+
 /**
- * Bonus miles for a financed booking. Term-independent by design:
- * the plan chosen never appears in this calculation.
+ * Financing-funded miles for a booking, per plan:
+ * - 0% APR plans earn nothing — the subsidised rate is the incentive.
+ * - APR plans earn miles back per $100 financed, rate differentiated by
+ *   fare tier (config.milesBackPer100).
+ * - The flat bonus applies only to the Economy Plus tier, capped.
+ * Same for every APR-bearing term: longer debt earns no more.
  */
-export function computeBonusMiles(
+export function financingMiles(
   amountFinanced: number,
+  fareId: string,
+  apr: number,
   config: MerchantConfig
-): number {
-  const raw =
-    config.bonusFlatPerBooking +
-    Math.floor(amountFinanced / 100) * config.bonusPer100Financed;
-  return Math.min(raw, config.bonusCapPerBooking);
+): { milesBack: number; bonus: number } {
+  if (apr <= 0) return { milesBack: 0, bonus: 0 };
+  const hundreds = Math.floor(amountFinanced / 100);
+  const milesBack = hundreds * (config.milesBackPer100[fareId] ?? 0);
+  const bonus =
+    fareId === BONUS_FARE_TIER
+      ? Math.min(
+          config.bonusFlatPerBooking + hundreds * config.bonusPer100Financed,
+          config.bonusCapPerBooking
+        )
+      : 0;
+  return { milesBack, bonus };
 }
 
 /**
@@ -53,28 +81,37 @@ export interface MilesPreviewLine {
   travellerName: string;
   baseMiles: number;
   bonusMiles: number;
+  milesBack: number;
   hasLoyaltyNumber: boolean;
 }
 
-/** Full preview: base to each traveller, bonus to the payer only. */
+/**
+ * Full preview: base to each traveller; financing-funded miles (miles back
+ * + bonus) to the payer only, per the chosen plan's APR and fare tier.
+ */
 export function previewMiles(
   fareExclTaxes: number,
   amountFinanced: number,
   travellers: Traveller[],
   config: MerchantConfig,
-  financed: boolean
+  financed: boolean,
+  fareId: string = BONUS_FARE_TIER,
+  apr: number = 0
 ): MilesPreviewLine[] {
   const basePer = computeBaseMilesPerTraveller(
     fareExclTaxes,
     travellers.length,
     config
   );
-  const bonus = financed ? computeBonusMiles(amountFinanced, config) : 0;
+  const funded = financed
+    ? financingMiles(amountFinanced, fareId, apr, config)
+    : { milesBack: 0, bonus: 0 };
   return travellers.map((t) => ({
     travellerId: t.id,
     travellerName: t.name,
     baseMiles: basePer,
-    bonusMiles: t.isPayer ? bonus : 0,
+    bonusMiles: t.isPayer ? funded.bonus : 0,
+    milesBack: t.isPayer ? funded.milesBack : 0,
     hasLoyaltyNumber: !!t.mileagePlusNumber,
   }));
 }
@@ -94,26 +131,30 @@ export function applyDelinquency(
 ): MilesEntry[] {
   if (fullyRepaid || dpd < config.dpdFreezeThreshold) return ledger;
 
+  const isFunded = (t: string) =>
+    (FINANCING_EARN_TYPES as readonly string[]).includes(t);
+
   const updated = ledger.map((e) => {
-    if (e.type !== "bonus_earn" || e.status === "reversed") return e;
+    if (!isFunded(e.type) || e.status === "reversed") return e;
+    const label = e.type === "bonus_earn" ? "Bonus" : "Miles back";
     if (dpd >= config.dpdReverseThreshold) {
       return {
         ...e,
         status: "reversed" as const,
-        reason: `Bonus reversed at ${config.dpdReverseThreshold}+ days past due`,
+        reason: `${label} reversed at ${config.dpdReverseThreshold}+ days past due`,
       };
     }
     return {
       ...e,
       status: "held" as const,
-      reason: `Bonus held at ${config.dpdFreezeThreshold}+ days past due`,
+      reason: `${label} held at ${config.dpdFreezeThreshold}+ days past due`,
     };
   });
 
   // At the reverse threshold, add an explicit reversal line for audit.
   if (dpd >= config.dpdReverseThreshold) {
     const reversedEarn = ledger.filter(
-      (e) => e.type === "bonus_earn" && e.status !== "reversed"
+      (e) => isFunded(e.type) && e.status !== "reversed"
     );
     for (const e of reversedEarn) {
       updated.push({
@@ -121,7 +162,7 @@ export function applyDelinquency(
         loanId: e.loanId,
         travellerId: e.travellerId,
         travellerName: e.travellerName,
-        type: "bonus_reversal",
+        type: reversalTypeFor(e.type),
         amount: -e.amount,
         status: "posted",
         reason: `Delinquency reversal (${config.dpdReverseThreshold}+ DPD)`,
@@ -144,7 +185,7 @@ export function reverseWithNetting(params: {
   travellerName: string;
   milesToReverse: number;
   availableBalance: number;
-  type: "base_reversal" | "bonus_reversal";
+  type: "base_reversal" | "bonus_reversal" | "miles_back_reversal";
   reason: string;
   today: string;
 }): { entries: MilesEntry[]; balanceDebit: number; milesOwed: number } {

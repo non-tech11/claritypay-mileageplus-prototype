@@ -4,7 +4,7 @@
 
 2. **The lender is invisible except where the law requires it.** United branding everywhere the customer acts; ClarityPay appears only as the wallet micro-tag, the prequal disclosure block, the loan agreement, and statement footers. All regulated copy is a shared constant (`lib/copy.ts`) — disclosures are never free-typed.
 
-3. **Miles are identical across plan terms, and the UI says so.** The plan sheet and offer screen state explicitly that longer terms earn nothing extra. We never let the loyalty currency nudge a customer into more expensive debt; the engine enforces it (bonus calc takes no plan input, covered by a unit test).
+3. **Financing miles reward margin, never term length.** 0% APR plans earn no financing miles — the subsidised rate *is* the incentive, and there is no margin to fund miles from. APR-bearing plans earn miles back per $100 financed at a fare-tier rate (Basic < Economy < Economy Plus), and every APR term earns the same — we never let the loyalty currency nudge a customer into longer debt. The flat bonus is reserved for Economy Plus, concentrating spend-up where United's margin is. All enforced in the engine and unit-tested; a calculator in the plan sheet shows financing cost vs miles value honestly.
 
 4. **Bonus goes to the payer only; base goes to every traveller.** One loan, one borrower, one bonus. Base miles are earned by flying and split per traveller with a MileagePlus number; travellers without one get a 30-day retro-credit window instead of silently losing the earn.
 
@@ -20,4 +20,6 @@
 
 10. **Chart is hand-rolled SVG, state is in-memory, personas replace auth.** Prototype-scale choices made deliberately: no chart dependency, no database (documented cold-start reset + `POST /api/reset`), and a persona switcher that also drives underwriting outcomes so every path is walkable without credentials.
 
-11. **Partial cancellation keeps the payer's bonus.** The bonus rewards the financed booking (which still exists, re-amortised), not headcount. The cancelled traveller's base miles are reversed pro-rata; the loan is re-amortised so unpaid instalments sum to the new outstanding balance.
+11. **One plan is recommended, and it's the 12-month.** A default fights choice paralysis; 12 months balances a manageable payment against total cost, and (unlike 0%) it earns financing miles — aligned incentives for customer, United, and ClarityPay.
+
+12. **Partial cancellation keeps the payer's bonus.** The bonus rewards the financed booking (which still exists, re-amortised), not headcount. The cancelled traveller's base miles are reversed pro-rata; the loan is re-amortised so unpaid instalments sum to the new outstanding balance.

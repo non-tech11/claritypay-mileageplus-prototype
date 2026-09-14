@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
         destination: "EWR",
         travelDate: "2026-10-12",
         fareLabel: "Economy Plus",
+        fareId: "economy-plus",
         fare: Math.round(offer.amount * 0.89 * 100) / 100,
         taxes: Math.round(offer.amount * 0.11 * 100) / 100,
       },

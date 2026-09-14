@@ -17,7 +17,7 @@ interface EstimateResponse {
 }
 interface PreviewResponse {
   totalBase: number;
-  totalBonus: number;
+  maxFinancingMiles: number;
 }
 
 function FareCard({
@@ -34,7 +34,9 @@ function FareCard({
     `/api/offers/estimate?amount=${fare.total}`
   );
   const preview = useApi<PreviewResponse>(
-    highlight ? `/api/loyalty/preview?amount=${fare.total}&fare=${fare.fare}&travellers=1` : null
+    highlight
+      ? `/api/loyalty/preview?amount=${fare.total}&fare=${fare.fare}&travellers=1&fareTier=${fare.id}`
+      : null
   );
 
   return (
@@ -68,7 +70,7 @@ function FareCard({
             variant="chip"
             tierName=""
             balance={0}
-            chipText={`Earn up to ${preview.data.totalBase.toLocaleString()} ${theme.unit} · +${preview.data.totalBonus.toLocaleString()} bonus if you pay over time`}
+            chipText={`Earn up to ${preview.data.totalBase.toLocaleString()} ${theme.unit} · up to +${preview.data.maxFinancingMiles.toLocaleString()} more if you pay over time`}
           />
         </div>
       )}

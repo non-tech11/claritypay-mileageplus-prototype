@@ -17,9 +17,17 @@ import { LoyaltyCard } from "@/components/LoyaltyCard";
 import { PrototypeNotes } from "@/components/PrototypeNotes";
 import { ErrorRetry } from "@/components/ErrorRetry";
 
+interface PlanMilesLine {
+  planId: string;
+  apr: number;
+  recommended: boolean;
+  milesBack: number;
+  bonus: number;
+  financingTotal: number;
+}
 interface PreviewResponse {
   totalBase: number;
-  totalBonus: number;
+  perPlan: PlanMilesLine[];
 }
 
 export default function OfferPage() {
@@ -45,14 +53,19 @@ export default function OfferPage() {
     const carried = d.plans.some((p) => p.id === d.selectedPlanId)
       ? d.selectedPlanId
       : null;
-    setPlanId(carried ?? d.plans[Math.min(1, d.plans.length - 1)]?.id ?? d.plans[0]?.id ?? "");
+    setPlanId(
+      carried ??
+        d.plans.find((p) => p.recommended)?.id ??
+        d.plans[0]?.id ??
+        ""
+    );
   }, [router]);
 
   const multiplier = draft && draft.travellers.length > 1 ? 2 : 1;
   const total = draft?.fare ? Number((draft.fare.total * multiplier).toFixed(2)) : 0;
   const preview = useApi<PreviewResponse>(
     draft?.fare
-      ? `/api/loyalty/preview?amount=${total}&fare=${draft.fare.fare * multiplier}&travellers=${multiplier}`
+      ? `/api/loyalty/preview?amount=${total}&fare=${draft.fare.fare * multiplier}&travellers=${multiplier}&fareTier=${draft.fare.id}`
       : null
   );
 
@@ -81,7 +94,14 @@ export default function OfferPage() {
   };
 
   const base = preview.data?.totalBase ?? 0;
-  const bonus = preview.data?.totalBonus ?? 0;
+  const chosenMiles = preview.data?.perPlan.find((x) => x.planId === planId);
+  const milesBack = chosenMiles?.milesBack ?? 0;
+  const bonus = chosenMiles?.bonus ?? 0;
+  const earnParts = [
+    `${base.toLocaleString()} base`,
+    ...(milesBack > 0 ? [`${milesBack.toLocaleString()} ${theme.unit} back`] : []),
+    ...(bonus > 0 ? [`${bonus.toLocaleString()} bonus`] : []),
+  ];
 
   return (
     <div className="flex min-h-full flex-col">
@@ -97,38 +117,61 @@ export default function OfferPage() {
       )}
 
       <div className="space-y-2" role="radiogroup" aria-label="Payment plans">
-        {draft.plans.map((p) => (
-          <button
-            key={p.id}
-            role="radio"
-            aria-checked={planId === p.id}
-            onClick={() => setPlanId(p.id)}
-            className={`flex w-full items-center justify-between rounded-xl border bg-white px-3 py-3 text-left transition ${
-              planId === p.id ? "border-2" : "border-slate-200"
-            }`}
-            style={planId === p.id ? { borderColor: "var(--brand)" } : undefined}
-          >
-            <div>
-              <p className="text-sm font-bold">
-                ${p.installmentAmount.toFixed(2)}
-                <span className="font-normal text-slate-500">
-                  {p.intervalDays === 14 ? " / 2 wks" : " / mo"}
+        {draft.plans.map((p) => {
+          const miles = preview.data?.perPlan.find((x) => x.planId === p.id);
+          return (
+            <button
+              key={p.id}
+              role="radio"
+              aria-checked={planId === p.id}
+              onClick={() => setPlanId(p.id)}
+              className={`relative flex w-full items-center justify-between rounded-xl border bg-white px-3 py-3 text-left transition ${
+                planId === p.id ? "border-2" : "border-slate-200"
+              } ${p.recommended ? "mt-2" : ""}`}
+              style={planId === p.id ? { borderColor: "var(--brand)" } : undefined}
+            >
+              {p.recommended && (
+                <span
+                  className="absolute -top-2 left-3 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-slate-900"
+                  style={{ background: "var(--accent)" }}
+                >
+                  Recommended
                 </span>
-              </p>
-              <p className="text-[11px] text-slate-500">
-                {p.label} · {p.apr}% APR · ${p.totalCost.toFixed(2)} total
-              </p>
-            </div>
-            {planId === p.id && (
-              <span
-                className="rounded-full px-2 py-0.5 text-[10px] font-bold text-white"
-                style={{ background: "var(--brand)" }}
-              >
-                Selected
+              )}
+              <div>
+                <p className="text-sm font-bold">
+                  ${p.installmentAmount.toFixed(2)}
+                  <span className="font-normal text-slate-500">
+                    {p.intervalDays === 14 ? " / 2 wks" : " / mo"}
+                  </span>
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  {p.label} · {p.apr}% APR · ${p.totalCost.toFixed(2)} total
+                </p>
+              </div>
+              <span className="flex flex-col items-end gap-1">
+                {miles && (
+                  <span
+                    className="text-[11px] font-semibold"
+                    style={{ color: miles.financingTotal > 0 ? "var(--brand)" : "#94a3b8" }}
+                  >
+                    {miles.financingTotal > 0
+                      ? `+${miles.financingTotal.toLocaleString()} ${theme.unit}`
+                      : `no extra ${theme.unit}`}
+                  </span>
+                )}
+                {planId === p.id && (
+                  <span
+                    className="rounded-full px-2 py-0.5 text-[10px] font-bold text-white"
+                    style={{ background: "var(--brand)" }}
+                  >
+                    Selected
+                  </span>
+                )}
               </span>
-            )}
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
 
       <div className="mt-3">
@@ -141,7 +184,9 @@ export default function OfferPage() {
             balance={persona.milesBalance}
             pendingLine={
               preview.data
-                ? `You'll earn ${base.toLocaleString()} base + ${bonus.toLocaleString()} pay-over-time bonus = ${(base + bonus).toLocaleString()} ${theme.unit}`
+                ? milesBack + bonus > 0
+                  ? `You'll earn ${earnParts.join(" + ")} = ${(base + milesBack + bonus).toLocaleString()} ${theme.unit}`
+                  : `You'll earn ${base.toLocaleString()} base ${theme.unit} — this 0% plan adds none`
                 : "Calculating your earn…"
             }
           />

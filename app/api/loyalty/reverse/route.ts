@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { reverseWithNetting } from "@/lib/engine/loyalty";
+import { reversalTypeFor, reverseWithNetting } from "@/lib/engine/loyalty";
 import { findLoan, getStore, replaceLoan } from "@/lib/store";
 
 interface ReverseBody {
@@ -20,7 +20,9 @@ export async function POST(req: NextRequest) {
 
   const targets = loan.ledger.filter(
     (e) =>
-      (e.type === "base_earn" || e.type === "bonus_earn") &&
+      (e.type === "base_earn" ||
+        e.type === "bonus_earn" ||
+        e.type === "miles_back_earn") &&
       e.status !== "reversed" &&
       (!travellerId || e.travellerId === travellerId)
   );
@@ -41,7 +43,7 @@ export async function POST(req: NextRequest) {
       travellerName: e.travellerName,
       milesToReverse: e.amount,
       availableBalance: store.balances[e.travellerId] ?? 0,
-      type: e.type === "base_earn" ? "base_reversal" : "bonus_reversal",
+      type: reversalTypeFor(e.type),
       reason,
       today,
     });

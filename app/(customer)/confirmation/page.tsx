@@ -110,7 +110,12 @@ function ConfirmationInner() {
               <li key={e.id} className="flex items-center justify-between gap-2 text-xs">
                 <span>
                   {e.amount.toLocaleString()}{" "}
-                  {e.type === "bonus_earn" ? "bonus" : "base"} {theme.unit} —{" "}
+                  {e.type === "bonus_earn"
+                    ? "bonus"
+                    : e.type === "miles_back_earn"
+                      ? `${theme.unit} back`
+                      : "base"}{" "}
+                  {e.type === "miles_back_earn" ? "" : theme.unit} —{" "}
                   {e.travellerName}
                 </span>
                 <MilesPill status={e.status} />

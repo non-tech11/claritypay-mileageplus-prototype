@@ -6,7 +6,17 @@ export async function GET() {
   return NextResponse.json(getStore().config);
 }
 
-const NUMERIC_KEYS: (keyof MerchantConfig)[] = [
+type NumericKey =
+  | "bonusFlatPerBooking"
+  | "bonusPer100Financed"
+  | "bonusCapPerBooking"
+  | "bonusPostDelayDays"
+  | "dpdFreezeThreshold"
+  | "dpdReverseThreshold"
+  | "baseMilesPerDollar"
+  | "retroCreditWindowDays";
+
+const NUMERIC_KEYS: NumericKey[] = [
   "bonusFlatPerBooking",
   "bonusPer100Financed",
   "bonusCapPerBooking",
@@ -26,6 +36,16 @@ export async function PUT(req: NextRequest) {
     if (typeof v === "number" && Number.isFinite(v) && v >= 0) {
       updated[key] = v;
     }
+  }
+  // Per-fare-tier miles-back rates (numbers only, merged key by key).
+  if (body.milesBackPer100 && typeof body.milesBackPer100 === "object") {
+    const merged = { ...updated.milesBackPer100 };
+    for (const [tier, v] of Object.entries(body.milesBackPer100)) {
+      if (typeof v === "number" && Number.isFinite(v) && v >= 0) {
+        merged[tier] = v;
+      }
+    }
+    updated.milesBackPer100 = merged;
   }
   if (updated.dpdReverseThreshold < updated.dpdFreezeThreshold) {
     return NextResponse.json(

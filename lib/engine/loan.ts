@@ -26,20 +26,22 @@ export interface PlanTemplate {
   installments: number;
   intervalDays: number;
   apr: number;
+  recommended?: boolean;
 }
 
-/** Illustrative plan ladder by credit profile. */
+/** Illustrative plan ladder by credit profile. 12mo is the recommended
+ * default: manageable payment, earns financing miles (unlike 0%). */
 export function planTemplates(profile: CreditProfile): PlanTemplate[] {
   if (profile === "near-prime") {
     // Shorter terms only, higher APR, shown clearly.
     return [
       { id: "6wk", label: "4 payments / 6 weeks", installments: 4, intervalDays: 14, apr: 0 },
-      { id: "12mo", label: "12 monthly payments", installments: 12, intervalDays: 30, apr: 24.99 },
+      { id: "12mo", label: "12 monthly payments", installments: 12, intervalDays: 30, apr: 24.99, recommended: true },
     ];
   }
   return [
     { id: "6wk", label: "4 payments / 6 weeks", installments: 4, intervalDays: 14, apr: 0 },
-    { id: "12mo", label: "12 monthly payments", installments: 12, intervalDays: 30, apr: 14.99 },
+    { id: "12mo", label: "12 monthly payments", installments: 12, intervalDays: 30, apr: 14.99, recommended: true },
     { id: "24mo", label: "24 monthly payments", installments: 24, intervalDays: 30, apr: 17.99 },
   ];
 }

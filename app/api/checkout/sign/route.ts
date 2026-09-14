@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   computeBaseMilesPerTraveller,
-  computeBonusMiles,
+  financingMiles,
   nextEntryId,
 } from "@/lib/engine/loyalty";
 import { findLoan, generatePnr, getStore, replaceLoan } from "@/lib/store";
@@ -35,7 +35,10 @@ export async function POST(req: NextRequest) {
     loan.travellers.length || 1,
     config
   );
-  const bonus = computeBonusMiles(loan.principal, config);
+  const fareId =
+    loan.trip.fareId ??
+    loan.trip.fareLabel.toLowerCase().replace(/\s+/g, "-").replace("basic-economy", "basic");
+  const funded = financingMiles(loan.principal, fareId, loan.plan.apr, config);
 
   const ledger = [...loan.ledger];
   for (const t of loan.travellers) {
@@ -53,17 +56,32 @@ export async function POST(req: NextRequest) {
       date: today,
     });
     if (t.isPayer) {
-      ledger.push({
-        id: nextEntryId(),
-        loanId: loan.id,
-        travellerId: t.id,
-        travellerName: t.name,
-        type: "bonus_earn",
-        amount: bonus,
-        status: "pending",
-        reason: "Pay-over-time bonus — posts after first on-time payment",
-        date: today,
-      });
+      if (funded.milesBack > 0) {
+        ledger.push({
+          id: nextEntryId(),
+          loanId: loan.id,
+          travellerId: t.id,
+          travellerName: t.name,
+          type: "miles_back_earn",
+          amount: funded.milesBack,
+          status: "pending",
+          reason: `Miles back on financed amount (${loan.trip.fareLabel} rate) — posts after first on-time payment`,
+          date: today,
+        });
+      }
+      if (funded.bonus > 0) {
+        ledger.push({
+          id: nextEntryId(),
+          loanId: loan.id,
+          travellerId: t.id,
+          travellerName: t.name,
+          type: "bonus_earn",
+          amount: funded.bonus,
+          status: "pending",
+          reason: "Economy Plus pay-over-time bonus — posts after first on-time payment",
+          date: today,
+        });
+      }
     }
   }
 

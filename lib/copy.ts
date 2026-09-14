@@ -35,7 +35,7 @@ export const MILES_TIMING_BASE =
   "Base miles are earned by flying and post after travel completes, per MileagePlus program rules.";
 
 export const MILES_TIMING_BONUS =
-  "Bonus miles post after your first on-time payment clears.";
+  "Miles back and bonus miles post after your first on-time payment clears.";
 
 export const MILES_TIMING_REVERSAL =
   "Both are reversed if the booking is cancelled.";
@@ -45,13 +45,13 @@ export const PROTOTYPE_NOTES: Record<string, string> = {
   search:
     "Discovery placement: one light monthly-price line per fare, and a single loyalty chip on the fare most likely to be financed. Deliberately no heavy loyalty sell here — discovery earns attention, checkout earns conversion.",
   cart:
-    "The monthly figure matches the one on search (consistency builds trust). The plan sheet shows miles are identical across terms — we do not reward taking on longer debt. Traveller 2 sets up the multi-member edge case.",
+    "The monthly figure matches search (consistency builds trust). In the plan sheet, 0% APR earns no financing miles — the subsidy is the incentive; APR plans earn miles back at a fare-tier rate, Economy Plus adds the bonus, and every APR term earns the same (we never reward longer debt). The calculator shows cost vs miles value honestly.",
   checkout:
     "Wallet placement: pay-over-time sits below card, above PayPal. United has no other pay-later provider in this mock, so no adjacency conflict. ClarityPay appears only as a micro-tag — the lender shows up where the law requires, nowhere else.",
   prequal:
     "Inline application, no redirect. Phone + last-4 SSN, soft pull only. The lender disclosure is a shared constant, not free-typed. The persona switcher (header) decides the outcome.",
   offer:
-    "Plan selection with miles breakdown and explicit timing: base miles post after travel (United's rules), bonus after first on-time payment (ClarityPay-funded). Autopay defaults on — best repayment behaviour, best miles outcome.",
+    "One plan is recommended, each shows its own financing miles (0% earns none), and timing is explicit: base miles post after travel (United's rules), miles back + bonus after first on-time payment (ClarityPay-funded). Autopay defaults on.",
   declined:
     "Soft decline: no reason codes beyond the legal minimum, adverse-action notice by mail, and a one-tap fallback to card — nothing re-entered. The loyalty line adjusts to base miles only: bonus rewards financing, base rewards flying.",
   confirmation:

@@ -59,7 +59,8 @@ export async function POST(
 
     case "reward_failed": {
       const ledger = loan.ledger.map((e) =>
-        (e.status === "pending" || e.status === "posted") && e.type === "bonus_earn"
+        (e.status === "pending" || e.status === "posted") &&
+        (e.type === "bonus_earn" || e.type === "miles_back_earn")
           ? {
               ...e,
               status: "pending_retry" as const,

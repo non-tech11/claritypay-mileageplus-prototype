@@ -56,7 +56,11 @@ loans `/account` shows.
    product decision the screen demonstrates. Select **Economy Plus**.
 2. **`/cart`** — toggle *Add 2nd traveller* (Alex, no MileagePlus #) to arm the
    multi-traveller case. Tap the `or from $XX/mo` line: the plan sheet shows
-   three plans with **identical miles on each** — we don't reward longer debt.
+   the plans with **per-plan financing miles** — the 0% plan earns none (the
+   subsidy is the incentive), APR plans earn miles back at a fare-tier rate,
+   Economy Plus adds the bonus, and every APR term earns the same. One plan
+   is **Recommended**, and picking one carries it through checkout. The
+   calculator at the bottom shows financing cost vs miles value honestly.
 3. **`/checkout`** — wallet order: card, Apple Pay, **Pay over time** (with
    "Powered by ClarityPay" micro-tag), PayPal. Pay-over-time expands inline:
    phone + last-4 SSN, soft-pull note, the shared lender disclosure. Press
@@ -102,10 +106,13 @@ POST /api/reset
 ```
 
 Handlers are thin; the rules live in `lib/engine/` (`loyalty.ts`, `loan.ts`,
-`refund.ts`) as pure functions with 12 vitest tests: bonus term-independence,
-cap enforcement, payer-only bonus, decline → base-only, 30/60 DPD
-freeze/reverse, no-clawback-after-repayment, redeemed-then-cancelled netting,
-full/partial cancellation math, re-amortisation, plan-ladder shape.
+`refund.ts`) as pure functions with 15 vitest tests: 0% APR earns no
+financing miles, APR-presence (not term length) drives earn, fare-tier
+differentiated miles-back rates, Economy-Plus-only bonus with cap,
+payer-only financing miles, decline → base-only, 30/60 DPD freeze/reverse
+of both financing types, no-clawback-after-repayment, redeemed-then-cancelled
+netting, full/partial cancellation math, re-amortisation, plan-ladder shape
+with one recommended plan.
 
 ## Known limitations
 

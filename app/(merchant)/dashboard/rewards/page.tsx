@@ -24,7 +24,7 @@ const FIELDS: {
   {
     key: "bonusFlatPerBooking",
     label: "Bonus miles per financed booking",
-    hint: "Flat bonus at signing; term-independent by design",
+    hint: "Economy Plus + APR plans only; identical across APR terms",
   },
   {
     key: "bonusPer100Financed",
@@ -80,7 +80,7 @@ export default function RewardsPage() {
   const log =
     txs.data?.transactions.flatMap((t) =>
       t.ledger
-        .filter((e) => e.type.startsWith("bonus"))
+        .filter((e) => e.type.startsWith("bonus") || e.type.startsWith("miles_back"))
         .map((e) => ({ ...e, pnr: t.pnr }))
     ) ?? [];
 
@@ -94,6 +94,39 @@ export default function RewardsPage() {
           <CardSkeleton lines={6} />
         ) : (
           <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
+            <fieldset className="rounded-lg border border-slate-200 p-3">
+              <legend className="px-1 text-[11px] font-bold text-slate-600">
+                Miles back per $100 financed (APR plans only)
+              </legend>
+              <div className="grid grid-cols-3 gap-2">
+                {(["basic", "economy", "economy-plus"] as const).map((tier) => (
+                  <div key={tier}>
+                    <label className="label capitalize" htmlFor={`mb-${tier}`}>
+                      {tier.replace("-", " ")}
+                    </label>
+                    <input
+                      id={`mb-${tier}`}
+                      type="number"
+                      min={0}
+                      className="input"
+                      value={form.milesBackPer100?.[tier] ?? ""}
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          milesBackPer100: {
+                            ...(prev.milesBackPer100 ?? {}),
+                            [tier]: Number(e.target.value),
+                          },
+                        }))
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+              <p className="mt-1 text-[10px] text-slate-400">
+                Differentiated by fare tier; 0% APR plans always earn none.
+              </p>
+            </fieldset>
             {FIELDS.map((f) => (
               <div key={f.key}>
                 <label className="label" htmlFor={f.key}>
@@ -104,7 +137,7 @@ export default function RewardsPage() {
                   type="number"
                   min={0}
                   className="input"
-                  value={form[f.key] ?? ""}
+                  value={(form[f.key] as number | undefined) ?? ""}
                   onChange={(e) =>
                     setForm((prev) => ({
                       ...prev,

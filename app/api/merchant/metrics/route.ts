@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   // Live counters derived from the ledger sit on top of the seeded series.
   const allEntries = store.loans.flatMap((l) => l.ledger);
   const liveBonusReversed = allEntries
-    .filter((e) => e.type === "bonus_reversal")
+    .filter((e) => e.type === "bonus_reversal" || e.type === "miles_back_reversal")
     .reduce((s, e) => s + Math.abs(e.amount), 0);
   return NextResponse.json({
     window,

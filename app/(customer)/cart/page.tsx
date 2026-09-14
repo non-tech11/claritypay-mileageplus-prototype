@@ -181,6 +181,7 @@ export default function CartPage() {
         <PlanSheet
           amount={Number(total.toFixed(2))}
           fare={fare.fare * multiplier}
+          fareId={fare.id}
           travellers={multiplier}
           onClose={() => setSheetOpen(false)}
           selectedPlanId={loadDraft().selectedPlanId}

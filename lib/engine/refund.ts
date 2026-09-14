@@ -1,5 +1,10 @@
 import type { Loan, MerchantConfig, MilesEntry } from "../types";
-import { nextEntryId, reverseWithNetting } from "./loyalty";
+import {
+  FINANCING_EARN_TYPES,
+  nextEntryId,
+  reversalTypeFor,
+  reverseWithNetting,
+} from "./loyalty";
 import { reamortise } from "./loan";
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -81,9 +86,11 @@ export function fullCancellation(
     }
   }
 
-  // Reverse bonus miles (within hold window on full cancellation).
+  // Reverse financing-funded miles (bonus + miles back) on cancellation.
   for (const e of loan.ledger.filter(
-    (x) => x.type === "bonus_earn" && x.status !== "reversed"
+    (x) =>
+      (FINANCING_EARN_TYPES as readonly string[]).includes(x.type) &&
+      x.status !== "reversed"
   )) {
     if (e.status === "posted" || e.status === "held") {
       const res = reverseWithNetting({
@@ -94,8 +101,11 @@ export function fullCancellation(
         availableBalance:
           (memberBalances[e.travellerId] ?? 0) -
           (balanceDebits[e.travellerId] ?? 0),
-        type: "bonus_reversal",
-        reason: "Booking cancelled — bonus miles reversed",
+        type: reversalTypeFor(e.type) as "bonus_reversal" | "miles_back_reversal",
+        reason:
+          e.type === "bonus_earn"
+            ? "Booking cancelled — bonus miles reversed"
+            : "Booking cancelled — miles back reversed",
         today,
       });
       ledger.push(...res.entries);
