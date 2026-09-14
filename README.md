@@ -23,7 +23,7 @@ request the UI makes in real time, with expandable request/response JSON.
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm test           # 12 vitest unit tests on the loyalty/loan/refund engine
+npm test           # 14 vitest unit tests on the loyalty/loan/refund engine
 npm run build      # production build, zero TS errors
 ```
 
@@ -50,15 +50,16 @@ loans `/account` shows.
 
 ## How to walk the prototype in 5 minutes
 
-1. **`/` Search** — three fares with `or from $XX/mo`; Economy Plus carries the
-   single loyalty chip ("Earn up to 1,860 miles · +500 bonus"). Open the
+1. **`/` Search** — three fares with `or from $XX/mo`; every fare carries a
+   loyalty chip stating the plan-exclusive earn ("Earn 372 miles · +208
+   bonus with a payment plan"). Open the
    *Prototype notes* drawer at the bottom of every screen — it explains the
    product decision the screen demonstrates. Select **Economy Plus**.
 2. **`/cart`** — toggle *Add 2nd traveller* (Alex, no MileagePlus #) to arm the
    multi-traveller case. Tap the `or from $XX/mo` line: the plan sheet shows
-   the plans with **per-plan financing miles** — the 0% plan earns none (the
-   subsidy is the incentive), APR plans earn miles back at a fare-tier rate,
-   Economy Plus adds the bonus, and every APR term earns the same. One plan
+   the plans, each showing the **same earn** — 1 mi/$ of fare + 0.5 bonus
+   mi/$ financed, 0% included — so the plan choice is about cash flow, never
+   about miles. One plan
    is **Recommended**, and picking one carries it through checkout. The
    calculator at the bottom shows financing cost vs miles value honestly.
 3. **`/checkout`** — wallet order: card, Apple Pay, **Pay over time** (with
@@ -66,12 +67,12 @@ loans `/account` shows.
    phone + last-4 SSN, soft-pull note, the shared lender disclosure. Press
    **Continue and agree** as Priya.
 4. **`/checkout/offer`** — plans with exact APRs, compact loyalty card
-   ("1,860 base + 500 bonus = 2,360 miles"), the *When do I get these?*
+   ("372 miles + 208 bonus = 580 total"), the *When do I get these?*
    timing disclosure, autopay on. **Sign and book** → **`/confirmation`** with
    PNR, plan summary, miles as status pills, and Alex's retro-credit prompt.
 5. **Decline path** — switch persona to **Dana**, repeat checkout: soft
-   decline, adverse-action link, *one-tap* card fallback, loyalty line drops
-   to base-only ("You'll still earn 1,860 miles").
+   decline, adverse-action link, *one-tap* card fallback, and the loyalty
+   line says plainly that miles are a payment-plan benefit.
 6. **`/account`** — three seeded loans (healthy / cancelled / delinquent).
    Open the delinquent one: late instalment, bonus **held**, late-fee
    disclosure. Use the **simulator panel**: run *Missed instalment* twice
@@ -106,9 +107,8 @@ POST /api/reset
 ```
 
 Handlers are thin; the rules live in `lib/engine/` (`loyalty.ts`, `loan.ts`,
-`refund.ts`) as pure functions with 15 vitest tests: 0% APR earns no
-financing miles, APR-presence (not term length) drives earn, fare-tier
-differentiated miles-back rates, Economy-Plus-only bonus with cap,
+`refund.ts`) as pure functions with 14 vitest tests: uniform earn
+(1 mi/\$ fare + 0.5 bonus mi/\$ financed, every plan and fare, capped),
 payer-only financing miles, decline → base-only, 30/60 DPD freeze/reverse
 of both financing types, no-clawback-after-repayment, redeemed-then-cancelled
 netting, full/partial cancellation math, re-amortisation, plan-ladder shape
@@ -125,9 +125,9 @@ with one recommended plan.
   model. The member's normal flying miles are the airline's own programme
   and sit outside this product. The customer never sees the funder: the
   reward carries the airline's brand end to end.
-- **Earn model**: trip miles at 5 mi/$ of fare (excl. taxes) on every
-  financed booking; the bonus (Economy Plus + monthly plans only) credits at
-  plan completion — a 0% plan is already subsidised.
+- **Earn model**: uniform — 1 mi/$ of fare (excl. taxes) credited after the
+  flight, plus 0.5 bonus mi/$ financed credited at plan completion. Every
+  plan (0% included) and every fare tier earns the same, capped per booking.
 - **Credit**: three illustrative profiles (prime / near-prime / thin) stand
   in for underwriting; APRs 0–24.99% are illustrative, not priced.
 - **Repeat behaviour**: members who redeem earned miles rebook at ~1.4× the
@@ -136,8 +136,8 @@ with one recommended plan.
 **Data I'd request first, and why it changes the recommendation:**
 
 1. **Incremental take rate by fare tier** — if financing shifts Basic buyers
-   up to Economy Plus, the bonus concentration on Economy Plus is right; if
-   not, spread the miles-back rates flatter.
+   up-fare, a tiered earn (higher on premium fares) beats the flat rate; if
+   not, the uniform 1 + 0.5 stays.
 2. **Reversal/refund rate on financed vs card bookings** — sets the bonus
    hold window; a high early-cancel rate argues for unlock-at-travel.
 3. **Redemption-to-rebooking elasticity** — the repeat-purchase lift is the

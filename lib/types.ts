@@ -142,24 +142,20 @@ export interface Loan {
 }
 
 export interface MerchantConfig {
-  /** Flat bonus miles per financed booking (Economy Plus only, APR plans only). */
-  bonusFlatPerBooking: number;
-  /** Additional bonus miles per $100 financed. */
-  bonusPer100Financed: number;
-  bonusCapPerBooking: number;
   /**
-   * Miles back per $100 financed on APR-bearing plans, differentiated by
-   * fare tier. 0% APR plans earn none — the 0% subsidy is already the
-   * incentive.
+   * Bonus miles per $ financed — every plan (0% included), every fare.
+   * Credits when the plan completes.
    */
-  milesBackPer100: Record<string, number>;
-  /** Days after the final instalment clears before financing miles credit. */
+  bonusMilesPerDollar: number;
+  /** Ceiling on the bonus per booking, whatever the amount. */
+  bonusCapPerBooking: number;
+  /** Days after the final instalment clears before the bonus credits. */
   bonusPostDelayDays: number;
   /** DPD at which bonus miles freeze. */
   dpdFreezeThreshold: number;
   /** DPD at which bonus miles reverse. */
   dpdReverseThreshold: number;
-  /** Base earn: miles per $ of fare (excl. taxes). Airline-owned. */
+  /** Base earn: miles per $ of fare (excl. taxes), credited after the flight. */
   baseMilesPerDollar: number;
   /** Retro-credit window for travellers who add a loyalty # later. */
   retroCreditWindowDays: number;

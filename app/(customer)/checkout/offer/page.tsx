@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { loadDraft, saveDraft, type BookingDraft } from "@/lib/booking";
 import { postJson, useApi } from "@/lib/api-client";
-import { BONUS_FARE_TIER } from "@/lib/engine/loyalty";
 import { useTheme } from "@/app/theme-context";
 import { usePersona } from "@/lib/use-persona";
 import { tierForProgress } from "@/lib/theme";
@@ -103,10 +102,6 @@ export default function OfferPage() {
   const base = preview.data?.totalBase ?? 0;
   const chosenMiles = preview.data?.perPlan.find((x) => x.planId === planId);
   const bonus = chosenMiles?.bonus ?? 0;
-  // Bonus talk only where a bonus exists on this fare — anywhere else it
-  // just confuses ("0% plans add no bonus" on a fare that never bonuses).
-  const bonusFare = draft.fare.id === BONUS_FARE_TIER;
-  const maxBonus = Math.max(0, ...(preview.data?.perPlan.map((x) => x.financingTotal) ?? [0]));
 
   return (
     <div className="flex min-h-full flex-col">
@@ -179,18 +174,9 @@ export default function OfferPage() {
                     Earn {(base + miles.financingTotal).toLocaleString()} {theme.unit}
                   </span>
                 )}
-                {miles && bonusFare && (
-                  <span
-                    className="whitespace-nowrap text-[10px] text-slate-400"
-                    title={
-                      miles.financingTotal > 0
-                        ? undefined
-                        : `Bonus ${theme.unit} come with monthly plans — you still earn ${base.toLocaleString()} ${theme.unit}`
-                    }
-                  >
-                    {miles.financingTotal > 0
-                      ? `incl. ${miles.financingTotal.toLocaleString()} bonus`
-                      : `no bonus ${theme.unit}`}
+                {miles && miles.financingTotal > 0 && (
+                  <span className="whitespace-nowrap text-[10px] text-slate-400">
+                    incl. {miles.financingTotal.toLocaleString()} bonus
                   </span>
                 )}
                 {planId === p.id && (
@@ -219,9 +205,7 @@ export default function OfferPage() {
               preview.data
                 ? bonus > 0
                   ? `You'll earn ${base.toLocaleString()} ${theme.unit} + ${bonus.toLocaleString()} bonus = ${(base + bonus).toLocaleString()} total`
-                  : bonusFare && maxBonus > 0
-                    ? `You'll earn ${base.toLocaleString()} ${theme.unit} — monthly plans add ${maxBonus.toLocaleString()} bonus ${theme.unit}`
-                    : `You'll earn ${base.toLocaleString()} ${theme.unit} on this trip`
+                  : `You'll earn ${base.toLocaleString()} ${theme.unit} on this trip`
                 : "Calculating your earn…"
             }
           />

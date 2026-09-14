@@ -35,10 +35,7 @@ export async function POST(req: NextRequest) {
     loan.travellers.length || 1,
     config
   );
-  const fareId =
-    loan.trip.fareId ??
-    loan.trip.fareLabel.toLowerCase().replace(/\s+/g, "-").replace("basic-economy", "basic");
-  const funded = financingMiles(loan.principal, fareId, loan.plan.apr, config);
+  const funded = financingMiles(loan.principal, config);
 
   const ledger = [...loan.ledger];
   for (const t of loan.travellers) {
@@ -55,18 +52,17 @@ export async function POST(req: NextRequest) {
         : `Held for retro-credit — add a MileagePlus number within ${config.retroCreditWindowDays} days`,
       date: today,
     });
-    // One customer-facing bonus entry: tier-rate earn + Economy Plus extra.
-    const totalBonus = funded.milesBack + funded.bonus;
-    if (t.isPayer && totalBonus > 0) {
+    // One customer-facing bonus entry to the payer: 0.5 mi/$ financed.
+    if (t.isPayer && funded.bonus > 0) {
       ledger.push({
         id: nextEntryId(),
         loanId: loan.id,
         travellerId: t.id,
         travellerName: t.name,
         type: "bonus_earn",
-        amount: totalBonus,
+        amount: funded.bonus,
         status: "pending",
-        reason: `Pay-over-time bonus (${loan.trip.fareLabel} rate) — credits after your final payment`,
+        reason: "Pay-over-time bonus — credits after your final payment",
         date: today,
       });
     }

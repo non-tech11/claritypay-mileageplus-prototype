@@ -7,7 +7,6 @@ import { useApi } from "@/lib/api-client";
 import { CardSkeleton } from "./Skeleton";
 import { ErrorRetry } from "./ErrorRetry";
 import { buildPlans } from "@/lib/engine/loan";
-import { BONUS_FARE_TIER } from "@/lib/engine/loyalty";
 
 export interface PlanMilesLine {
   planId: string;
@@ -28,10 +27,9 @@ interface PreviewResponse {
 const MILE_VALUE_CENTS = 1.3;
 
 /**
- * "Pay over time" bottom sheet: plans with per-plan financing miles.
- * 0% APR earns none (the subsidy is the incentive); APR plans earn miles
- * back by fare tier; Economy Plus adds the flat bonus. One plan is
- * recommended. A calculator at the bottom shows cost vs miles value.
+ * "Pay over time" bottom sheet. Every plan earns the same: 1 mi/$ of fare
+ * (base) + 0.5 mi/$ financed (bonus) — 0% included, term-independent. One
+ * plan is recommended. A calculator at the bottom shows cost vs miles value.
  */
 export function PlanSheet({
   amount,
@@ -63,9 +61,6 @@ export function PlanSheet({
     preview.data?.perPlan.find((p) => p.planId === id) ?? null;
   const pickedPlan = picked ? plans.find((p) => p.id === picked) : null;
   const pickedMiles = picked ? perPlan(picked) : null;
-  // Bonus labels only on the fare that actually bonuses — on other fares
-  // every row would read the same and just add noise.
-  const bonusFare = fareId === BONUS_FARE_TIER;
 
   return (
     <div
@@ -138,18 +133,9 @@ export function PlanSheet({
                           {theme.unit}
                         </span>
                       )}
-                      {miles && bonusFare && (
-                        <span
-                          className="whitespace-nowrap text-[10px] text-slate-400"
-                          title={
-                            miles.financingTotal > 0
-                              ? undefined
-                              : `Bonus ${theme.unit} come with monthly plans — you still earn ${(preview.data?.totalBase ?? 0).toLocaleString()} ${theme.unit}`
-                          }
-                        >
-                          {miles.financingTotal > 0
-                            ? `incl. ${miles.financingTotal.toLocaleString()} bonus`
-                            : `no bonus ${theme.unit}`}
+                      {miles && miles.financingTotal > 0 && (
+                        <span className="whitespace-nowrap text-[10px] text-slate-400">
+                          incl. {miles.financingTotal.toLocaleString()} bonus
                         </span>
                       )}
                       {isSelected && (

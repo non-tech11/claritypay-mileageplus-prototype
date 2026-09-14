@@ -99,9 +99,10 @@ export default function OverviewPage() {
           Unit economics — one financed booking (illustrative)
         </h2>
         <p className="mb-3 text-xs text-slate-500">
-          How the variables connect on a $1,000 Economy Plus booking, 12-month
-          plan. ClarityPay funds all reward miles, purchased from the airline
-          at the transfer price — cost scales with the Rewards page controls.
+          How the variables connect on a $1,000 booking ($900 fare), 12-month
+          plan. Uniform earn — 1 mi/$ fare + 0.5 mi/$ financed, every plan and
+          fare. ClarityPay funds all reward miles, purchased from the airline
+          at the transfer price; cost scales with the Rewards page controls.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[520px] text-left text-xs">
@@ -111,8 +112,8 @@ export default function OverviewPage() {
                 ["Interest income (14.99% APR, 12mo)", "borne by customer", "+$82.00", "revenue"],
                 ["Cost of funds", "~5% on outstanding balance", "−$27.00", "cost"],
                 ["Expected credit loss", "2.0% of principal", "−$20.00", "cost"],
-                ["Reward cost — trip miles", "4,500 mi × 0.6¢ purchased from airline", "−$27.00", "cost"],
-                ["Reward cost — bonus miles", "3,000 mi × 0.6¢ purchased from airline", "−$18.00", "cost"],
+                ["Reward cost — trip miles", "900 mi (1 mi/$ fare) × 0.6¢ from airline", "−$5.40", "cost"],
+                ["Reward cost — bonus miles", "500 mi (0.5 mi/$ financed) × 0.6¢ from airline", "−$3.00", "cost"],
                 ["Servicing & ops", "per-loan allocation", "−$8.00", "cost"],
               ].map(([label, note, value, kind]) => (
                 <tr key={label} className="border-b border-slate-100">
@@ -135,7 +136,7 @@ export default function OverviewPage() {
                   before repeat-purchase lift
                 </td>
                 <td className="py-2 text-right text-sm font-bold text-emerald-700">
-                  +$42.00
+                  +$78.60
                 </td>
               </tr>
             </tbody>
@@ -143,15 +144,14 @@ export default function OverviewPage() {
         </div>
         <p className="mt-2 rounded-lg bg-slate-50 px-3 py-2 text-[11px] text-slate-600">
           The reward runs on a value arbitrage: miles bought at 0.6¢ are
-          valued by members at ~1.3¢, so the $45 reward spend here reads as
-          ~$97 of perceived value — every reward dollar lands at ~2.2×. And
-          it pays twice: a member who redeems earned miles rebooks at ~1.4×
-          the rate of a card payer (illustrative), so reward cost is partly
-          acquisition spend for the next booking. Levers: each 1 mi/$ off
-          the trip-miles earn rate adds ~$5.40 of contribution; take rate
-          moves revenue linearly; if 30+ DPD rises 1pt, contribution drops
-          ~$10, which is why the delinquency guardrail freezes the reward
-          spend first.
+          valued by members at ~1.3¢, so the $8.40 reward spend here reads
+          as ~$18 of perceived value — every reward dollar lands at ~2.2×.
+          And it pays twice: a member who redeems earned miles rebooks at
+          ~1.4× the rate of a card payer (illustrative), so reward cost is
+          partly acquisition spend for the next booking. Levers: each extra
+          0.1 mi/$ of earn costs ~$0.54 per booking; take rate moves revenue
+          linearly; if 30+ DPD rises 1pt, contribution drops ~$10, which is
+          why the delinquency guardrail freezes the reward spend first.
         </p>
       </section>
 

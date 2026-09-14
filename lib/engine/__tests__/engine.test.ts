@@ -74,65 +74,49 @@ function entry(
   };
 }
 
-describe("financing miles (miles back + bonus)", () => {
-  it("earns nothing on a 0% APR plan — subsidy is the incentive", () => {
-    const funded = financingMiles(416.8, "economy-plus", 0, DEFAULT_CONFIG);
-    expect(funded.milesBack).toBe(0);
-    expect(funded.bonus).toBe(0);
+describe("financing bonus (0.5 mi/$ financed, uniform)", () => {
+  it("earns 0.5 mi per $ financed, floored", () => {
+    const funded = financingMiles(416.8, DEFAULT_CONFIG);
+    expect(funded.bonus).toBe(208); // floor(416.80 x 0.5)
   });
 
-  it("depends on APR presence, not term length: 12mo and 24mo earn the same", () => {
-    const prime = buildPlans(416.8, "prime");
-    const p12 = prime.find((p) => p.id === "12mo")!;
-    const p24 = prime.find((p) => p.id === "24mo")!;
-    const f12 = financingMiles(416.8, "economy-plus", p12.apr, DEFAULT_CONFIG);
-    const f24 = financingMiles(416.8, "economy-plus", p24.apr, DEFAULT_CONFIG);
-    expect(f12).toEqual(f24);
-    expect(f12.milesBack).toBe(4 * 200); // 4 hundreds x Economy Plus rate
-    expect(f12.bonus).toBe(500);
+  it("is identical on every plan — 0% included, term-independent", () => {
+    // The bonus depends only on the amount financed, never on the plan:
+    // buildPlans yields 0%, 12mo and 24mo, all with the same principal.
+    const plans = buildPlans(416.8, "prime");
+    expect(plans.length).toBeGreaterThanOrEqual(3);
+    const bonuses = plans.map(() => financingMiles(416.8, DEFAULT_CONFIG).bonus);
+    expect(new Set(bonuses).size).toBe(1);
+    expect(bonuses[0]).toBe(208);
   });
 
-  it("is strictly an Economy Plus benefit — other tiers earn nothing extra", () => {
-    const economy = financingMiles(337.2, "economy", 14.99, DEFAULT_CONFIG);
-    expect(economy.bonus + economy.milesBack).toBe(0);
-    const basic = financingMiles(262.6, "basic", 14.99, DEFAULT_CONFIG);
-    expect(basic.bonus + basic.milesBack).toBe(0);
-    const plus = financingMiles(416.8, "economy-plus", 14.99, DEFAULT_CONFIG);
-    // Per-$100 rate (4 x 200) + flat 500 = 1,300 total bonus.
-    expect(plus.milesBack + plus.bonus).toBe(1300);
+  it("scales linearly with the amount financed below the cap", () => {
+    expect(financingMiles(200, DEFAULT_CONFIG).bonus).toBe(100);
+    expect(financingMiles(400, DEFAULT_CONFIG).bonus).toBe(200);
+    expect(financingMiles(337.2, DEFAULT_CONFIG).bonus).toBe(168);
   });
 
-  it("caps the Economy Plus bonus per booking", () => {
-    const config = { ...DEFAULT_CONFIG, bonusPer100Financed: 100 };
-    const funded = financingMiles(4150, "economy-plus", 14.99, config);
-    // 500 flat + 41 x 100 = 4600 raw → capped at 1000.
+  it("caps the bonus per booking", () => {
+    const funded = financingMiles(4150, DEFAULT_CONFIG);
+    // floor(4150 x 0.5) = 2075 raw → capped at 1000.
     expect(funded.bonus).toBe(1000);
   });
 
   it("routes the bonus to the payer only; base splits across travellers", () => {
-    const preview = previewMiles(
-      744,
-      833.6,
-      [priya, alex],
-      DEFAULT_CONFIG,
-      true,
-      "economy-plus",
-      14.99
-    );
+    const preview = previewMiles(744, 833.6, [priya, alex], DEFAULT_CONFIG, true);
     const payer = preview.find((p) => p.travellerId === "priya")!;
     const other = preview.find((p) => p.travellerId === "alex")!;
-    // Customer-facing bonus is one number: tier rate + Economy Plus extra.
-    expect(payer.bonusMiles).toBe(500 + 8 * 200);
+    expect(payer.bonusMiles).toBe(416); // floor(833.60 x 0.5)
     expect(other.bonusMiles).toBe(0);
     expect(payer.baseMiles).toBe(other.baseMiles);
-    expect(payer.baseMiles).toBe(Math.round((744 * 5) / 2));
+    expect(payer.baseMiles).toBe(Math.round((744 * 1) / 2));
   });
 });
 
 describe("decline path", () => {
   it("yields base miles only — no bonus when not financed", () => {
     const preview = previewMiles(372, 416.8, [priya], DEFAULT_CONFIG, false);
-    expect(preview[0].baseMiles).toBe(1860);
+    expect(preview[0].baseMiles).toBe(372); // 1 mi/$ of fare
     expect(preview[0].bonusMiles).toBe(0);
   });
 });

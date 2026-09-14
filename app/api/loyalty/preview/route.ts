@@ -6,9 +6,8 @@ import { getStore } from "@/lib/store";
 import type { Traveller } from "@/lib/types";
 
 /**
- * Miles preview: base per traveller, plus a per-plan breakdown of
- * financing-funded miles (miles back by fare tier + Economy Plus bonus).
- * 0% APR plans earn no financing miles by design.
+ * Miles preview: base per traveller (1 mi/$ fare), plus the pay-over-time
+ * bonus (0.5 mi/$ financed) — identical on every plan, 0% included.
  */
 export async function GET(req: NextRequest) {
   const amount = Number(req.nextUrl.searchParams.get("amount"));
@@ -40,10 +39,8 @@ export async function GET(req: NextRequest) {
   const ladder =
     persona.creditProfile === "thin" ? "prime" : persona.creditProfile;
   // Customer-facing model has exactly two reward types: base and bonus.
-  // The bonus merges the tier-rate earn and the Economy Plus extra.
   const perPlan = buildPlans(amount, ladder).map((p) => {
-    const funded = financingMiles(amount, fareTier, p.apr, config);
-    const bonus = funded.milesBack + funded.bonus;
+    const { bonus } = financingMiles(amount, config);
     return {
       planId: p.id,
       label: p.label,
@@ -62,6 +59,6 @@ export async function GET(req: NextRequest) {
     perPlan,
     maxFinancingMiles: best,
     note:
-      "0% APR plans earn no bonus — the subsidised rate is the incentive. The pay-over-time bonus is an Economy Plus benefit, identical on every APR term.",
+      "Every plan earns the same bonus — 0.5 mi per $ financed, 0% included. Longer terms earn no more.",
   });
 }

@@ -11,19 +11,14 @@ export function nextEntryId(): string {
 }
 
 export const DEFAULT_CONFIG: MerchantConfig = {
-  bonusFlatPerBooking: 500,
-  bonusPer100Financed: 0,
+  bonusMilesPerDollar: 0.5,
   bonusCapPerBooking: 1000,
-  milesBackPer100: { basic: 100, economy: 150, "economy-plus": 200 },
   bonusPostDelayDays: 1,
   dpdFreezeThreshold: 30,
   dpdReverseThreshold: 60,
-  baseMilesPerDollar: 5,
+  baseMilesPerDollar: 1,
   retroCreditWindowDays: 30,
 };
-
-/** Fare tier that qualifies for the flat pay-over-time bonus. */
-export const BONUS_FARE_TIER = "economy-plus";
 
 /** Ledger entry types funded by ClarityPay (vs the airline's base earn). */
 export const FINANCING_EARN_TYPES = ["bonus_earn", "miles_back_earn"] as const;
@@ -37,28 +32,20 @@ export function reversalTypeFor(
 }
 
 /**
- * Pay-over-time bonus for a booking, per plan. Strictly Economy Plus:
- * other fare tiers earn base miles only, whatever the plan.
- * - 0% APR plans earn nothing — the subsidised rate is the incentive.
- * - Economy Plus + APR plan: per-$100 rate + flat extra, capped.
- * Same for every APR-bearing term: longer debt earns no more.
+ * Pay-over-time bonus for a booking: 0.5 mi/$ financed (config), capped.
+ * Every plan earns it — 0% included — and every fare tier: paying with a
+ * plan is the qualifying act, and the same amount financed earns the same
+ * bonus on every term (longer debt earns no more).
  */
 export function financingMiles(
   amountFinanced: number,
-  fareId: string,
-  apr: number,
   config: MerchantConfig
-): { milesBack: number; bonus: number } {
-  if (apr <= 0 || fareId !== BONUS_FARE_TIER) {
-    return { milesBack: 0, bonus: 0 };
-  }
-  const hundreds = Math.floor(amountFinanced / 100);
-  const milesBack = hundreds * (config.milesBackPer100[fareId] ?? 0);
+): { bonus: number } {
   const bonus = Math.min(
-    config.bonusFlatPerBooking + hundreds * config.bonusPer100Financed,
+    Math.floor(amountFinanced * config.bonusMilesPerDollar),
     config.bonusCapPerBooking
   );
-  return { milesBack, bonus };
+  return { bonus };
 }
 
 /**
@@ -78,24 +65,21 @@ export interface MilesPreviewLine {
   travellerId: string;
   travellerName: string;
   baseMiles: number;
-  /** Single customer-facing bonus: tier rate + Economy Plus extra, merged. */
+  /** Customer-facing bonus: 0.5 mi/$ financed, payer only, capped. */
   bonusMiles: number;
   hasLoyaltyNumber: boolean;
 }
 
 /**
- * Full preview: base to each traveller; the bonus (one number — tier-rate
- * earn plus the Economy Plus extra) to the payer only, per the chosen
- * plan's APR and fare tier. Customers see exactly two reward types.
+ * Full preview: base to each traveller; the bonus to the payer only.
+ * Customers see exactly two reward types.
  */
 export function previewMiles(
   fareExclTaxes: number,
   amountFinanced: number,
   travellers: Traveller[],
   config: MerchantConfig,
-  financed: boolean,
-  fareId: string = BONUS_FARE_TIER,
-  apr: number = 0
+  financed: boolean
 ): MilesPreviewLine[] {
   const basePer = computeBaseMilesPerTraveller(
     fareExclTaxes,
@@ -103,13 +87,13 @@ export function previewMiles(
     config
   );
   const funded = financed
-    ? financingMiles(amountFinanced, fareId, apr, config)
-    : { milesBack: 0, bonus: 0 };
+    ? financingMiles(amountFinanced, config)
+    : { bonus: 0 };
   return travellers.map((t) => ({
     travellerId: t.id,
     travellerName: t.name,
     baseMiles: basePer,
-    bonusMiles: t.isPayer ? funded.bonus + funded.milesBack : 0,
+    bonusMiles: t.isPayer ? funded.bonus : 0,
     hasLoyaltyNumber: !!t.mileagePlusNumber,
   }));
 }

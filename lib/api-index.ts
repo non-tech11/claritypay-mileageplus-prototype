@@ -142,7 +142,7 @@ export const API_ENDPOINTS: EndpointDoc[] = [
     method: "PUT",
     path: "/api/merchant/config",
     purpose: "Update config — reflected in checkout on next load",
-    sampleRequest: { bonusFlatPerBooking: 500, bonusCapPerBooking: 1000 },
+    sampleRequest: { bonusMilesPerDollar: 0.5, bonusCapPerBooking: 1000 },
   },
   {
     method: "GET",

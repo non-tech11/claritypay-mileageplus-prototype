@@ -53,15 +53,15 @@ export const MILES_TIMING_REVERSAL =
 /** Per-screen prototype notes — the "voiceover" for interviewers. */
 export const PROTOTYPE_NOTES: Record<string, string> = {
   search:
-    "Discovery placement: one light monthly-price line per fare, and a loyalty chip per fare stating the exclusivity up front — miles are earned only by paying with a program plan. The financed-most fare leads with the bonus; discovery earns attention, checkout earns conversion.",
+    "Discovery placement: one light monthly-price line per fare, and a loyalty chip per fare stating the exclusivity up front — miles are earned only by paying with a program plan, at 1 mi/$ of fare + 0.5 bonus/$ financed. Discovery earns attention, checkout earns conversion.",
   cart:
-    "The monthly figure matches search (consistency builds trust). In the plan sheet, bonus labels show only on the bonus-eligible fare: monthly plans add the bonus, the 0% plan doesn't (its subsidy is the incentive), and every monthly term earns the same (we never reward longer debt). The calculator shows cost vs miles value honestly.",
+    "The monthly figure matches search (consistency builds trust). In the plan sheet every plan shows the same earn — 1 mi/$ of fare + 0.5 bonus/$ financed, 0% included — so the plan choice is about cash flow, never about miles (we never reward longer debt). The calculator shows cost vs miles value honestly.",
   checkout:
     "The wallet is the selection moment: several providers, one differentiator. Only the pay-over-time option earns program miles, and it says so with the real numbers for this booking; the other methods say 'No miles' plainly. ClarityPay appears only as a micro-tag — the lender shows up where the law requires, nowhere else.",
   prequal:
     "Inline application, no redirect. Phone + last-4 SSN, soft pull only. The lender disclosure is a shared constant, not free-typed. The persona switcher (header) decides the outcome.",
   offer:
-    "One plan is recommended. Bonus labels appear only on the bonus-eligible fare (elsewhere they would be noise), and timing is explicit: miles credit after the flight, the bonus credits when the plan completes — completion rewards repayment. Every plan earns the trip miles; the funder is never named to the customer. Autopay defaults on.",
+    "One plan is recommended, and every plan earns the same — the choice is about cash flow, not miles. Timing is explicit: trip miles credit after the flight, the bonus credits when the plan completes — completion rewards repayment. The funder is never named to the customer. Autopay defaults on.",
   declined:
     "Soft decline: no reason codes beyond the legal minimum, adverse-action notice by mail, and a one-tap fallback to card — nothing re-entered. The loyalty line is honest about the trade-off: miles are a payment-plan benefit, so the card fallback earns none.",
   confirmation:
