@@ -26,8 +26,6 @@ interface PreviewResponse {
   note: string;
 }
 
-/** Illustrative value of one mile/point, for the benefit strip. */
-const MILE_VALUE_CENTS = 1.3;
 /** Illustrative one-way saver award, to make the earn feel tangible. */
 const AWARD_MILES = 12500;
 
@@ -165,7 +163,6 @@ export function PlanSheet({
                 className="mt-3 rounded-xl bg-slate-50 px-3 py-2.5 text-[11px] text-slate-600"
               >
                 {(() => {
-                  const cost = Math.max(pickedPlan.totalCost - amount, 0);
                   const totalMiles = pickedMiles.totalMiles;
                   if (totalMiles === 0) {
                     return (
@@ -174,7 +171,6 @@ export function PlanSheet({
                       </p>
                     );
                   }
-                  const value = (totalMiles * MILE_VALUE_CENTS) / 100;
                   const after = persona.milesBalance + totalMiles;
                   const goal =
                     theme.unit === "miles" ? "award flight" : "reward";
@@ -193,13 +189,6 @@ export function PlanSheet({
                         {persona.milesBalance.toLocaleString()} →{" "}
                         <strong>{after.toLocaleString()}</strong> {theme.unit}{" "}
                         — {goal}s start at {AWARD_MILES.toLocaleString()}.
-                      </p>
-                      <p className="mt-1 text-[10px] text-slate-400">
-                        Worth ≈ ${value.toFixed(2)} toward {goal}s
-                        (illustrative, {MILE_VALUE_CENTS}¢/
-                        {theme.unit.replace(/s$/, "")}) · this plan costs $
-                        {cost.toFixed(2)} over {pickedPlan.installments}{" "}
-                        payments.
                       </p>
                     </>
                   );
