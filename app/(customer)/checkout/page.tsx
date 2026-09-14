@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CreditCard, Loader2, ShieldCheck, Wallet } from "lucide-react";
 import { loadDraft, saveDraft, type BookingDraft } from "@/lib/booking";
-import { postJson } from "@/lib/api-client";
+import { postJson, useApi } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
 import { LENDER_DISCLOSURE_POINTS, SOFT_PULL_NOTE } from "@/lib/copy";
 import { ClarityPayMark } from "@/components/ClarityPayMark";
@@ -18,6 +18,11 @@ interface PrequalResponse {
   decision: "approved" | "declined";
   offerId: string | null;
   plans: Plan[];
+}
+
+interface PreviewResponse {
+  totalBase: number;
+  maxFinancingMiles: number;
 }
 
 export default function CheckoutPage() {
@@ -48,9 +53,17 @@ export default function CheckoutPage() {
       .catch(() => setMonthly(null));
   }, [router]);
 
+  const multiplier = draft && draft.travellers.length > 1 ? 2 : 1;
+  const total = draft?.fare ? Number((draft.fare.total * multiplier).toFixed(2)) : 0;
+  // Miles are the wallet differentiator: fetch the earn for this booking so
+  // the pay-over-time row can show it next to the other providers.
+  const preview = useApi<PreviewResponse>(
+    draft?.fare
+      ? `/api/loyalty/preview?amount=${total}&fare=${draft.fare.fare * multiplier}&travellers=${multiplier}&fareTier=${draft.fare.id}`
+      : null
+  );
+
   if (!draft?.fare) return null;
-  const multiplier = draft.travellers.length > 1 ? 2 : 1;
-  const total = Number((draft.fare.total * multiplier).toFixed(2));
   // Label for a plan picked in the cart sheet (illustrative prime ladder;
   // real terms confirmed by the prequal).
   const selectedPlanLabel = draft.selectedPlanId
@@ -124,49 +137,69 @@ export default function CheckoutPage() {
         Total due: <strong>${total.toFixed(2)}</strong>
       </p>
 
-      <div className="space-y-2">
-        {walletOption(
-          "card",
-          "Credit / debit card",
-          <CreditCard size={18} aria-hidden />,
-          () => {
-            setSelected("card");
-            scopeToast();
-          }
-        )}
-        {walletOption(
-          "applepay",
-          "Apple Pay",
-          <Wallet size={18} aria-hidden />,
-          () => {
-            setSelected("applepay");
-            scopeToast();
-          }
-        )}
-        {walletOption(
-          "payovertime",
-          <span>
-            Pay over time
-            {monthly !== null && (
-              <span className="text-slate-500"> · from ${monthly.toFixed(0)}/mo</span>
+      {(() => {
+        const noMilesNote = (
+          <span className="mt-0.5 block text-[10px] font-normal text-slate-400">
+            No {theme.programName} {theme.unit}
+          </span>
+        );
+        return (
+          <div className="space-y-2">
+            {walletOption(
+              "card",
+              <span>Credit / debit card{noMilesNote}</span>,
+              <CreditCard size={18} aria-hidden />,
+              () => {
+                setSelected("card");
+                scopeToast();
+              }
             )}
-            <span style={{ color: "var(--brand)" }}> · earn {theme.unit}</span>
-            <span className="mt-0.5 flex items-center gap-1 text-[10px] font-normal text-slate-400">
-              Powered by <ClarityPayMark muted />
-            </span>
-          </span>,
-          <ShieldCheck size={18} aria-hidden />
-        )}
-        {walletOption(
-          "paypal",
-          "PayPal",
-          <Wallet size={18} aria-hidden />,
-          () => {
-            setSelected("paypal");
-            scopeToast();
-          }
-        )}
-      </div>
+            {walletOption(
+              "applepay",
+              <span>Apple Pay{noMilesNote}</span>,
+              <Wallet size={18} aria-hidden />,
+              () => {
+                setSelected("applepay");
+                scopeToast();
+              }
+            )}
+            {walletOption(
+              "payovertime",
+              <span>
+                Pay over time
+                {monthly !== null && (
+                  <span className="text-slate-500"> · from ${monthly.toFixed(0)}/mo</span>
+                )}
+                <span
+                  className="mt-0.5 block text-[11px] font-semibold"
+                  style={{ color: "var(--brand)" }}
+                >
+                  {preview.data
+                    ? `Earn ${preview.data.totalBase.toLocaleString()} ${theme.programName} ${theme.unit}${
+                        preview.data.maxFinancingMiles > 0
+                          ? ` + up to ${preview.data.maxFinancingMiles.toLocaleString()} bonus`
+                          : ""
+                      }`
+                    : `Earn ${theme.programName} ${theme.unit}`}
+                </span>
+                <span className="mt-0.5 flex items-center gap-1 text-[10px] font-normal text-slate-400">
+                  Powered by <ClarityPayMark muted />
+                </span>
+              </span>,
+              <ShieldCheck size={18} aria-hidden />
+            )}
+            {walletOption(
+              "paypal",
+              <span>PayPal{noMilesNote}</span>,
+              <Wallet size={18} aria-hidden />,
+              () => {
+                setSelected("paypal");
+                scopeToast();
+              }
+            )}
+          </div>
+        );
+      })()}
 
       {selected === "payovertime" && (
         <section

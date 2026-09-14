@@ -52,7 +52,7 @@ export async function POST(
       });
       message =
         newDpd >= store.config.dpdReverseThreshold
-          ? `Now ${newDpd} DPD — bonus miles reversed. Base miles untouched (earned by flying).`
+          ? `Now ${newDpd} DPD — bonus miles reversed. Base miles untouched — only the bonus is at risk in delinquency.`
           : `Now ${newDpd} DPD — bonus miles held. Base miles untouched. Trigger again to reach 60 DPD.`;
       break;
     }

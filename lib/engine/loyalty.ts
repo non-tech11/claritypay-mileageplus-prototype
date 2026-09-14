@@ -117,7 +117,8 @@ export function previewMiles(
 /**
  * Delinquency effect on the ledger. Bonus miles: held at the freeze
  * threshold, reversed at the reverse threshold. Base miles untouched —
- * they were earned by flying and belong to the airline's relationship.
+ * they credit after the flight regardless of repayment state; only the
+ * bonus is at risk in delinquency.
  * A fully repaid loan is exempt (never claw back from a customer who paid).
  */
 export function applyDelinquency(

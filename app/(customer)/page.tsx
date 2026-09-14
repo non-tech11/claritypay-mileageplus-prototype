@@ -69,7 +69,7 @@ function FareCard({
               variant="chip"
               tierName=""
               balance={0}
-              chipText={`Earn ${preview.data.totalBase.toLocaleString()} ${theme.unit} · +${preview.data.maxFinancingMiles.toLocaleString()} bonus with a monthly payment plan`}
+              chipText={`${theme.programName} exclusive: earn ${preview.data.totalBase.toLocaleString()} ${theme.unit} · +${preview.data.maxFinancingMiles.toLocaleString()} bonus with a payment plan`}
             />
           </div>
         ) : (
@@ -87,9 +87,10 @@ function FareCard({
                 style={{ background: "var(--accent)" }}
                 aria-hidden
               />
-              Earn {preview.data.totalBase.toLocaleString()} {theme.unit}
+              Earn {preview.data.totalBase.toLocaleString()} {theme.unit} with
+              a {theme.programName} payment plan
               {preview.data.maxFinancingMiles > 0 &&
-                ` · +${preview.data.maxFinancingMiles.toLocaleString()} bonus with a monthly payment plan`}
+                ` · +${preview.data.maxFinancingMiles.toLocaleString()} bonus`}
             </span>
           </p>
         ))}
@@ -150,7 +151,8 @@ export default function SearchPage() {
         </div>
       )}
       <p className="mt-3 text-[10px] text-slate-400">
-        Monthly estimates are illustrative. {theme.programName} members earn on
+        Monthly estimates are illustrative. {theme.unit.charAt(0).toUpperCase() + theme.unit.slice(1)}{" "}
+        are earned when you pay with a {theme.programName} payment plan — on
         the fare, excluding taxes and fees.
       </p>
       <PrototypeNotes screen="search" />

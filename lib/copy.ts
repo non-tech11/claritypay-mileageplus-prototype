@@ -42,7 +42,7 @@ export const REWARD_RETRY_NOTE =
   "We'll post these within 72 hours — no action needed.";
 
 export const MILES_TIMING_BASE =
-  "Base miles are earned by flying and are credited after your flight, per MileagePlus program rules.";
+  "Base miles are earned on bookings paid with a payment plan and are credited after your flight.";
 
 export const MILES_TIMING_BONUS =
   "Bonus miles are credited when your payment plan completes — after your final payment.";
@@ -53,17 +53,17 @@ export const MILES_TIMING_REVERSAL =
 /** Per-screen prototype notes — the "voiceover" for interviewers. */
 export const PROTOTYPE_NOTES: Record<string, string> = {
   search:
-    "Discovery placement: one light monthly-price line per fare, and a single loyalty chip on the fare most likely to be financed. Deliberately no heavy loyalty sell here — discovery earns attention, checkout earns conversion.",
+    "Discovery placement: one light monthly-price line per fare, and a loyalty chip per fare stating the exclusivity up front — miles are earned only by paying with a program plan. The financed-most fare leads with the bonus; discovery earns attention, checkout earns conversion.",
   cart:
     "The monthly figure matches search (consistency builds trust). In the plan sheet, 0% APR earns no bonus — the subsidy is the incentive; APR plans earn a bonus at a fare-tier rate (Economy Plus highest), and every APR term earns the same (we never reward longer debt). The calculator shows cost vs miles value honestly.",
   checkout:
-    "Wallet placement: pay-over-time sits below card, above PayPal. United has no other pay-later provider in this mock, so no adjacency conflict. ClarityPay appears only as a micro-tag — the lender shows up where the law requires, nowhere else.",
+    "The wallet is the selection moment: several providers, one differentiator. Only the pay-over-time option earns program miles, and it says so with the real numbers for this booking; the other methods say 'No miles' plainly. ClarityPay appears only as a micro-tag — the lender shows up where the law requires, nowhere else.",
   prequal:
     "Inline application, no redirect. Phone + last-4 SSN, soft pull only. The lender disclosure is a shared constant, not free-typed. The persona switcher (header) decides the outcome.",
   offer:
-    "One plan is recommended, each shows its bonus (0% earns none), and timing is explicit: base miles credit after the flight (United's rules), the bonus credits when the plan completes (ClarityPay-funded — completion rewards repayment). Autopay defaults on.",
+    "One plan is recommended, each shows its bonus (0% earns none), and timing is explicit: base miles credit after the flight, the bonus credits when the plan completes (ClarityPay-funded — completion rewards repayment). Every plan earns the base — miles are the plan benefit. Autopay defaults on.",
   declined:
-    "Soft decline: no reason codes beyond the legal minimum, adverse-action notice by mail, and a one-tap fallback to card — nothing re-entered. The loyalty line adjusts to base miles only: bonus rewards financing, base rewards flying.",
+    "Soft decline: no reason codes beyond the legal minimum, adverse-action notice by mail, and a one-tap fallback to card — nothing re-entered. The loyalty line is honest about the trade-off: miles are a payment-plan benefit, so the card fallback earns none.",
   confirmation:
     "Miles shown with honest statuses (pending / posted / reversed) rather than a single inflated number. A traveller without a MileagePlus number gets a 30-day retro-credit prompt.",
   account:
