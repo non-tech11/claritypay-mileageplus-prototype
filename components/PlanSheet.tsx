@@ -148,73 +148,46 @@ export function PlanSheet({
                 );
               })}
             </div>
-            <p className="mt-3 rounded-lg bg-slate-100 px-3 py-2 text-[11px] text-slate-600">
-              {preview.data.note}
-            </p>
-
-            {/* Benefit calculator for the picked plan */}
+            {/* Compact benefit strip for the picked plan */}
             {pickedPlan && pickedMiles && (
               <section
                 aria-label="Benefit calculator"
-                className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3"
+                className="mt-3 rounded-xl bg-slate-50 px-3 py-2.5"
               >
-                <h3 className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <Calculator size={13} aria-hidden /> What this plan gives back
-                </h3>
                 {(() => {
                   const cost = Math.max(pickedPlan.totalCost - amount, 0);
-                  const milesValue =
-                    (pickedMiles.financingTotal * MILE_VALUE_CENTS) / 100;
-                  const baseValue =
-                    ((preview.data?.totalBase ?? 0) * MILE_VALUE_CENTS) / 100;
-                  const max = Math.max(cost, milesValue + baseValue, 1);
+                  const totalMiles =
+                    (preview.data?.totalBase ?? 0) + pickedMiles.financingTotal;
+                  const value = (totalMiles * MILE_VALUE_CENTS) / 100;
+                  const max = Math.max(cost, value, 1);
                   const bar = (v: number) => `${Math.max((v / max) * 100, 2)}%`;
                   return (
-                    <div className="mt-2 space-y-2 text-[11px] text-slate-600">
-                      <div>
-                        <div className="flex justify-between">
-                          <span>Cost of financing ({pickedPlan.apr}% APR)</span>
-                          <span className="font-semibold text-slate-800">
-                            ${cost.toFixed(2)}
-                          </span>
-                        </div>
-                        <div className="mt-0.5 h-2 rounded-full bg-slate-200">
+                    <div className="text-[11px] text-slate-600">
+                      <p className="flex items-center gap-1.5 font-semibold text-slate-800">
+                        <Calculator size={12} aria-hidden />
+                        Costs ${cost.toFixed(2)} · earns{" "}
+                        {totalMiles.toLocaleString()} {theme.unit}
+                        <span style={{ color: "var(--brand)" }}>
+                          ≈ ${value.toFixed(2)}
+                        </span>
+                      </p>
+                      <div className="mt-1.5 space-y-1">
+                        <div className="h-1.5 rounded-full bg-slate-200">
                           <div
-                            className="h-2 rounded-full bg-slate-500"
+                            className="h-1.5 rounded-full bg-slate-500"
                             style={{ width: bar(cost) }}
                           />
                         </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between">
-                          <span>
-                            {theme.unit.charAt(0).toUpperCase() + theme.unit.slice(1)} you
-                            earn ({(
-                              (preview.data?.totalBase ?? 0) + pickedMiles.financingTotal
-                            ).toLocaleString()}{" "}
-                            × {MILE_VALUE_CENTS}¢)
-                          </span>
-                          <span className="font-semibold" style={{ color: "var(--brand)" }}>
-                            ≈ ${(milesValue + baseValue).toFixed(2)}
-                          </span>
-                        </div>
-                        <div className="mt-0.5 h-2 rounded-full bg-slate-200">
+                        <div className="h-1.5 rounded-full bg-slate-200">
                           <div
-                            className="h-2 rounded-full"
-                            style={{ width: bar(milesValue + baseValue), background: "var(--brand)" }}
+                            className="h-1.5 rounded-full"
+                            style={{ width: bar(value), background: "var(--brand)" }}
                           />
                         </div>
                       </div>
-                      <p className="text-[10px] text-slate-400">
-                        {pickedMiles.financingTotal > 0
-                          ? `${pickedMiles.milesBack.toLocaleString()} ${theme.unit} back${
-                              pickedMiles.bonus > 0
-                                ? ` + ${pickedMiles.bonus.toLocaleString()} bonus`
-                                : ""
-                            } for paying over time, plus ${(preview.data?.totalBase ?? 0).toLocaleString()} from flying. `
-                          : `This plan costs nothing extra and earns no extra ${theme.unit}. `}
-                        {theme.unit === "miles" ? "Mile" : "Point"} value of{" "}
-                        {MILE_VALUE_CENTS}¢ is illustrative.
+                      <p className="mt-1 text-[10px] text-slate-400">
+                        At {MILE_VALUE_CENTS}¢/{theme.unit.replace(/s$/, "")},
+                        illustrative.
                       </p>
                     </div>
                   );
