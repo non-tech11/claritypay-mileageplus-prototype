@@ -21,21 +21,33 @@ interface ActivityRow extends MilesEntry {
   unlockHint: string;
 }
 
+function friendlyMonth(isoDate: string | undefined): string {
+  if (!isoDate) return "";
+  const d = new Date(`${isoDate}T00:00:00Z`);
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
 function buildRows(loans: Loan[]): ActivityRow[] {
-  return loans.flatMap((loan) =>
-    loan.ledger.map((e) => ({
+  return loans.flatMap((loan) => {
+    // Concrete dates, not promises — the unlock can be months away.
+    const finalPayment = loan.schedule[loan.schedule.length - 1]?.dueDate;
+    return loan.ledger.map((e) => ({
       ...e,
       pnr: loan.pnr,
       route: `${loan.trip.origin} → ${loan.trip.destination}`,
       travelDate: loan.trip.travelDate,
       unlockHint:
         e.type === "base_earn"
-          ? `unlocks after travel on ${loan.trip.travelDate}`
+          ? `arrives after your flight · ${friendlyMonth(loan.trip.travelDate)}`
           : e.type === "bonus_earn"
-            ? "unlocks after your final payment"
+            ? `arrives after your final payment · ${friendlyMonth(finalPayment)}`
             : "",
-    }))
-  );
+    }));
+  });
 }
 
 function Row({ row, unit }: { row: ActivityRow; unit: string }) {
@@ -95,7 +107,7 @@ export default function MilesPage() {
           nudge={tierNudge(theme, persona.tierProgress)}
           pendingLine={
             soonTotal > 0
-              ? `${soonTotal.toLocaleString()} ${theme.unit} unlocking soon`
+              ? `${soonTotal.toLocaleString()} ${theme.unit} on the way`
               : null
           }
           ctaLabel="Redeem"
@@ -114,7 +126,7 @@ export default function MilesPage() {
           <section className="card">
             <h2 className="flex items-center gap-1.5 text-sm font-bold">
               <Lock size={14} style={{ color: "var(--accent)" }} aria-hidden />
-              Unlocking soon
+              On the way
               {soonTotal > 0 && (
                 <span className="font-normal text-slate-400">
                   · {soonTotal.toLocaleString()} {theme.unit}
@@ -159,7 +171,7 @@ export default function MilesPage() {
               ))}
               {unlocked.length === 0 && (
                 <li className="py-2 text-xs text-slate-400">
-                  {unitCap} unlock here after travel (base) and after your
+                  {unitCap} land here after your flight (base) and after your
                   final payment (bonus).
                 </li>
               )}
@@ -169,26 +181,28 @@ export default function MilesPage() {
           <section className="card">
             <h2 className="flex items-center gap-1.5 text-sm font-bold">
               <MinusCircle size={14} className="text-slate-400" aria-hidden />
-              Removed &amp; adjustments
+              Adjustments
             </h2>
+            <p className="mt-0.5 text-[10px] text-slate-400">
+              Changes from cancellations, refunds and redemptions.
+            </p>
             <ul className="mt-1 divide-y divide-slate-100">
               {removed.map((r) => (
                 <Row key={r.id} row={r} unit={theme.unit} />
               ))}
               {removed.length === 0 && (
                 <li className="py-2 text-xs text-slate-400">
-                  Nothing removed. Cancellations deduct {theme.unit} that were
-                  unlocking soon.
+                  No adjustments. Cancelling a booking takes back {theme.unit}{" "}
+                  that were still on the way.
                 </li>
               )}
             </ul>
           </section>
 
           <p className="text-[10px] text-slate-400">
-            Base {theme.unit} unlock after travel is completed. Bonus{" "}
-            {theme.unit} unlock after your payment plan completes. Cancelling a
-            booking deducts anything still unlocking soon — never a cash
-            charge.
+            Base {theme.unit} arrive after your flight. Bonus {theme.unit}{" "}
+            arrive after your final payment. Cancelling a booking takes back
+            anything still on the way — never a cash charge.
           </p>
         </div>
       )}

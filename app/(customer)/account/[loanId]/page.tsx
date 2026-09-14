@@ -149,8 +149,8 @@ export default function LoanDetailPage({
                     · {e.travellerName}
                     {e.status === "pending" &&
                       (e.type === "base_earn"
-                        ? ` · unlocks after travel`
-                        : ` · unlocks after final payment`)}
+                        ? ` · arrives after your flight`
+                        : ` · arrives after your final payment`)}
                   </span>
                 </span>
                 <MilesPill status={e.status} customer />

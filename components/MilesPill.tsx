@@ -17,13 +17,14 @@ const OPS_LABELS: Record<MilesStatus, string> = {
   pending_retry: "pending — retrying",
 };
 
-/** Customer-facing labels — the unlock metaphor. */
+/** Customer-facing labels. "On the way" over "soon" — the unlock can be
+ * months out, so entries carry the concrete date instead of a promise. */
 const CUSTOMER_LABELS: Record<MilesStatus, string> = {
-  pending: "unlocking soon",
+  pending: "on the way",
   posted: "unlocked",
   held: "on hold",
   reversed: "removed",
-  pending_retry: "unlocking soon — retrying",
+  pending_retry: "on the way — retrying",
 };
 
 export function MilesPill({

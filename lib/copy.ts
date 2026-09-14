@@ -59,7 +59,7 @@ export const PROTOTYPE_NOTES: Record<string, string> = {
   account:
     "Post-purchase servicing under United's brand. Trips carry a compact earn summary; the full miles story lives in its own tab — the customer never has to learn that two companies are involved.",
   miles:
-    "The miles hub uses the unlock metaphor: base miles unlock after travel, bonus miles unlock after the final payment, and cancellations deduct whatever was still unlocking soon. One place to answer 'where are my miles?'",
+    "The miles hub avoids vague promises: every earn 'on the way' carries its concrete arrival — after the flight (with the date) or after the final payment (with the month). Cancellations take back what was still on the way. One place to answer 'where are my miles?'",
   loan:
     "Every miles movement is a ledger line with a reason. The simulator panel below exercises the edge cases: cancellations, partial refunds, redeemed-then-cancelled netting, delinquency freeze/reverse, and loyalty-API failure.",
   dashboard:
