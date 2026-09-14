@@ -117,8 +117,9 @@ with one recommended plan.
 ## Assumptions (stated, per the brief)
 
 - **Booking economics**: $1,000 illustrative AOV financed; 6% merchant fee;
-  ~5% cost of funds; 2% expected credit loss; miles transfer price 1.1¢,
-  member-perceived value 1.3¢. See the unit-economics table on `/dashboard`.
+  ~5% cost of funds; 2% expected credit loss; miles transfer price 0.6¢,
+  member-perceived value 1.3¢ — every reward dollar lands at ~2.2× perceived
+  value. See the unit-economics table on `/dashboard`.
 - **Funding**: ClarityPay funds **all** reward miles shown in the prototype,
   purchasing them from the airline at the transfer price — the cobrand-card
   model. The member's normal flying miles are the airline's own programme

@@ -111,8 +111,8 @@ export default function OverviewPage() {
                 ["Interest income (14.99% APR, 12mo)", "borne by customer", "+$82.00", "revenue"],
                 ["Cost of funds", "~5% on outstanding balance", "−$27.00", "cost"],
                 ["Expected credit loss", "2.0% of principal", "−$20.00", "cost"],
-                ["Reward cost — trip miles", "4,500 mi × 1.1¢ purchased from airline", "−$49.50", "cost"],
-                ["Reward cost — bonus miles", "3,000 mi × 1.1¢ purchased from airline", "−$33.00", "cost"],
+                ["Reward cost — trip miles", "4,500 mi × 0.6¢ purchased from airline", "−$27.00", "cost"],
+                ["Reward cost — bonus miles", "3,000 mi × 0.6¢ purchased from airline", "−$18.00", "cost"],
                 ["Servicing & ops", "per-loan allocation", "−$8.00", "cost"],
               ].map(([label, note, value, kind]) => (
                 <tr key={label} className="border-b border-slate-100">
@@ -135,21 +135,23 @@ export default function OverviewPage() {
                   before repeat-purchase lift
                 </td>
                 <td className="py-2 text-right text-sm font-bold text-emerald-700">
-                  +$4.50
+                  +$42.00
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         <p className="mt-2 rounded-lg bg-slate-50 px-3 py-2 text-[11px] text-slate-600">
-          Reward funding is the largest cost line, so per-booking margin is
-          thin by design — the case rests on the repeat-purchase lift: a
-          member who redeems earned miles rebooks at ~1.4× the rate of a card
-          payer (illustrative), making reward cost partly an acquisition
-          spend for the next booking. Levers: each 1 mi/$ off the trip-miles
-          earn rate adds ~$9.90 of contribution; take rate moves revenue
-          linearly; if 30+ DPD rises 1pt, contribution drops ~$10, which is
-          why the delinquency guardrail freezes the reward spend first.
+          The reward runs on a value arbitrage: miles bought at 0.6¢ are
+          valued by members at ~1.3¢, so the $45 reward spend here reads as
+          ~$97 of perceived value — every reward dollar lands at ~2.2×. And
+          it pays twice: a member who redeems earned miles rebooks at ~1.4×
+          the rate of a card payer (illustrative), so reward cost is partly
+          acquisition spend for the next booking. Levers: each 1 mi/$ off
+          the trip-miles earn rate adds ~$5.40 of contribution; take rate
+          moves revenue linearly; if 30+ DPD rises 1pt, contribution drops
+          ~$10, which is why the delinquency guardrail freezes the reward
+          spend first.
         </p>
       </section>
 
