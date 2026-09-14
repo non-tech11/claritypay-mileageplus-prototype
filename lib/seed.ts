@@ -199,17 +199,6 @@ function seedLoans(): Loan[] {
         reason: "Booking cancelled before travel",
         date: "2026-07-15",
       },
-      {
-        id: "ME-S3B",
-        loanId: "LN-1002",
-        travellerId: "priya",
-        travellerName: "Priya",
-        type: "bonus_earn",
-        amount: 168,
-        status: "reversed",
-        reason: "Booking cancelled before travel",
-        date: "2026-07-15",
-      },
     ],
     travellers: [
       { id: "priya", name: "Priya", mileagePlusNumber: "MP4821937", isPayer: true },

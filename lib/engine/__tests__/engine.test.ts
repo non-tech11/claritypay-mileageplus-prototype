@@ -74,36 +74,46 @@ function entry(
   };
 }
 
-describe("financing bonus (0.5 mi/$ financed, uniform)", () => {
-  it("earns 0.5 mi per $ financed, floored", () => {
-    const funded = financingMiles(416.8, DEFAULT_CONFIG);
+describe("earn rules (1 mi/$ fare base + 0.5 mi/$ financed bonus)", () => {
+  it("bonus is 0.5 mi per $ financed on Economy Plus with an APR plan", () => {
+    const funded = financingMiles(416.8, "economy-plus", 14.99, DEFAULT_CONFIG);
     expect(funded.bonus).toBe(208); // floor(416.80 x 0.5)
   });
 
-  it("is identical on every plan — 0% included, term-independent", () => {
-    // The bonus depends only on the amount financed, never on the plan:
-    // buildPlans yields 0%, 12mo and 24mo, all with the same principal.
-    const plans = buildPlans(416.8, "prime");
-    expect(plans.length).toBeGreaterThanOrEqual(3);
-    const bonuses = plans.map(() => financingMiles(416.8, DEFAULT_CONFIG).bonus);
-    expect(new Set(bonuses).size).toBe(1);
-    expect(bonuses[0]).toBe(208);
+  it("bonus is strictly an Economy Plus benefit — other tiers earn none", () => {
+    expect(financingMiles(337.2, "economy", 14.99, DEFAULT_CONFIG).bonus).toBe(0);
+    expect(financingMiles(262.6, "basic", 14.99, DEFAULT_CONFIG).bonus).toBe(0);
   });
 
-  it("scales linearly with the amount financed below the cap", () => {
-    expect(financingMiles(200, DEFAULT_CONFIG).bonus).toBe(100);
-    expect(financingMiles(400, DEFAULT_CONFIG).bonus).toBe(200);
-    expect(financingMiles(337.2, DEFAULT_CONFIG).bonus).toBe(168);
+  it("a 0% plan earns no reward at all — no bonus and no base", () => {
+    expect(financingMiles(416.8, "economy-plus", 0, DEFAULT_CONFIG).bonus).toBe(0);
+    const preview = previewMiles(
+      372, 416.8, [priya], DEFAULT_CONFIG, true, "economy-plus", 0
+    );
+    expect(preview[0].baseMiles).toBe(0);
+    expect(preview[0].bonusMiles).toBe(0);
+  });
+
+  it("is term-independent: 12mo and 24mo earn the same", () => {
+    const prime = buildPlans(416.8, "prime");
+    const p12 = prime.find((p) => p.id === "12mo")!;
+    const p24 = prime.find((p) => p.id === "24mo")!;
+    const f12 = financingMiles(416.8, "economy-plus", p12.apr, DEFAULT_CONFIG);
+    const f24 = financingMiles(416.8, "economy-plus", p24.apr, DEFAULT_CONFIG);
+    expect(f12).toEqual(f24);
+    expect(f12.bonus).toBe(208);
   });
 
   it("caps the bonus per booking", () => {
-    const funded = financingMiles(4150, DEFAULT_CONFIG);
+    const funded = financingMiles(4150, "economy-plus", 14.99, DEFAULT_CONFIG);
     // floor(4150 x 0.5) = 2075 raw → capped at 1000.
     expect(funded.bonus).toBe(1000);
   });
 
   it("routes the bonus to the payer only; base splits across travellers", () => {
-    const preview = previewMiles(744, 833.6, [priya, alex], DEFAULT_CONFIG, true);
+    const preview = previewMiles(
+      744, 833.6, [priya, alex], DEFAULT_CONFIG, true, "economy-plus", 14.99
+    );
     const payer = preview.find((p) => p.travellerId === "priya")!;
     const other = preview.find((p) => p.travellerId === "alex")!;
     expect(payer.bonusMiles).toBe(416); // floor(833.60 x 0.5)
@@ -114,9 +124,9 @@ describe("financing bonus (0.5 mi/$ financed, uniform)", () => {
 });
 
 describe("decline path", () => {
-  it("yields base miles only — no bonus when not financed", () => {
+  it("earns nothing when not financed — miles are a plan benefit", () => {
     const preview = previewMiles(372, 416.8, [priya], DEFAULT_CONFIG, false);
-    expect(preview[0].baseMiles).toBe(372); // 1 mi/$ of fare
+    expect(preview[0].baseMiles).toBe(0);
     expect(preview[0].bonusMiles).toBe(0);
   });
 });

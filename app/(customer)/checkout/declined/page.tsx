@@ -49,7 +49,7 @@ export default function DeclinedPage() {
 
       <p className="mb-4 rounded-lg bg-slate-100 px-3 py-2 text-xs text-slate-700">
         Paying by card completes this booking as usual — {theme.programName}{" "}
-        {theme.unit} are earned only with a payment plan.
+        {theme.unit} are earned only with a monthly payment plan.
       </p>
 
       {/* One-tap fallback: same booking, same details, nothing re-entered. */}

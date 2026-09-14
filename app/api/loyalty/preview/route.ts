@@ -6,8 +6,9 @@ import { getStore } from "@/lib/store";
 import type { Traveller } from "@/lib/types";
 
 /**
- * Miles preview: base per traveller (1 mi/$ fare), plus the pay-over-time
- * bonus (0.5 mi/$ financed) — identical on every plan, 0% included.
+ * Miles preview: base per traveller (1 mi/$ fare) and the pay-over-time
+ * bonus (0.5 mi/$ financed, Economy Plus only) — on APR-bearing plans.
+ * A 0% plan earns nothing: the subsidised rate is the reward.
  */
 export async function GET(req: NextRequest) {
   const amount = Number(req.nextUrl.searchParams.get("amount"));
@@ -32,15 +33,17 @@ export async function GET(req: NextRequest) {
     travellers.push({ id: "alex", name: "Alex", mileagePlusNumber: null, isPayer: false });
   }
 
-  // Base miles only in the lines (financing miles depend on the plan).
-  const lines = previewMiles(fare, amount, travellers, config, false);
+  // Base as earned on an APR (monthly) plan — the number the chips and
+  // wallet quote. A 0% plan earns nothing; per-plan rows carry the truth.
+  const lines = previewMiles(fare, amount, travellers, config, true, fareTier, 14.99);
   const totalBase = lines.reduce((s, l) => s + l.baseMiles, 0);
 
   const ladder =
     persona.creditProfile === "thin" ? "prime" : persona.creditProfile;
   // Customer-facing model has exactly two reward types: base and bonus.
   const perPlan = buildPlans(amount, ladder).map((p) => {
-    const { bonus } = financingMiles(amount, config);
+    const { bonus } = financingMiles(amount, fareTier, p.apr, config);
+    const baseTotal = p.apr > 0 ? totalBase : 0;
     return {
       planId: p.id,
       label: p.label,
@@ -48,6 +51,8 @@ export async function GET(req: NextRequest) {
       recommended: !!p.recommended,
       bonus,
       financingTotal: bonus,
+      baseTotal,
+      totalMiles: baseTotal + bonus,
     };
   });
   const best = Math.max(...perPlan.map((p) => p.financingTotal));
@@ -59,6 +64,6 @@ export async function GET(req: NextRequest) {
     perPlan,
     maxFinancingMiles: best,
     note:
-      "Every plan earns the same bonus — 0.5 mi per $ financed, 0% included. Longer terms earn no more.",
+      "Rewards apply on monthly (APR) plans: 1 mi/$ of fare, plus 0.5 bonus mi/$ financed on Economy Plus. A 0% plan earns none — the subsidised rate is the reward. Every APR term earns the same.",
   });
 }

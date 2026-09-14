@@ -20,6 +20,9 @@ export const DEFAULT_CONFIG: MerchantConfig = {
   retroCreditWindowDays: 30,
 };
 
+/** Fare tier that qualifies for the pay-over-time bonus. */
+export const BONUS_FARE_TIER = "economy-plus";
+
 /** Ledger entry types funded by ClarityPay (vs the airline's base earn). */
 export const FINANCING_EARN_TYPES = ["bonus_earn", "miles_back_earn"] as const;
 
@@ -32,15 +35,18 @@ export function reversalTypeFor(
 }
 
 /**
- * Pay-over-time bonus for a booking: 0.5 mi/$ financed (config), capped.
- * Every plan earns it — 0% included — and every fare tier: paying with a
- * plan is the qualifying act, and the same amount financed earns the same
- * bonus on every term (longer debt earns no more).
+ * Pay-over-time bonus: 0.5 mi/$ financed (config), capped. Strictly an
+ * Economy Plus benefit, and strictly on APR-bearing (monthly) plans — a
+ * 0% plan earns no reward at all: the subsidised rate leaves no margin
+ * to fund one. Every APR term earns the same (longer debt earns no more).
  */
 export function financingMiles(
   amountFinanced: number,
+  fareId: string,
+  apr: number,
   config: MerchantConfig
 ): { bonus: number } {
+  if (apr <= 0 || fareId !== BONUS_FARE_TIER) return { bonus: 0 };
   const bonus = Math.min(
     Math.floor(amountFinanced * config.bonusMilesPerDollar),
     config.bonusCapPerBooking
@@ -72,22 +78,24 @@ export interface MilesPreviewLine {
 
 /**
  * Full preview: base to each traveller; the bonus to the payer only.
- * Customers see exactly two reward types.
+ * Rewards exist only on APR-bearing plans — a 0% plan (or an unfinanced
+ * booking) earns nothing. Customers see exactly two reward types.
  */
 export function previewMiles(
   fareExclTaxes: number,
   amountFinanced: number,
   travellers: Traveller[],
   config: MerchantConfig,
-  financed: boolean
+  financed: boolean,
+  fareId: string = BONUS_FARE_TIER,
+  apr: number = 0
 ): MilesPreviewLine[] {
-  const basePer = computeBaseMilesPerTraveller(
-    fareExclTaxes,
-    travellers.length,
-    config
-  );
-  const funded = financed
-    ? financingMiles(amountFinanced, config)
+  const earns = financed && apr > 0;
+  const basePer = earns
+    ? computeBaseMilesPerTraveller(fareExclTaxes, travellers.length, config)
+    : 0;
+  const funded = earns
+    ? financingMiles(amountFinanced, fareId, apr, config)
     : { bonus: 0 };
   return travellers.map((t) => ({
     travellerId: t.id,

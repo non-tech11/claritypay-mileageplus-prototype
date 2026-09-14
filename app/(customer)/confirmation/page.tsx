@@ -99,10 +99,16 @@ function ConfirmationInner() {
         {cardFallback ? (
           <p className="text-xs text-slate-500">
             No {theme.unit} on this booking — {theme.unit} come with a{" "}
-            {theme.programName} payment plan.
+            {theme.programName} monthly payment plan.
           </p>
         ) : loan ? (
           <ul className="space-y-2">
+            {loan.ledger.length === 0 && (
+              <li className="text-xs text-slate-500">
+                No {theme.unit} on this plan — the 0% rate is the reward.
+                Monthly plans earn {theme.unit}.
+              </li>
+            )}
             {loan.ledger.map((e) => (
               <li key={e.id} className="flex items-center justify-between gap-2 text-xs">
                 <span>

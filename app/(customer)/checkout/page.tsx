@@ -179,7 +179,7 @@ export default function CheckoutPage() {
                         preview.data.maxFinancingMiles > 0
                           ? ` + ${preview.data.maxFinancingMiles.toLocaleString()} bonus`
                           : ""
-                      }`
+                      } on monthly plans`
                     : `Earn ${theme.programName} ${theme.unit}`}
                 </span>
                 <span className="mt-0.5 flex items-center gap-1 text-[10px] font-normal text-slate-400">

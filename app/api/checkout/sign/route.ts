@@ -30,28 +30,35 @@ export async function POST(req: NextRequest) {
   const today = new Date().toISOString().slice(0, 10);
   const pnr = loan.pnr || generatePnr();
 
-  const basePer = computeBaseMilesPerTraveller(
-    loan.trip.fare,
-    loan.travellers.length || 1,
-    config
-  );
-  const funded = financingMiles(loan.principal, config);
+  // Rewards only on APR-bearing plans — a 0% plan writes no miles at all.
+  const earns = loan.plan.apr > 0;
+  const basePer = earns
+    ? computeBaseMilesPerTraveller(loan.trip.fare, loan.travellers.length || 1, config)
+    : 0;
+  const fareId =
+    loan.trip.fareId ??
+    loan.trip.fareLabel.toLowerCase().replace(/\s+/g, "-").replace("basic-economy", "basic");
+  const funded = earns
+    ? financingMiles(loan.principal, fareId, loan.plan.apr, config)
+    : { bonus: 0 };
 
   const ledger = [...loan.ledger];
   for (const t of loan.travellers) {
-    ledger.push({
-      id: nextEntryId(),
-      loanId: loan.id,
-      travellerId: t.id,
-      travellerName: t.name,
-      type: "base_earn",
-      amount: basePer,
-      status: "pending",
-      reason: t.mileagePlusNumber
-        ? `Earned on this trip — posts after your flight on ${loan.trip.travelDate}`
-        : `Held for retro-credit — add a MileagePlus number within ${config.retroCreditWindowDays} days`,
-      date: today,
-    });
+    if (basePer > 0) {
+      ledger.push({
+        id: nextEntryId(),
+        loanId: loan.id,
+        travellerId: t.id,
+        travellerName: t.name,
+        type: "base_earn",
+        amount: basePer,
+        status: "pending",
+        reason: t.mileagePlusNumber
+          ? `Earned on this trip — posts after your flight on ${loan.trip.travelDate}`
+          : `Held for retro-credit — add a MileagePlus number within ${config.retroCreditWindowDays} days`,
+        date: today,
+      });
+    }
     // One customer-facing bonus entry to the payer: 0.5 mi/$ financed.
     if (t.isPayer && funded.bonus > 0) {
       ledger.push({

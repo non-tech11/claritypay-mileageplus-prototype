@@ -25,13 +25,13 @@ const FIELDS: {
   {
     key: "baseMilesPerDollar",
     label: "Base miles per $ of fare",
-    hint: "Credited after the flight, every financed booking, every traveller",
+    hint: "Monthly (APR) plans only — a 0% plan earns no miles at all",
     step: 0.1,
   },
   {
     key: "bonusMilesPerDollar",
     label: "Bonus miles per $ financed",
-    hint: "Every plan earns it — 0% included — identical on every term",
+    hint: "Economy Plus fares on monthly plans only; identical on every term",
     step: 0.1,
   },
   {

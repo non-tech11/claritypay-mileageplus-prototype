@@ -15,6 +15,8 @@ export interface PlanMilesLine {
   recommended: boolean;
   bonus: number;
   financingTotal: number;
+  baseTotal: number;
+  totalMiles: number;
 }
 
 interface PreviewResponse {
@@ -27,9 +29,10 @@ interface PreviewResponse {
 const MILE_VALUE_CENTS = 1.3;
 
 /**
- * "Pay over time" bottom sheet. Every plan earns the same: 1 mi/$ of fare
- * (base) + 0.5 mi/$ financed (bonus) — 0% included, term-independent. One
- * plan is recommended. A calculator at the bottom shows cost vs miles value.
+ * "Pay over time" bottom sheet. Monthly (APR) plans earn 1 mi/$ of fare,
+ * plus 0.5 bonus mi/$ financed on Economy Plus; the 0% plan earns none —
+ * the subsidised rate is the reward. One plan is recommended. A calculator
+ * at the bottom shows cost vs miles value.
  */
 export function PlanSheet({
   amount,
@@ -123,21 +126,28 @@ export function PlanSheet({
                       </p>
                     </div>
                     <span className="flex shrink-0 flex-col items-end gap-0.5">
-                      {miles && (
+                      {miles && miles.totalMiles > 0 ? (
+                        <>
+                          <span
+                            className="whitespace-nowrap text-right text-[11px] font-semibold"
+                            style={{ color: "var(--brand)" }}
+                          >
+                            Earn {miles.totalMiles.toLocaleString()} {theme.unit}
+                          </span>
+                          {miles.financingTotal > 0 && (
+                            <span className="whitespace-nowrap text-[10px] text-slate-400">
+                              incl. {miles.financingTotal.toLocaleString()} bonus
+                            </span>
+                          )}
+                        </>
+                      ) : miles ? (
                         <span
-                          className="whitespace-nowrap text-right text-[11px] font-semibold"
-                          style={{ color: "var(--brand)" }}
+                          className="whitespace-nowrap text-[10px] text-slate-400"
+                          title={`The 0% rate is the reward on this plan — monthly plans earn ${theme.unit}`}
                         >
-                          Earn{" "}
-                          {((preview.data?.totalBase ?? 0) + miles.financingTotal).toLocaleString()}{" "}
-                          {theme.unit}
+                          no {theme.unit} — 0% is the reward
                         </span>
-                      )}
-                      {miles && miles.financingTotal > 0 && (
-                        <span className="whitespace-nowrap text-[10px] text-slate-400">
-                          incl. {miles.financingTotal.toLocaleString()} bonus
-                        </span>
-                      )}
+                      ) : null}
                       {isSelected && (
                         <span
                           className="rounded-full px-2 py-0.5 text-[10px] font-bold text-white"
@@ -159,8 +169,7 @@ export function PlanSheet({
               >
                 {(() => {
                   const cost = Math.max(pickedPlan.totalCost - amount, 0);
-                  const totalMiles =
-                    (preview.data?.totalBase ?? 0) + pickedMiles.financingTotal;
+                  const totalMiles = pickedMiles.totalMiles;
                   const value = (totalMiles * MILE_VALUE_CENTS) / 100;
                   const max = Math.max(cost, value, 1);
                   const bar = (v: number) => `${Math.max((v / max) * 100, 2)}%`;

@@ -30,6 +30,8 @@ interface PlanMilesLine {
   recommended: boolean;
   bonus: number;
   financingTotal: number;
+  baseTotal: number;
+  totalMiles: number;
 }
 interface PreviewResponse {
   totalBase: number;
@@ -102,6 +104,8 @@ export default function OfferPage() {
   const base = preview.data?.totalBase ?? 0;
   const chosenMiles = preview.data?.perPlan.find((x) => x.planId === planId);
   const bonus = chosenMiles?.bonus ?? 0;
+  const chosenTotal = chosenMiles?.totalMiles ?? 0;
+  const bestTotal = Math.max(0, ...(preview.data?.perPlan.map((x) => x.totalMiles) ?? [0]));
 
   return (
     <div className="flex min-h-full flex-col">
@@ -166,19 +170,28 @@ export default function OfferPage() {
                 </p>
               </div>
               <span className="flex shrink-0 flex-col items-end gap-0.5">
-                {miles && (
+                {miles && miles.totalMiles > 0 ? (
+                  <>
+                    <span
+                      className="whitespace-nowrap text-[11px] font-semibold"
+                      style={{ color: "var(--brand)" }}
+                    >
+                      Earn {miles.totalMiles.toLocaleString()} {theme.unit}
+                    </span>
+                    {miles.financingTotal > 0 && (
+                      <span className="whitespace-nowrap text-[10px] text-slate-400">
+                        incl. {miles.financingTotal.toLocaleString()} bonus
+                      </span>
+                    )}
+                  </>
+                ) : miles ? (
                   <span
-                    className="whitespace-nowrap text-[11px] font-semibold"
-                    style={{ color: "var(--brand)" }}
+                    className="whitespace-nowrap text-[10px] text-slate-400"
+                    title={`The 0% rate is the reward on this plan — monthly plans earn ${theme.unit}`}
                   >
-                    Earn {(base + miles.financingTotal).toLocaleString()} {theme.unit}
+                    no {theme.unit} — 0% is the reward
                   </span>
-                )}
-                {miles && miles.financingTotal > 0 && (
-                  <span className="whitespace-nowrap text-[10px] text-slate-400">
-                    incl. {miles.financingTotal.toLocaleString()} bonus
-                  </span>
-                )}
+                ) : null}
                 {planId === p.id && (
                   <span
                     className="rounded-full px-2 py-0.5 text-[10px] font-bold text-white"
@@ -205,21 +218,25 @@ export default function OfferPage() {
               preview.data
                 ? bonus > 0
                   ? `You'll earn ${base.toLocaleString()} ${theme.unit} + ${bonus.toLocaleString()} bonus = ${(base + bonus).toLocaleString()} total`
-                  : `You'll earn ${base.toLocaleString()} ${theme.unit} on this trip`
+                  : chosenTotal > 0
+                    ? `You'll earn ${chosenTotal.toLocaleString()} ${theme.unit} on this trip`
+                    : `No ${theme.unit} on the 0% plan — monthly plans earn ${bestTotal.toLocaleString()}`
                 : "Calculating your earn…"
             }
           />
         )}
-        <button
-          className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold underline"
-          style={{ color: "var(--brand)" }}
-          onClick={() => setTimingOpen((o) => !o)}
-          aria-expanded={timingOpen}
-        >
-          When do I get these?
-          {timingOpen ? <ChevronUp size={12} aria-hidden /> : <ChevronDown size={12} aria-hidden />}
-        </button>
-        {timingOpen && (
+        {chosenTotal > 0 && (
+          <button
+            className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold underline"
+            style={{ color: "var(--brand)" }}
+            onClick={() => setTimingOpen((o) => !o)}
+            aria-expanded={timingOpen}
+          >
+            When do I get these?
+            {timingOpen ? <ChevronUp size={12} aria-hidden /> : <ChevronDown size={12} aria-hidden />}
+          </button>
+        )}
+        {timingOpen && chosenTotal > 0 && (
           <div
             className="mt-2 rounded-xl border p-3"
             style={{

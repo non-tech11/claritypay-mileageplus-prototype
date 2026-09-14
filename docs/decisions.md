@@ -4,7 +4,7 @@
 
 2. **The lender is invisible except where the law requires it.** United branding everywhere the customer acts; ClarityPay appears only as the wallet micro-tag, the prequal disclosure block, the loan agreement, and statement footers. All regulated copy is a shared constant (`lib/copy.ts`) — disclosures are never free-typed.
 
-3. **One uniform earn rate: 1 mi/$ of fare (base) + 0.5 mi/$ financed (bonus), capped per booking.** Every plan earns it — 0% included — and every fare tier: the qualifying act is paying with a program plan, so the plan choice is about cash flow, never about miles, and the loyalty currency can never nudge a customer into longer debt. Simple enough to say in one chip line, and cobrand-familiar. Enforced in the engine and unit-tested; a calculator in the plan sheet shows financing cost vs miles value honestly.
+3. **Rewards exist only where there is margin: APR plans.** A 0% plan earns nothing — the subsidised rate *is* the reward, and there is no margin to fund miles from. Monthly (APR) plans earn 1 mi/$ of fare, and Economy Plus adds 0.5 bonus mi/$ financed (capped), concentrating spend-up where the airline's margin is. Every APR term earns the same — the loyalty currency never nudges a customer into longer debt. Enforced in the engine and unit-tested; a calculator in the plan sheet shows financing cost vs miles value honestly.
 
 4. **Bonus goes to the payer only; base goes to every traveller.** One loan, one borrower, one bonus. Base miles are earned on the fare and split per traveller with a MileagePlus number; travellers without one get a 30-day retro-credit window instead of silently losing the earn.
 
@@ -20,6 +20,6 @@
 
 10. **Chart is hand-rolled SVG, state is in-memory, personas replace auth.** Prototype-scale choices made deliberately: no chart dependency, no database (documented cold-start reset + `POST /api/reset`), and a persona switcher that also drives underwriting outcomes so every path is walkable without credentials.
 
-11. **One plan is recommended, and it's the 12-month.** A default fights choice paralysis, and 12 months balances a manageable payment against total cost — with a uniform earn, the recommendation can be purely about cash flow.
+11. **One plan is recommended, and it's the 12-month.** A default fights choice paralysis; 12 months balances a manageable payment against total cost, and (unlike 0%) it earns miles — aligned incentives for customer, airline, and ClarityPay.
 
 12. **Partial cancellation keeps the payer's bonus.** The bonus rewards the financed booking (which still exists, re-amortised), not headcount. The cancelled traveller's trip miles are reversed pro-rata; the loan is re-amortised so unpaid instalments sum to the new outstanding balance.

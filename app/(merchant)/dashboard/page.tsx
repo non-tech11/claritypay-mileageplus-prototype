@@ -99,10 +99,11 @@ export default function OverviewPage() {
           Unit economics — one financed booking (illustrative)
         </h2>
         <p className="mb-3 text-xs text-slate-500">
-          How the variables connect on a $1,000 booking ($900 fare), 12-month
-          plan. Uniform earn — 1 mi/$ fare + 0.5 mi/$ financed, every plan and
-          fare. ClarityPay funds all reward miles, purchased from the airline
-          at the transfer price; cost scales with the Rewards page controls.
+          How the variables connect on a $1,000 Economy Plus booking ($900
+          fare), 12-month plan. Monthly plans earn 1 mi/$ of fare; Economy
+          Plus adds 0.5 bonus mi/$ financed; a 0% plan earns none. ClarityPay
+          funds all reward miles, purchased from the airline at the transfer
+          price; cost scales with the Rewards page controls.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[520px] text-left text-xs">
