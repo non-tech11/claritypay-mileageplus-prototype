@@ -173,7 +173,7 @@ export default function OfferPage() {
                     title={
                       miles.financingTotal > 0
                         ? undefined
-                        : `Bonus ${theme.unit} apply on Economy Plus fares with an APR plan — you still earn your base ${theme.unit}`
+                        : `Bonus ${theme.unit} apply on Economy Plus fares with a monthly payment plan — you still earn your base ${theme.unit}`
                     }
                   >
                     {miles.financingTotal > 0
