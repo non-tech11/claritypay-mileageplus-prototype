@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Calculator, X } from "lucide-react";
+import { Plane, X } from "lucide-react";
 import { useTheme } from "@/app/theme-context";
 import { useApi } from "@/lib/api-client";
+import { usePersona } from "@/lib/use-persona";
 import { CardSkeleton } from "./Skeleton";
 import { ErrorRetry } from "./ErrorRetry";
 import { buildPlans } from "@/lib/engine/loan";
@@ -25,8 +26,10 @@ interface PreviewResponse {
   note: string;
 }
 
-/** Illustrative value of one mile/point, for the benefit calculator. */
+/** Illustrative value of one mile/point, for the benefit strip. */
 const MILE_VALUE_CENTS = 1.3;
+/** Illustrative one-way saver award, to make the earn feel tangible. */
+const AWARD_MILES = 12500;
 
 /**
  * "Pay over time" bottom sheet. Monthly (APR) plans earn 1 mi/$ of fare,
@@ -52,6 +55,7 @@ export function PlanSheet({
   onSelect?: (planId: string) => void;
 }) {
   const theme = useTheme();
+  const persona = usePersona();
   const preview = useApi<PreviewResponse>(
     `/api/loyalty/preview?amount=${amount}&fare=${fare}&travellers=${travellers}&fareTier=${fareId}`
   );
@@ -154,47 +158,50 @@ export function PlanSheet({
                 );
               })}
             </div>
-            {/* Compact benefit strip for the picked plan */}
+            {/* Benefit strip: the earn as progress toward the next trip. */}
             {pickedPlan && pickedMiles && (
               <section
-                aria-label="Benefit calculator"
-                className="mt-3 rounded-xl bg-slate-50 px-3 py-2.5"
+                aria-label="What you get"
+                className="mt-3 rounded-xl bg-slate-50 px-3 py-2.5 text-[11px] text-slate-600"
               >
                 {(() => {
                   const cost = Math.max(pickedPlan.totalCost - amount, 0);
                   const totalMiles = pickedMiles.totalMiles;
+                  if (totalMiles === 0) {
+                    return (
+                      <p>
+                        No extra cost — you pay exactly ${amount.toFixed(2)}.
+                      </p>
+                    );
+                  }
                   const value = (totalMiles * MILE_VALUE_CENTS) / 100;
-                  const max = Math.max(cost, value, 1);
-                  const bar = (v: number) => `${Math.max((v / max) * 100, 2)}%`;
+                  const after = persona.milesBalance + totalMiles;
+                  const goal =
+                    theme.unit === "miles" ? "award flight" : "reward";
                   return (
-                    <div className="text-[11px] text-slate-600">
-                      <p className="flex items-center gap-1.5 font-semibold text-slate-800">
-                        <Calculator size={12} aria-hidden />
-                        Costs ${cost.toFixed(2)} · earns{" "}
-                        {totalMiles.toLocaleString()} {theme.unit}
-                        <span style={{ color: "var(--brand)" }}>
-                          ≈ ${value.toFixed(2)}
-                        </span>
+                    <>
+                      <p
+                        className="flex items-center gap-1.5 text-xs font-bold"
+                        style={{ color: "var(--brand)" }}
+                      >
+                        <Plane size={13} aria-hidden />
+                        {totalMiles.toLocaleString()} {theme.unit} closer to
+                        your next {goal}
                       </p>
-                      <div className="mt-1.5 space-y-1">
-                        <div className="h-1.5 rounded-full bg-slate-200">
-                          <div
-                            className="h-1.5 rounded-full bg-slate-500"
-                            style={{ width: bar(cost) }}
-                          />
-                        </div>
-                        <div className="h-1.5 rounded-full bg-slate-200">
-                          <div
-                            className="h-1.5 rounded-full"
-                            style={{ width: bar(value), background: "var(--brand)" }}
-                          />
-                        </div>
-                      </div>
+                      <p className="mt-1">
+                        Your balance grows{" "}
+                        {persona.milesBalance.toLocaleString()} →{" "}
+                        <strong>{after.toLocaleString()}</strong> {theme.unit}{" "}
+                        — {goal}s start at {AWARD_MILES.toLocaleString()}.
+                      </p>
                       <p className="mt-1 text-[10px] text-slate-400">
-                        At {MILE_VALUE_CENTS}¢/{theme.unit.replace(/s$/, "")},
-                        illustrative.
+                        Worth ≈ ${value.toFixed(2)} toward {goal}s
+                        (illustrative, {MILE_VALUE_CENTS}¢/
+                        {theme.unit.replace(/s$/, "")}) · this plan costs $
+                        {cost.toFixed(2)} over {pickedPlan.installments}{" "}
+                        payments.
                       </p>
-                    </div>
+                    </>
                   );
                 })()}
               </section>

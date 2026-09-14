@@ -72,7 +72,7 @@
       "source_file": "app/layout.tsx",
       "source_location": "L1",
       "id": "app_layout_tsx",
-      "community": 20,
+      "community": 19,
       "norm_label": "layout.tsx"
     },
     {
@@ -81,7 +81,7 @@
       "source_file": "app/layout.tsx",
       "source_location": "L18",
       "id": "layout_rootlayout",
-      "community": 20,
+      "community": 19,
       "norm_label": "rootlayout()"
     },
     {
@@ -90,7 +90,7 @@
       "source_file": "app/(merchant)/dashboard/layout.tsx",
       "source_location": "L1",
       "id": "app_merchant_dashboard_layout_tsx",
-      "community": 21,
+      "community": 20,
       "norm_label": "layout.tsx"
     },
     {
@@ -99,7 +99,7 @@
       "source_file": "app/(merchant)/dashboard/layout.tsx",
       "source_location": "L35",
       "id": "layout_dashboardlayout",
-      "community": 21,
+      "community": 20,
       "norm_label": "dashboardlayout()"
     },
     {
@@ -108,7 +108,7 @@
       "source_file": "app/(merchant)/dashboard/page.tsx",
       "source_location": "L1",
       "id": "app_merchant_dashboard_page_tsx",
-      "community": 22,
+      "community": 21,
       "norm_label": "page.tsx"
     },
     {
@@ -117,7 +117,7 @@
       "source_file": "app/(merchant)/dashboard/page.tsx",
       "source_location": "L11",
       "id": "page_money",
-      "community": 22,
+      "community": 21,
       "norm_label": "money()"
     },
     {
@@ -126,7 +126,7 @@
       "source_file": "app/(merchant)/dashboard/rewards/page.tsx",
       "source_location": "L1",
       "id": "app_merchant_dashboard_rewards_page_tsx",
-      "community": 23,
+      "community": 22,
       "norm_label": "page.tsx"
     },
     {
@@ -135,7 +135,7 @@
       "source_file": "app/(merchant)/dashboard/rewards/page.tsx",
       "source_location": "L70",
       "id": "page_save",
-      "community": 23,
+      "community": 22,
       "norm_label": "save()"
     },
     {
@@ -144,7 +144,7 @@
       "source_file": "app/(merchant)/dashboard/exceptions/page.tsx",
       "source_location": "L1",
       "id": "app_merchant_dashboard_exceptions_page_tsx",
-      "community": 24,
+      "community": 23,
       "norm_label": "page.tsx"
     },
     {
@@ -153,7 +153,7 @@
       "source_file": "app/(merchant)/dashboard/exceptions/page.tsx",
       "source_location": "L25",
       "id": "page_retryposting",
-      "community": 24,
+      "community": 23,
       "norm_label": "retryposting()"
     },
     {
@@ -171,7 +171,7 @@
       "source_file": "app/(merchant)/dashboard/data/page.tsx",
       "source_location": "L1",
       "id": "app_merchant_dashboard_data_page_tsx",
-      "community": 25,
+      "community": 24,
       "norm_label": "page.tsx"
     },
     {
@@ -180,7 +180,7 @@
       "source_file": "app/(merchant)/dashboard/data/page.tsx",
       "source_location": "L94",
       "id": "page_datamappage",
-      "community": 25,
+      "community": 24,
       "norm_label": "datamappage()"
     },
     {
@@ -189,7 +189,7 @@
       "source_file": "app/(customer)/layout.tsx",
       "source_location": "L1",
       "id": "app_customer_layout_tsx",
-      "community": 26,
+      "community": 25,
       "norm_label": "layout.tsx"
     },
     {
@@ -198,7 +198,7 @@
       "source_file": "app/(customer)/layout.tsx",
       "source_location": "L7",
       "id": "layout_customerlayout",
-      "community": 26,
+      "community": 25,
       "norm_label": "customerlayout()"
     },
     {
@@ -207,7 +207,7 @@
       "source_file": "app/(customer)/page.tsx",
       "source_location": "L1",
       "id": "app_customer_page_tsx",
-      "community": 27,
+      "community": 26,
       "norm_label": "page.tsx"
     },
     {
@@ -216,7 +216,7 @@
       "source_file": "app/(customer)/page.tsx",
       "source_location": "L23",
       "id": "page_farecard",
-      "community": 27,
+      "community": 26,
       "norm_label": "farecard()"
     },
     {
@@ -234,7 +234,7 @@
       "source_file": "app/(customer)/checkout/page.tsx",
       "source_location": "L1",
       "id": "app_customer_checkout_page_tsx",
-      "community": 28,
+      "community": 27,
       "norm_label": "page.tsx"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "app/(customer)/checkout/page.tsx",
       "source_location": "L73",
       "id": "page_submitprequal",
-      "community": 28,
+      "community": 27,
       "norm_label": "submitprequal()"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "app/(customer)/checkout/offer/page.tsx",
       "source_location": "L1",
       "id": "app_customer_checkout_offer_page_tsx",
-      "community": 29,
+      "community": 28,
       "norm_label": "page.tsx"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "app/(customer)/checkout/offer/page.tsx",
       "source_location": "L83",
       "id": "page_signandbook",
-      "community": 29,
+      "community": 28,
       "norm_label": "signandbook()"
     },
     {
@@ -324,7 +324,7 @@
       "source_file": "app/(customer)/account/[loanId]/page.tsx",
       "source_location": "L1",
       "id": "app_customer_account_loanid_page_tsx",
-      "community": 30,
+      "community": 29,
       "norm_label": "page.tsx"
     },
     {
@@ -333,7 +333,7 @@
       "source_file": "app/(customer)/account/[loanId]/page.tsx",
       "source_location": "L46",
       "id": "page_act",
-      "community": 30,
+      "community": 29,
       "norm_label": "act()"
     },
     {
@@ -594,7 +594,7 @@
       "source_file": "app/api-docs/page.tsx",
       "source_location": "L1",
       "id": "app_api_docs_page_tsx",
-      "community": 31,
+      "community": 30,
       "norm_label": "page.tsx"
     },
     {
@@ -603,7 +603,7 @@
       "source_file": "app/api-docs/page.tsx",
       "source_location": "L18",
       "id": "page_tryit",
-      "community": 31,
+      "community": 30,
       "norm_label": "tryit()"
     },
     {
@@ -612,7 +612,7 @@
       "source_file": "components/TierProgress.tsx",
       "source_location": "L1",
       "id": "components_tierprogress_tsx",
-      "community": 32,
+      "community": 31,
       "norm_label": "tierprogress.tsx"
     },
     {
@@ -621,7 +621,7 @@
       "source_file": "components/TierProgress.tsx",
       "source_location": "L10",
       "id": "tierprogress_tierprogress",
-      "community": 32,
+      "community": 31,
       "norm_label": "tierprogress()"
     },
     {
@@ -630,26 +630,17 @@
       "source_file": "components/PlanSheet.tsx",
       "source_location": "L1",
       "id": "components_plansheet_tsx",
-      "community": 14,
+      "community": 32,
       "norm_label": "plansheet.tsx"
     },
     {
       "label": "perPlan()",
       "file_type": "code",
       "source_file": "components/PlanSheet.tsx",
-      "source_location": "L63",
+      "source_location": "L67",
       "id": "plansheet_perplan",
-      "community": 14,
+      "community": 32,
       "norm_label": "perplan()"
-    },
-    {
-      "label": "bar()",
-      "file_type": "code",
-      "source_file": "components/PlanSheet.tsx",
-      "source_location": "L168",
-      "id": "plansheet_bar",
-      "community": 14,
-      "norm_label": "bar()"
     },
     {
       "label": "SvgLineChart.tsx",
@@ -792,7 +783,7 @@
       "source_file": "components/ClarityPayMark.tsx",
       "source_location": "L1",
       "id": "components_claritypaymark_tsx",
-      "community": 15,
+      "community": 14,
       "norm_label": "claritypaymark.tsx"
     },
     {
@@ -801,7 +792,7 @@
       "source_file": "components/ClarityPayMark.tsx",
       "source_location": "L7",
       "id": "claritypaymark_claritypaylogo",
-      "community": 15,
+      "community": 14,
       "norm_label": "claritypaylogo()"
     },
     {
@@ -810,7 +801,7 @@
       "source_file": "components/ClarityPayMark.tsx",
       "source_location": "L33",
       "id": "claritypaymark_claritypaymark",
-      "community": 15,
+      "community": 14,
       "norm_label": "claritypaymark()"
     },
     {
@@ -855,7 +846,7 @@
       "source_file": "components/Toast.tsx",
       "source_location": "L1",
       "id": "components_toast_tsx",
-      "community": 16,
+      "community": 15,
       "norm_label": "toast.tsx"
     },
     {
@@ -864,7 +855,7 @@
       "source_file": "components/Toast.tsx",
       "source_location": "L12",
       "id": "toast_usetoast",
-      "community": 16,
+      "community": 15,
       "norm_label": "usetoast()"
     },
     {
@@ -873,7 +864,7 @@
       "source_file": "components/Toast.tsx",
       "source_location": "L17",
       "id": "toast_usescopetoast",
-      "community": 16,
+      "community": 15,
       "norm_label": "usescopetoast()"
     },
     {
@@ -909,7 +900,7 @@
       "source_file": "components/Skeleton.tsx",
       "source_location": "L1",
       "id": "components_skeleton_tsx",
-      "community": 17,
+      "community": 16,
       "norm_label": "skeleton.tsx"
     },
     {
@@ -918,7 +909,7 @@
       "source_file": "components/Skeleton.tsx",
       "source_location": "L1",
       "id": "skeleton_skeleton",
-      "community": 17,
+      "community": 16,
       "norm_label": "skeleton()"
     },
     {
@@ -927,7 +918,7 @@
       "source_file": "components/Skeleton.tsx",
       "source_location": "L10",
       "id": "skeleton_cardskeleton",
-      "community": 17,
+      "community": 16,
       "norm_label": "cardskeleton()"
     },
     {
@@ -954,7 +945,7 @@
       "source_file": "lib/api-client.ts",
       "source_location": "L1",
       "id": "lib_api_client_ts",
-      "community": 18,
+      "community": 17,
       "norm_label": "api-client.ts"
     },
     {
@@ -963,7 +954,7 @@
       "source_file": "lib/api-client.ts",
       "source_location": "L12",
       "id": "api_client_useapi",
-      "community": 18,
+      "community": 17,
       "norm_label": "useapi()"
     },
     {
@@ -972,7 +963,7 @@
       "source_file": "lib/api-client.ts",
       "source_location": "L49",
       "id": "api_client_postjson",
-      "community": 18,
+      "community": 17,
       "norm_label": "postjson()"
     },
     {
@@ -1485,7 +1476,7 @@
       "source_file": "lib/engine/__tests__/engine.test.ts",
       "source_location": "L1",
       "id": "lib_engine_tests_engine_test_ts",
-      "community": 19,
+      "community": 18,
       "norm_label": "engine.test.ts"
     },
     {
@@ -1494,7 +1485,7 @@
       "source_file": "lib/engine/__tests__/engine.test.ts",
       "source_location": "L28",
       "id": "engine_test_makeloan",
-      "community": 19,
+      "community": 18,
       "norm_label": "makeloan()"
     },
     {
@@ -1503,7 +1494,7 @@
       "source_file": "lib/engine/__tests__/engine.test.ts",
       "source_location": "L58",
       "id": "engine_test_entry",
-      "community": 19,
+      "community": 18,
       "norm_label": "entry()"
     }
   ],
@@ -2052,24 +2043,12 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/PlanSheet.tsx",
-      "source_location": "L63",
+      "source_location": "L67",
       "weight": 1.0,
       "_src": "components_plansheet_tsx",
       "_tgt": "plansheet_perplan",
       "source": "components_plansheet_tsx",
       "target": "plansheet_perplan",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/PlanSheet.tsx",
-      "source_location": "L168",
-      "weight": 1.0,
-      "_src": "components_plansheet_tsx",
-      "_tgt": "plansheet_bar",
-      "source": "components_plansheet_tsx",
-      "target": "plansheet_bar",
       "confidence_score": 1.0
     },
     {
