@@ -170,10 +170,15 @@ export default function OfferPage() {
                   <span
                     className="text-[11px] font-semibold"
                     style={{ color: miles.financingTotal > 0 ? "var(--brand)" : "#94a3b8" }}
+                    title={
+                      miles.financingTotal > 0
+                        ? undefined
+                        : `Bonus ${theme.unit} apply on Economy Plus fares with an APR plan — you still earn your base ${theme.unit}`
+                    }
                   >
                     {miles.financingTotal > 0
-                      ? `+${miles.financingTotal.toLocaleString()} ${theme.unit}`
-                      : `no extra ${theme.unit}`}
+                      ? `+${miles.financingTotal.toLocaleString()} bonus ${theme.unit}`
+                      : `base ${theme.unit} only`}
                   </span>
                 )}
                 {planId === p.id && (
@@ -268,7 +273,9 @@ export default function OfferPage() {
               </p>
             )}
             <p className="mt-1.5 text-center text-[10px] text-slate-400">
-              {MILES_TIMING_REVERSAL}
+              {bonus > 0
+                ? MILES_TIMING_REVERSAL
+                : "Reversed if the booking is cancelled."}
             </p>
           </div>
         )}
@@ -278,7 +285,9 @@ export default function OfferPage() {
         <span className="text-sm font-medium">
           Autopay
           <span className="block text-[11px] font-normal text-slate-500">
-            On-time payments protect your bonus {theme.unit}
+            {bonus > 0
+              ? `On-time payments protect your bonus ${theme.unit}`
+              : "Never miss a payment date"}
           </span>
         </span>
         <input

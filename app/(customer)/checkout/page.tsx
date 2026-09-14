@@ -31,6 +31,8 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [monthly, setMonthly] = useState<number | null>(null);
+  /** Approved prequal result held back so the walker picks the next screen. */
+  const [approvedResult, setApprovedResult] = useState<PrequalResponse | null>(null);
 
   useEffect(() => {
     const d = loadDraft();
@@ -82,7 +84,8 @@ export default function CheckoutPage() {
       });
       if (res.decision === "approved" && res.offerId) {
         saveDraft({ offerId: res.offerId, plans: res.plans, declined: false });
-        router.push("/checkout/offer");
+        // Hold here: the outcome panel lets the walker pick the next screen.
+        setApprovedResult(res);
       } else {
         saveDraft({ declined: true, offerId: null, plans: [] });
         router.push("/checkout/declined");
@@ -218,32 +221,39 @@ export default function CheckoutPage() {
               {LENDER_DISCLOSURE}
             </p>
           </div>
-          <button
-            className="btn-primary mt-3 flex items-center justify-center gap-2"
-            onClick={submitPrequal}
-            disabled={submitting}
-          >
-            {submitting && <Loader2 size={14} className="animate-spin" aria-hidden />}
-            {submitting ? "Checking eligibility…" : "Continue and agree"}
-          </button>
-          <div className="mt-3 rounded-lg border border-dashed border-slate-300 px-3 py-2">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
-              Prototype: outcomes
-            </p>
-            <p className="mt-0.5 text-[10px] text-slate-400">
-              The persona in the toolbar decides the decision — Priya/Marcus
-              approve, Dana declines. Or jump straight to it:
-            </p>
+          {approvedResult ? (
+            <div className="mt-3 rounded-xl border border-emerald-300 bg-emerald-50 p-3">
+              <p className="text-sm font-bold text-emerald-800">
+                ✓ You&apos;re eligible
+              </p>
+              <p className="mt-0.5 text-[11px] text-emerald-900">
+                {approvedResult.plans.length} plan
+                {approvedResult.plans.length === 1 ? "" : "s"} available for $
+                {total.toFixed(2)}.
+              </p>
+              <button
+                className="btn-primary mt-2"
+                onClick={() => router.push("/checkout/offer")}
+              >
+                See your offer
+              </button>
+              <button
+                className="mt-1.5 w-full rounded-lg px-3 py-1.5 text-[11px] font-medium text-slate-500 underline hover:text-slate-700"
+                onClick={() => router.push("/checkout/declined")}
+              >
+                Prototype: preview the decline screen instead
+              </button>
+            </div>
+          ) : (
             <button
-              className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-700 hover:bg-slate-50"
-              onClick={() => {
-                saveDraft({ declined: true, offerId: null, plans: [] });
-                router.push("/checkout/declined");
-              }}
+              className="btn-primary mt-3 flex items-center justify-center gap-2"
+              onClick={submitPrequal}
+              disabled={submitting}
             >
-              Preview the decline path →
+              {submitting && <Loader2 size={14} className="animate-spin" aria-hidden />}
+              {submitting ? "Checking eligibility…" : "Continue and agree"}
             </button>
-          </div>
+          )}
         </section>
       )}
       <PrototypeNotes screen={selected === "payovertime" ? "prequal" : "checkout"} />

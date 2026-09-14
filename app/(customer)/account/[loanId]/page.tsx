@@ -2,7 +2,7 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
-import { CalendarClock, FileText, FlaskConical, Loader2 } from "lucide-react";
+import { CalendarClock, FileText, FlaskConical, Loader2, X } from "lucide-react";
 import { postJson, useApi } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
 import { LATE_FEE_DISCLOSURE, STATEMENT_FOOTER } from "@/lib/copy";
@@ -41,6 +41,7 @@ export default function LoanDetailPage({
   const scopeToast = useScopeToast();
   const { data: loan, loading, error, retry } = useApi<Loan>(`/api/loans/${loanId}`);
   const [busy, setBusy] = useState<string | null>(null);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
 
   const act = async (key: string, fn: () => Promise<{ message?: string } | unknown>) => {
     setBusy(key);
@@ -115,22 +116,88 @@ export default function LoanDetailPage({
         </button>
       </div>
 
-      {/* Schedule */}
+      {/* Schedule — compact summary; full list lives in a bottom sheet. */}
       <section className="card mb-3">
         <h2 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
-          <CalendarClock size={14} aria-hidden /> Payment schedule
+          <CalendarClock size={14} aria-hidden /> Payments
         </h2>
-        <ul className="max-h-48 space-y-1 overflow-y-auto text-xs">
-          {loan.schedule.map((s) => (
-            <li key={s.idx} className="flex justify-between">
-              <span className={INSTALMENT_STYLE[s.status]}>
-                {s.dueDate} — ${s.amount.toFixed(2)}
-              </span>
-              <span className={INSTALMENT_STYLE[s.status]}>{s.status}</span>
-            </li>
-          ))}
-        </ul>
+        {(() => {
+          const paid = loan.schedule.filter((s) => s.status === "paid" || s.status === "refunded").length;
+          const total = loan.schedule.length;
+          return (
+            <>
+              <p className="text-xs text-slate-600">
+                {loan.status === "cancelled" ? (
+                  <>Plan cancelled — nothing more to pay.</>
+                ) : openInstalment ? (
+                  <>
+                    Next: <strong>${openInstalment.amount.toFixed(2)}</strong> on{" "}
+                    {openInstalment.dueDate}
+                    {openInstalment.status === "late" && (
+                      <span className="ml-1 font-semibold text-red-700">(overdue)</span>
+                    )}
+                  </>
+                ) : (
+                  <>All paid — plan complete. 🎉</>
+                )}
+              </p>
+              <div className="mt-2 flex items-center gap-2">
+                <div className="h-1.5 flex-1 rounded-full bg-slate-200">
+                  <div
+                    className="h-1.5 rounded-full"
+                    style={{
+                      width: `${Math.max((paid / total) * 100, 2)}%`,
+                      background: "var(--brand)",
+                    }}
+                  />
+                </div>
+                <span className="text-[10px] text-slate-400">
+                  {paid} of {total} paid
+                </span>
+              </div>
+              <button
+                className="mt-2 text-xs font-semibold underline"
+                style={{ color: "var(--brand)" }}
+                onClick={() => setScheduleOpen(true)}
+              >
+                View full schedule
+              </button>
+            </>
+          );
+        })()}
       </section>
+
+      {scheduleOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Payment schedule"
+          onClick={() => setScheduleOpen(false)}
+        >
+          <div
+            className="max-h-[80vh] w-full max-w-[430px] overflow-y-auto rounded-t-2xl bg-white p-4 pb-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-sm font-bold">Payment schedule</h2>
+              <button aria-label="Close" onClick={() => setScheduleOpen(false)}>
+                <X size={18} aria-hidden />
+              </button>
+            </div>
+            <ul className="space-y-1.5 text-xs">
+              {loan.schedule.map((s) => (
+                <li key={s.idx} className="flex justify-between">
+                  <span className={INSTALMENT_STYLE[s.status]}>
+                    {s.dueDate} — ${s.amount.toFixed(2)}
+                  </span>
+                  <span className={INSTALMENT_STYLE[s.status]}>{s.status}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
 
       {/* Earn summary — the full ledger lives in My miles. */}
       <section className="card mb-3">

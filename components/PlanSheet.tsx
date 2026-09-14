@@ -128,10 +128,15 @@ export function PlanSheet({
                         <span
                           className="text-right text-[11px] font-semibold"
                           style={{ color: miles.financingTotal > 0 ? "var(--brand)" : "#94a3b8" }}
+                          title={
+                            miles.financingTotal > 0
+                              ? undefined
+                              : `Bonus ${theme.unit} apply on Economy Plus fares with an APR plan — you still earn your base ${theme.unit}`
+                          }
                         >
                           {miles.financingTotal > 0
-                            ? `+${miles.financingTotal.toLocaleString()} ${theme.unit}`
-                            : `no extra ${theme.unit}`}
+                            ? `+${miles.financingTotal.toLocaleString()} bonus ${theme.unit}`
+                            : `base ${theme.unit} only`}
                         </span>
                       )}
                       {isSelected && (
