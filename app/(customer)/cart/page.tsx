@@ -76,7 +76,10 @@ export default function CartPage() {
         <p className="text-[11px] text-slate-500">Tue, Oct 12 · Nonstop · UA 1523</p>
       </section>
 
-      <section className="card mb-3">
+      <section
+        className="card mb-3"
+        data-spec="Travellers|app/(customer)/cart/page.tsx|Drives base-miles split. A traveller without a loyalty number gets the 30-day retro-credit path, not a silent loss."
+      >
         <div className="mb-2 flex items-center justify-between">
           <h2 className="flex items-center gap-1.5 text-sm font-bold">
             <Users size={14} aria-hidden /> Travellers
@@ -134,7 +137,10 @@ export default function CartPage() {
         </div>
       </section>
 
-      <section className="card mb-4">
+      <section
+        className="card mb-4"
+        data-spec="Price summary|app/(customer)/cart/page.tsx|'from $X/mo' is GET /api/offers/estimate — a representative example, deliberately not a link: no terms before underwriting (decision 17)."
+      >
         <h2 className="mb-2 text-sm font-bold">Price summary</h2>
         <dl className="space-y-1 text-xs text-slate-600">
           <div className="flex justify-between">

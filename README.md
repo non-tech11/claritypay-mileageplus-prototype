@@ -54,7 +54,10 @@ loans `/account` shows.
    loyalty chip stating the plan-exclusive earn ("Earn 372 miles · +208
    bonus with a monthly plan"). Open the
    *Prototype notes* drawer at the bottom of every screen — it explains the
-   product decision the screen demonstrates. Select **Economy Plus**.
+   product decision the screen demonstrates. For a build-oriented read,
+   toggle **Component map** in the prototype toolbar: each element is
+   labelled in the margin with its name, source file, the endpoint behind it
+   and the rule it encodes. Select **Economy Plus**.
 2. **`/cart`** — toggle *Add 2nd traveller* (Alex, no MileagePlus #) to arm the
    multi-traveller case. The `or from $XX/mo` line is labelled a
    representative example and is deliberately **not** a link: no plan, APR or
@@ -69,6 +72,11 @@ loans `/account` shows.
    ("372 miles + 208 bonus = 580 total"), the *When do I get these?*
    timing disclosure, autopay on. **Sign and book** → **`/confirmation`** with
    PNR, plan summary, miles as status pills, and Alex's retro-credit prompt.
+   Pick the **4 payments / 6 weeks** plan instead and the CTA becomes
+   *Continue to payment*: accepting terms creates the loan, then
+   **`/checkout/pay`** confirms the card for the $104.20 due today before
+   anything is charged. The monthly plans skip that screen — nothing is
+   collected at checkout, so there is nothing to confirm.
 5. **Decline path** — switch persona to **Dana**, repeat checkout: soft
    decline, adverse-action link, *one-tap* card fallback, and the loyalty
    line says plainly that miles are a payment-plan benefit.

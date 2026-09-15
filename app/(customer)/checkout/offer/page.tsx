@@ -74,6 +74,14 @@ export default function OfferPage() {
   if (!draft?.fare) return null;
   const nearPrime = persona.creditProfile === "near-prime";
 
+  const chosenPlan = draft.plans.find((p) => p.id === planId);
+  const collectsToday = !!chosenPlan?.dueAtSigning;
+
+  /**
+   * Accepting terms creates the loan. A plan that takes money today then
+   * routes to the payment step to confirm the card before anything is
+   * charged; a zero-down plan is signed here and booked straight away.
+   */
   const signAndBook = async () => {
     setSigning(true);
     setError(null);
@@ -83,10 +91,15 @@ export default function OfferPage() {
         planId,
         autopay,
       });
+      saveDraft({ loanId: sel.loanId, selectedPlanId: planId, autopay });
+      if (collectsToday) {
+        router.push("/checkout/pay");
+        return;
+      }
       const signed = await postJson<{ pnr: string }>("/api/checkout/sign", {
         loanId: sel.loanId,
       });
-      saveDraft({ loanId: sel.loanId, pnr: signed.pnr, selectedPlanId: planId, autopay });
+      saveDraft({ pnr: signed.pnr });
       router.push("/confirmation");
     } catch (e) {
       setError((e as Error).message);
@@ -105,6 +118,7 @@ export default function OfferPage() {
     <div className="flex min-h-full flex-col">
       <section
         aria-label="Approval"
+        data-spec="Approval banner|app/(customer)/checkout/offer/page.tsx|Decision + approved amount from POST /api/checkout/prequal. Soft-pull line is a regulated constant."
         className="mb-4 overflow-hidden rounded-2xl p-4 text-center text-white shadow-md"
         style={{
           background:
@@ -130,7 +144,12 @@ export default function OfferPage() {
         </p>
       )}
 
-      <div className="space-y-2" role="radiogroup" aria-label="Payment plans">
+      <div
+        className="space-y-2"
+        role="radiogroup"
+        aria-label="Payment plans"
+        data-spec="Plan ladder|app/(customer)/checkout/offer/page.tsx|Only plans from the approved offer. Per-plan earn from GET /api/loyalty/preview; bonus tapers with term."
+      >
         {draft.plans.map((p) => {
           const miles = preview.data?.perPlan.find((x) => x.planId === p.id);
           return (
@@ -199,7 +218,10 @@ export default function OfferPage() {
         })}
       </div>
 
-      <div className="mt-3">
+      <div
+        className="mt-3"
+        data-spec="LoyaltyCard (compact)|components/LoyaltyCard.tsx|Theme-driven, 3 variants. Earn line recomputes with the selected plan; timing disclosure is a shared copy constant."
+      >
         {preview.error ? (
           <ErrorRetry message={preview.error} onRetry={preview.retry} />
         ) : (
@@ -285,7 +307,10 @@ export default function OfferPage() {
         )}
       </div>
 
-      <label className="mt-4 flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-3">
+      <label
+        className="mt-4 flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-3"
+        data-spec="Autopay toggle|app/(customer)/checkout/offer/page.tsx|Defaults on; passed to POST /api/checkout/select-plan. Sublabel ties on-time payment to keeping the bonus."
+      >
         <span className="text-sm font-medium">
           Autopay
           <span className="block text-[11px] font-normal text-slate-500">
@@ -307,29 +332,28 @@ export default function OfferPage() {
           <ErrorRetry message={error} onRetry={signAndBook} />
         </div>
       )}
-      {(() => {
-        const chosen = draft.plans.find((p) => p.id === planId);
-        if (!chosen?.dueAtSigning) return null;
-        // Never let the down payment be a surprise at the button.
-        return (
-          <p className="mt-3 rounded-lg bg-slate-100 px-3 py-2 text-[11px] text-slate-600">
-            You&apos;ll be charged{" "}
-            <strong>${chosen.installmentAmount.toFixed(2)}</strong> today, and
-            the remaining {chosen.installments - 1} payments are taken every 2
-            weeks.
-          </p>
-        );
-      })()}
+      {/* Never let the down payment be a surprise at the button. */}
+      {collectsToday && chosenPlan && (
+        <p className="mt-3 rounded-lg bg-slate-100 px-3 py-2 text-[11px] text-slate-600">
+          Next you&apos;ll confirm the card for the{" "}
+          <strong>${chosenPlan.installmentAmount.toFixed(2)}</strong> due today.
+          The remaining {chosenPlan.installments - 1} payments are taken every 2
+          weeks.
+        </p>
+      )}
       <button
         className="btn-primary mt-4 flex items-center justify-center gap-2"
         onClick={signAndBook}
         disabled={signing || !planId}
+        data-spec="Accept CTA|app/(customer)/checkout/offer/page.tsx|POST select-plan creates the loan. Pay-in-4 then routes to /checkout/pay; zero-down plans sign here."
       >
         {signing && <Loader2 size={14} className="animate-spin" aria-hidden />}
         {signing
-          ? "Booking…"
-          : draft.plans.find((p) => p.id === planId)?.dueAtSigning
-            ? "Pay and book"
+          ? collectsToday
+            ? "Continuing…"
+            : "Booking…"
+          : collectsToday
+            ? "Continue to payment"
             : "Sign and book"}
       </button>
       <PrototypeNotes screen="offer" />

@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FlaskConical, RotateCcw } from "lucide-react";
+import { useEffect, useState } from "react";
+import { FlaskConical, RotateCcw, SquareDashedMousePointer } from "lucide-react";
 import { PERSONAS } from "@/lib/seed";
 import { useToast } from "./Toast";
+import { isSpecOverlayOn, toggleSpecOverlay } from "./SpecOverlay";
 
 const PERSONA_COOKIE = "cp_persona";
 
@@ -23,6 +25,19 @@ export function DemoBar() {
   const pathname = usePathname();
   const toast = useToast();
   const current = readPersonaCookie();
+  const [specOn, setSpecOn] = useState(false);
+
+  useEffect(() => setSpecOn(isSpecOverlayOn()), []);
+
+  const toggleSpec = () => {
+    const next = toggleSpecOverlay();
+    setSpecOn(next);
+    toast(
+      next
+        ? "Component map on — callouts name each component and its file"
+        : "Component map off"
+    );
+  };
 
   const setPersona = (id: string) => {
     document.cookie = `${PERSONA_COOKIE}=${id}; path=/; max-age=31536000`;
@@ -75,8 +90,18 @@ export function DemoBar() {
         {navLink("/api-docs", "API")}
       </nav>
       <button
+        onClick={toggleSpec}
+        aria-pressed={specOn}
+        title="Label each component with its name, file and purpose"
+        className={`ml-auto flex items-center gap-1 rounded px-2 py-1 transition hover:bg-white/10 ${
+          specOn ? "bg-indigo-500/30 font-semibold text-indigo-100" : ""
+        }`}
+      >
+        <SquareDashedMousePointer size={12} aria-hidden /> Component map
+      </button>
+      <button
         onClick={reset}
-        className="ml-auto flex items-center gap-1 rounded px-2 py-1 transition hover:bg-white/10"
+        className="flex items-center gap-1 rounded px-2 py-1 transition hover:bg-white/10"
       >
         <RotateCcw size={12} aria-hidden /> Reset data
       </button>

@@ -35,6 +35,7 @@ Prototype/
 │   │   ├── cart/page.tsx
 │   │   ├── checkout/page.tsx     # wallet + inline prequal (state)
 │   │   ├── checkout/offer/page.tsx
+│   │   ├── checkout/pay/page.tsx     # down payment (pay-in-4 only)
 │   │   ├── checkout/declined/page.tsx
 │   │   ├── confirmation/page.tsx
 │   │   └── account/
@@ -105,7 +106,7 @@ Prototype/
 3. **Tests**: ~10 vitest cases — bonus term-independence, partial refund pro-ration, redeemed-then-cancelled netting (miles-owed, never cash), 30 DPD hold / 60 DPD reverse, decline → base-only, cap enforcement, multi-traveller base split / bonus-to-payer, retro-credit window. Run `npm test`, green before UI.
 4. **API routes**: thin handlers over store + engine; `/api` GET index.
 5. **Shared components**: theme provider, LoyaltyCard (3 sizes), PersonaSwitcher, PrototypeNotes, Toast, skeletons.
-6. **Customer journey**: `/` → `/cart` → `/checkout` (wallet + inline prequal) → `/checkout/offer` | `/checkout/declined` → `/confirmation`. Persona drives outcome (Dana → declined; Marcus → short terms + higher APR).
+6. **Customer journey**: `/` → `/cart` → `/checkout` (wallet + inline prequal) → `/checkout/offer` | `/checkout/declined` → `/confirmation`, with `/checkout/pay` between offer and confirmation when the plan collects a down payment. Persona drives outcome (Dana → declined; Marcus → short terms + higher APR).
 7. **Servicing**: `/account`, `/account/[loanId]` with edge-case simulator panel (6 buttons incl. reset).
 8. **Dashboard**: overview, transactions (filter + row drawer), rewards (editable config → reflected in checkout), exceptions (retry), data map table.
 9. **api-docs page** with Try-it buttons.

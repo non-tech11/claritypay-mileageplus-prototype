@@ -62,6 +62,8 @@ export const PROTOTYPE_NOTES: Record<string, string> = {
     "Inline application, no redirect. Phone + last-4 SSN, soft pull only. The lender disclosure is a shared constant, not free-typed. The persona switcher (header) decides the outcome.",
   offer:
     "One plan is recommended, and the bonus tapers with term — the shorter plan earns more (0% earns none — its rate is the reward). Timing is explicit: trip miles credit after the flight, the bonus credits when the plan completes — completion rewards repayment. The funder is never named to the customer. Autopay defaults on.",
+  pay:
+    "Pay-in-4 takes 25% at the till, as Klarna and Afterpay do — on a small ticket the down payment is the underwriting. The monthly plans stay zero-down, because asking for cash there sends the customer back to their card. Accepting terms created the loan; this screen confirms the card, and signing is the only point money actually moves.",
   declined:
     "Soft decline: no reason codes beyond the legal minimum, adverse-action notice by mail, and a one-tap fallback to card — nothing re-entered. The loyalty line is honest about the trade-off: miles are a payment-plan benefit, so the card fallback earns none.",
   confirmation:

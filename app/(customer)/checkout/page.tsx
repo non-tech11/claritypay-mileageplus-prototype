@@ -138,7 +138,10 @@ export default function CheckoutPage() {
           </span>
         );
         return (
-          <div className="space-y-2">
+          <div
+            className="space-y-2"
+            data-spec="Wallet|app/(customer)/checkout/page.tsx|Provider list. Only pay-over-time earns miles and says so; others say 'No miles'. ClarityPay appears as a micro-tag only."
+          >
             {walletOption(
               "card",
               <span>Credit / debit card{noMilesNote}</span>,
@@ -198,6 +201,7 @@ export default function CheckoutPage() {
       {selected === "payovertime" && (
         <section
           aria-label="Eligibility check"
+          data-spec="Prequal form|app/(customer)/checkout/page.tsx|Inline, no redirect. Phone + last-4 SSN to POST /api/checkout/prequal. Disclosure points come from lib/copy.ts, never free-typed."
           className="card mt-3 border-slate-300"
         >
           <h2 className="text-sm font-bold">Quick eligibility check</h2>
