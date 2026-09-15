@@ -7,7 +7,6 @@ import { loadDraft, saveDraft } from "@/lib/booking";
 import { usePersona } from "@/lib/use-persona";
 import { useApi } from "@/lib/api-client";
 import { useTheme } from "@/app/theme-context";
-import { PlanSheet } from "@/components/PlanSheet";
 import { PrototypeNotes } from "@/components/PrototypeNotes";
 import type { FareOption } from "@/lib/types";
 
@@ -23,7 +22,6 @@ export default function CartPage() {
   const [twoTravellers, setTwoTravellers] = useState(false);
   const [alexMp, setAlexMp] = useState("");
   const [showAlexMp, setShowAlexMp] = useState(false);
-  const [sheetOpen, setSheetOpen] = useState(false);
 
   useEffect(() => {
     const draft = loadDraft();
@@ -64,14 +62,6 @@ export default function CartPage() {
 
   const continueToPayment = () => {
     saveDraft({ travellers: buildTravellers() });
-    router.push("/checkout");
-  };
-
-  // Picking a plan in the sheet carries the choice into checkout: the
-  // pay-over-time option comes pre-expanded and, after approval, the
-  // offer screen pre-selects this plan.
-  const selectPlan = (planId: string) => {
-    saveDraft({ travellers: buildTravellers(), selectedPlanId: planId });
     router.push("/checkout");
   };
 
@@ -163,13 +153,22 @@ export default function CartPage() {
           </div>
         </dl>
         {estimate.data && (
-          <button
-            className="mt-2 text-xs font-semibold underline"
-            style={{ color: "var(--brand)" }}
-            onClick={() => setSheetOpen(true)}
-          >
-            or from ${estimate.data.monthlyFrom.toFixed(0)}/mo — see plans
-          </button>
+          // A representative figure, not an offer: no terms are quoted and
+          // no plan is selectable until the eligibility check has run.
+          <p className="mt-2 text-xs">
+            <span className="font-semibold" style={{ color: "var(--brand)" }}>
+              or from ${estimate.data.monthlyFrom.toFixed(0)}/mo
+            </span>
+            <span className="text-slate-500">
+              {" "}
+              with {theme.programName} pay over time
+            </span>
+            <span className="mt-0.5 block text-[10px] text-slate-400">
+              Representative example. Your plans and rates are shown after a
+              quick eligibility check at payment — it won&apos;t affect your
+              credit score.
+            </span>
+          </p>
         )}
       </section>
 
@@ -177,17 +176,6 @@ export default function CartPage() {
         Continue to payment
       </button>
 
-      {sheetOpen && (
-        <PlanSheet
-          amount={Number(total.toFixed(2))}
-          fare={fare.fare * multiplier}
-          fareId={fare.id}
-          travellers={multiplier}
-          onClose={() => setSheetOpen(false)}
-          selectedPlanId={loadDraft().selectedPlanId}
-          onSelect={selectPlan}
-        />
-      )}
       <PrototypeNotes screen="cart" />
     </div>
   );

@@ -56,13 +56,11 @@ loans `/account` shows.
    *Prototype notes* drawer at the bottom of every screen — it explains the
    product decision the screen demonstrates. Select **Economy Plus**.
 2. **`/cart`** — toggle *Add 2nd traveller* (Alex, no MileagePlus #) to arm the
-   multi-traveller case. Tap the `or from $XX/mo` line: the plan sheet shows
-   the plans with per-plan earn: monthly plans earn 1 mi/$ of fare (Economy
-   Plus adds 0.5 bonus mi/$ financed, tapering with term so 24 months earns
-   half of 12); the 0% plan earns none — its rate is
-   the reward. One plan
-   is **Recommended**, and picking one carries it through checkout. The
-   calculator at the bottom shows financing cost vs miles value honestly.
+   multi-traveller case. The `or from $XX/mo` line is labelled a
+   representative example and is deliberately **not** a link: no plan, APR or
+   total is shown before underwriting has run, so the customer is never
+   presented with terms they may not qualify for. Plans appear on the offer
+   screen, after the eligibility check.
 3. **`/checkout`** — wallet order: card, Apple Pay, **Pay over time** (with
    "Powered by ClarityPay" micro-tag), PayPal. Pay-over-time expands inline:
    phone + last-4 SSN, soft-pull note, the shared lender disclosure. Press

@@ -76,7 +76,7 @@ Prototype/
 │   ├── LoyaltyCard.tsx           # theme-driven; sizes: full | compact | chip
 │   ├── PersonaSwitcher.tsx       # header, cookie-backed
 │   ├── PrototypeNotes.tsx        # collapsible bottom drawer, per-screen copy
-│   ├── PlanSheet.tsx             # bottom sheet: 3 plans + miles-per-plan
+│                                 # (no pre-underwriting plan sheet: see decision 17)
 │   ├── Toast.tsx                 # context + "Not in prototype scope"
 │   ├── Skeleton.tsx / ErrorRetry.tsx
 │   ├── MilesPill.tsx             # pending/posted/held/reversed pills

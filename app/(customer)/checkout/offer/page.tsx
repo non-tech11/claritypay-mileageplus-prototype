@@ -56,16 +56,10 @@ export default function OfferPage() {
       return;
     }
     setDraft(d);
-    // Carry the plan picked in the cart sheet, but only if the approved
-    // offer actually includes it (near-prime ladders are shorter).
-    const carried = d.plans.some((p) => p.id === d.selectedPlanId)
-      ? d.selectedPlanId
-      : null;
+    // This is the first screen where plans exist: they come from the
+    // approved offer, so there is nothing to carry forward from the cart.
     setPlanId(
-      carried ??
-        d.plans.find((p) => p.recommended)?.id ??
-        d.plans[0]?.id ??
-        ""
+      d.plans.find((p) => p.recommended)?.id ?? d.plans[0]?.id ?? ""
     );
   }, [router]);
 

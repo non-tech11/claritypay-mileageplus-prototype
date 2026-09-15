@@ -55,7 +55,7 @@ export const PROTOTYPE_NOTES: Record<string, string> = {
   search:
     "Discovery placement: one light monthly-price line per fare, and a loyalty chip per fare stating the exclusivity up front — miles are earned only on monthly program plans, at 1 mi/$ of fare, and Economy Plus adds 0.5 bonus mi/$ financed. Discovery earns attention, checkout earns conversion.",
   cart:
-    "The monthly figure matches search (consistency builds trust). In the plan sheet, monthly plans earn 1 mi/$ of fare (+0.5 bonus mi/$ financed on Economy Plus) and the bonus tapers with term — 24 months earns half what 12 does, so the currency steers toward shorter debt rather than sitting neutral. The 0% plan earns none: the subsidised rate is the reward, and the row says so plainly. The calculator shows cost vs miles value honestly.",
+    "The monthly figure matches search (consistency builds trust), but it is a representative example and says so — no plan is selectable and no APR is quoted until underwriting has run, so we never show terms the customer may not get. Plans live on the offer screen, after the eligibility check.",
   checkout:
     "The wallet is the selection moment: several providers, one differentiator. Only the pay-over-time option earns program miles, and it says so with the real numbers for this booking; the other methods say 'No miles' plainly. ClarityPay appears only as a micro-tag — the lender shows up where the law requires, nowhere else.",
   prequal:

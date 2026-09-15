@@ -9,7 +9,7 @@
       "source_file": "next-env.d.ts",
       "source_location": "L1",
       "id": "next_env_d_ts",
-      "community": 42,
+      "community": 41,
       "norm_label": "next-env.d.ts"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "tailwind.config.ts",
       "source_location": "L1",
       "id": "tailwind_config_ts",
-      "community": 43,
+      "community": 42,
       "norm_label": "tailwind.config.ts"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "vitest.config.ts",
       "source_location": "L1",
       "id": "vitest_config_ts",
-      "community": 44,
+      "community": 43,
       "norm_label": "vitest.config.ts"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "next.config.ts",
       "source_location": "L1",
       "id": "next_config_ts",
-      "community": 45,
+      "community": 44,
       "norm_label": "next.config.ts"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "app/theme-context.tsx",
       "source_location": "L1",
       "id": "app_theme_context_tsx",
-      "community": 13,
+      "community": 12,
       "norm_label": "theme-context.tsx"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "app/theme-context.tsx",
       "source_location": "L9",
       "id": "theme_context_themeprovider",
-      "community": 13,
+      "community": 12,
       "norm_label": "themeprovider()"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "app/theme-context.tsx",
       "source_location": "L19",
       "id": "theme_context_usetheme",
-      "community": 13,
+      "community": 12,
       "norm_label": "usetheme()"
     },
     {
@@ -162,7 +162,7 @@
       "source_file": "app/(merchant)/dashboard/transactions/page.tsx",
       "source_location": "L1",
       "id": "app_merchant_dashboard_transactions_page_tsx",
-      "community": 46,
+      "community": 45,
       "norm_label": "page.tsx"
     },
     {
@@ -225,7 +225,7 @@
       "source_file": "app/(customer)/confirmation/page.tsx",
       "source_location": "L1",
       "id": "app_customer_confirmation_page_tsx",
-      "community": 47,
+      "community": 46,
       "norm_label": "page.tsx"
     },
     {
@@ -241,7 +241,7 @@
       "label": "submitPrequal()",
       "file_type": "code",
       "source_file": "app/(customer)/checkout/page.tsx",
-      "source_location": "L73",
+      "source_location": "L67",
       "id": "page_submitprequal",
       "community": 27,
       "norm_label": "submitprequal()"
@@ -259,7 +259,7 @@
       "label": "signAndBook()",
       "file_type": "code",
       "source_file": "app/(customer)/checkout/offer/page.tsx",
-      "source_location": "L83",
+      "source_location": "L77",
       "id": "page_signandbook",
       "community": 28,
       "norm_label": "signandbook()"
@@ -270,7 +270,7 @@
       "source_file": "app/(customer)/checkout/declined/page.tsx",
       "source_location": "L1",
       "id": "app_customer_checkout_declined_page_tsx",
-      "community": 48,
+      "community": 47,
       "norm_label": "page.tsx"
     },
     {
@@ -279,35 +279,26 @@
       "source_file": "app/(customer)/cart/page.tsx",
       "source_location": "L1",
       "id": "app_customer_cart_page_tsx",
-      "community": 9,
+      "community": 13,
       "norm_label": "page.tsx"
     },
     {
       "label": "buildTravellers()",
       "file_type": "code",
       "source_file": "app/(customer)/cart/page.tsx",
-      "source_location": "L46",
+      "source_location": "L44",
       "id": "page_buildtravellers",
-      "community": 9,
+      "community": 13,
       "norm_label": "buildtravellers()"
     },
     {
       "label": "continueToPayment()",
       "file_type": "code",
       "source_file": "app/(customer)/cart/page.tsx",
-      "source_location": "L65",
+      "source_location": "L63",
       "id": "page_continuetopayment",
-      "community": 9,
+      "community": 13,
       "norm_label": "continuetopayment()"
-    },
-    {
-      "label": "selectPlan()",
-      "file_type": "code",
-      "source_file": "app/(customer)/cart/page.tsx",
-      "source_location": "L73",
-      "id": "page_selectplan",
-      "community": 9,
-      "norm_label": "selectplan()"
     },
     {
       "label": "page.tsx",
@@ -315,7 +306,7 @@
       "source_file": "app/(customer)/account/page.tsx",
       "source_location": "L1",
       "id": "app_customer_account_page_tsx",
-      "community": 49,
+      "community": 48,
       "norm_label": "page.tsx"
     },
     {
@@ -342,7 +333,7 @@
       "source_file": "app/(customer)/account/miles/page.tsx",
       "source_location": "L1",
       "id": "app_customer_account_miles_page_tsx",
-      "community": 10,
+      "community": 9,
       "norm_label": "page.tsx"
     },
     {
@@ -351,7 +342,7 @@
       "source_file": "app/(customer)/account/miles/page.tsx",
       "source_location": "L24",
       "id": "page_friendlymonth",
-      "community": 10,
+      "community": 9,
       "norm_label": "friendlymonth()"
     },
     {
@@ -360,7 +351,7 @@
       "source_file": "app/(customer)/account/miles/page.tsx",
       "source_location": "L34",
       "id": "page_buildrows",
-      "community": 10,
+      "community": 9,
       "norm_label": "buildrows()"
     },
     {
@@ -369,7 +360,7 @@
       "source_file": "app/(customer)/account/miles/page.tsx",
       "source_location": "L53",
       "id": "page_row",
-      "community": 10,
+      "community": 9,
       "norm_label": "row()"
     },
     {
@@ -634,30 +625,12 @@
       "norm_label": "tierprogress()"
     },
     {
-      "label": "PlanSheet.tsx",
-      "file_type": "code",
-      "source_file": "components/PlanSheet.tsx",
-      "source_location": "L1",
-      "id": "components_plansheet_tsx",
-      "community": 32,
-      "norm_label": "plansheet.tsx"
-    },
-    {
-      "label": "perPlan()",
-      "file_type": "code",
-      "source_file": "components/PlanSheet.tsx",
-      "source_location": "L65",
-      "id": "plansheet_perplan",
-      "community": 32,
-      "norm_label": "perplan()"
-    },
-    {
       "label": "SvgLineChart.tsx",
       "file_type": "code",
       "source_file": "components/SvgLineChart.tsx",
       "source_location": "L1",
       "id": "components_svglinechart_tsx",
-      "community": 33,
+      "community": 32,
       "norm_label": "svglinechart.tsx"
     },
     {
@@ -666,7 +639,7 @@
       "source_file": "components/SvgLineChart.tsx",
       "source_location": "L4",
       "id": "svglinechart_svglinechart",
-      "community": 33,
+      "community": 32,
       "norm_label": "svglinechart()"
     },
     {
@@ -675,7 +648,7 @@
       "source_file": "components/PrototypeNotes.tsx",
       "source_location": "L1",
       "id": "components_prototypenotes_tsx",
-      "community": 50,
+      "community": 49,
       "norm_label": "prototypenotes.tsx"
     },
     {
@@ -684,7 +657,7 @@
       "source_file": "components/BrandHeader.tsx",
       "source_location": "L1",
       "id": "components_brandheader_tsx",
-      "community": 34,
+      "community": 33,
       "norm_label": "brandheader.tsx"
     },
     {
@@ -693,7 +666,7 @@
       "source_file": "components/BrandHeader.tsx",
       "source_location": "L9",
       "id": "brandheader_brandheader",
-      "community": 34,
+      "community": 33,
       "norm_label": "brandheader()"
     },
     {
@@ -702,7 +675,7 @@
       "source_file": "components/AccountTabs.tsx",
       "source_location": "L1",
       "id": "components_accounttabs_tsx",
-      "community": 35,
+      "community": 34,
       "norm_label": "accounttabs.tsx"
     },
     {
@@ -711,7 +684,7 @@
       "source_file": "components/AccountTabs.tsx",
       "source_location": "L9",
       "id": "accounttabs_tab",
-      "community": 35,
+      "community": 34,
       "norm_label": "tab()"
     },
     {
@@ -765,7 +738,7 @@
       "source_file": "components/MilesPill.tsx",
       "source_location": "L1",
       "id": "components_milespill_tsx",
-      "community": 36,
+      "community": 35,
       "norm_label": "milespill.tsx"
     },
     {
@@ -774,7 +747,7 @@
       "source_file": "components/MilesPill.tsx",
       "source_location": "L30",
       "id": "milespill_milespill",
-      "community": 36,
+      "community": 35,
       "norm_label": "milespill()"
     },
     {
@@ -783,7 +756,7 @@
       "source_file": "components/MetricTile.tsx",
       "source_location": "L1",
       "id": "components_metrictile_tsx",
-      "community": 51,
+      "community": 50,
       "norm_label": "metrictile.tsx"
     },
     {
@@ -819,7 +792,7 @@
       "source_file": "components/ErrorRetry.tsx",
       "source_location": "L1",
       "id": "components_errorretry_tsx",
-      "community": 37,
+      "community": 36,
       "norm_label": "errorretry.tsx"
     },
     {
@@ -828,7 +801,7 @@
       "source_file": "components/ErrorRetry.tsx",
       "source_location": "L5",
       "id": "errorretry_errorretry",
-      "community": 37,
+      "community": 36,
       "norm_label": "errorretry()"
     },
     {
@@ -837,7 +810,7 @@
       "source_file": "components/ThemeSync.tsx",
       "source_location": "L1",
       "id": "components_themesync_tsx",
-      "community": 38,
+      "community": 37,
       "norm_label": "themesync.tsx"
     },
     {
@@ -846,7 +819,7 @@
       "source_file": "components/ThemeSync.tsx",
       "source_location": "L12",
       "id": "themesync_themesync",
-      "community": 38,
+      "community": 37,
       "norm_label": "themesync()"
     },
     {
@@ -882,7 +855,7 @@
       "source_file": "Prototype/components/LoyaltyCard.tsx",
       "source_location": "L1",
       "id": "prototype_components_loyaltycard_tsx",
-      "community": 52,
+      "community": 51,
       "norm_label": "loyaltycard.tsx"
     },
     {
@@ -891,7 +864,7 @@
       "source_file": "components/ApiLogPanel.tsx",
       "source_location": "L1",
       "id": "components_apilogpanel_tsx",
-      "community": 39,
+      "community": 38,
       "norm_label": "apilogpanel.tsx"
     },
     {
@@ -900,7 +873,7 @@
       "source_file": "components/ApiLogPanel.tsx",
       "source_location": "L20",
       "id": "apilogpanel_statuscolor",
-      "community": 39,
+      "community": 38,
       "norm_label": "statuscolor()"
     },
     {
@@ -936,7 +909,7 @@
       "source_file": "lib/use-persona.ts",
       "source_location": "L1",
       "id": "lib_use_persona_ts",
-      "community": 40,
+      "community": 39,
       "norm_label": "use-persona.ts"
     },
     {
@@ -945,7 +918,7 @@
       "source_file": "lib/use-persona.ts",
       "source_location": "L7",
       "id": "use_persona_usepersona",
-      "community": 40,
+      "community": 39,
       "norm_label": "usepersona()"
     },
     {
@@ -981,7 +954,7 @@
       "source_file": "lib/api-index.ts",
       "source_location": "L1",
       "id": "lib_api_index_ts",
-      "community": 53,
+      "community": 52,
       "norm_label": "api-index.ts"
     },
     {
@@ -1044,7 +1017,7 @@
       "source_file": "lib/persona.ts",
       "source_location": "L1",
       "id": "lib_persona_ts",
-      "community": 41,
+      "community": 40,
       "norm_label": "persona.ts"
     },
     {
@@ -1053,7 +1026,7 @@
       "source_file": "lib/persona.ts",
       "source_location": "L7",
       "id": "persona_personafromrequest",
-      "community": 41,
+      "community": 40,
       "norm_label": "personafromrequest()"
     },
     {
@@ -1062,7 +1035,7 @@
       "source_file": "lib/types.ts",
       "source_location": "L1",
       "id": "lib_types_ts",
-      "community": 54,
+      "community": 53,
       "norm_label": "types.ts"
     },
     {
@@ -1071,7 +1044,7 @@
       "source_file": "lib/copy.ts",
       "source_location": "L1",
       "id": "lib_copy_ts",
-      "community": 55,
+      "community": 54,
       "norm_label": "copy.ts"
     },
     {
@@ -1080,7 +1053,7 @@
       "source_file": "lib/booking.ts",
       "source_location": "L1",
       "id": "lib_booking_ts",
-      "community": 11,
+      "community": 10,
       "norm_label": "booking.ts"
     },
     {
@@ -1089,7 +1062,7 @@
       "source_file": "lib/booking.ts",
       "source_location": "L32",
       "id": "booking_loaddraft",
-      "community": 11,
+      "community": 10,
       "norm_label": "loaddraft()"
     },
     {
@@ -1098,7 +1071,7 @@
       "source_file": "lib/booking.ts",
       "source_location": "L42",
       "id": "booking_savedraft",
-      "community": 11,
+      "community": 10,
       "norm_label": "savedraft()"
     },
     {
@@ -1107,7 +1080,7 @@
       "source_file": "lib/booking.ts",
       "source_location": "L52",
       "id": "booking_cleardraft",
-      "community": 11,
+      "community": 10,
       "norm_label": "cleardraft()"
     },
     {
@@ -1386,7 +1359,7 @@
       "source_file": "lib/engine/refund.ts",
       "source_location": "L1",
       "id": "lib_engine_refund_ts",
-      "community": 12,
+      "community": 11,
       "norm_label": "refund.ts"
     },
     {
@@ -1395,7 +1368,7 @@
       "source_file": "lib/engine/refund.ts",
       "source_location": "L10",
       "id": "refund_round2",
-      "community": 12,
+      "community": 11,
       "norm_label": "round2()"
     },
     {
@@ -1404,7 +1377,7 @@
       "source_file": "lib/engine/refund.ts",
       "source_location": "L28",
       "id": "refund_fullcancellation",
-      "community": 12,
+      "community": 11,
       "norm_label": "fullcancellation()"
     },
     {
@@ -1413,7 +1386,7 @@
       "source_file": "lib/engine/refund.ts",
       "source_location": "L145",
       "id": "refund_partialrefund",
-      "community": 12,
+      "community": 11,
       "norm_label": "partialrefund()"
     },
     {
@@ -1641,7 +1614,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/(customer)/checkout/page.tsx",
-      "source_location": "L73",
+      "source_location": "L67",
       "weight": 1.0,
       "_src": "app_customer_checkout_page_tsx",
       "_tgt": "page_submitprequal",
@@ -1653,7 +1626,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/(customer)/checkout/offer/page.tsx",
-      "source_location": "L83",
+      "source_location": "L77",
       "weight": 1.0,
       "_src": "app_customer_checkout_offer_page_tsx",
       "_tgt": "page_signandbook",
@@ -1665,7 +1638,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/(customer)/cart/page.tsx",
-      "source_location": "L46",
+      "source_location": "L44",
       "weight": 1.0,
       "_src": "app_customer_cart_page_tsx",
       "_tgt": "page_buildtravellers",
@@ -1677,7 +1650,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/(customer)/cart/page.tsx",
-      "source_location": "L65",
+      "source_location": "L63",
       "weight": 1.0,
       "_src": "app_customer_cart_page_tsx",
       "_tgt": "page_continuetopayment",
@@ -1686,39 +1659,15 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "app/(customer)/cart/page.tsx",
-      "source_location": "L73",
-      "weight": 1.0,
-      "_src": "app_customer_cart_page_tsx",
-      "_tgt": "page_selectplan",
-      "source": "app_customer_cart_page_tsx",
-      "target": "page_selectplan",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "app/(customer)/cart/page.tsx",
-      "source_location": "L66",
+      "source_location": "L64",
       "weight": 1.0,
       "_src": "page_continuetopayment",
       "_tgt": "page_buildtravellers",
       "source": "page_buildtravellers",
       "target": "page_continuetopayment",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "app/(customer)/cart/page.tsx",
-      "source_location": "L74",
-      "weight": 1.0,
-      "_src": "page_selectplan",
-      "_tgt": "page_buildtravellers",
-      "source": "page_buildtravellers",
-      "target": "page_selectplan",
       "confidence_score": 1.0
     },
     {
@@ -2079,18 +2028,6 @@
       "_tgt": "tierprogress_tierprogress",
       "source": "components_tierprogress_tsx",
       "target": "tierprogress_tierprogress",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "components/PlanSheet.tsx",
-      "source_location": "L65",
-      "weight": 1.0,
-      "_src": "components_plansheet_tsx",
-      "_tgt": "plansheet_perplan",
-      "source": "components_plansheet_tsx",
-      "target": "plansheet_perplan",
       "confidence_score": 1.0
     },
     {
