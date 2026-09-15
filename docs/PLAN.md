@@ -116,7 +116,8 @@ Prototype/
 
 - **Earn exists only on APR-bearing (monthly) plans.** A 0% plan writes no ledger entries at all — the subsidised rate is the reward, and there is no margin to fund miles on top of it.
 - Base: 1 mi/$ fare (excl. taxes), posts after travel, reversed only on flight refund. Delinquency never touches it. ClarityPay-funded, purchased from the airline (the customer sees the airline's brand end to end).
-- Bonus: 0.5 mi/$ financed, cap 1000, Economy Plus fares only, term-independent (every APR term earns the same). `pending` → `posted` (when the plan completes) → `held` (30 DPD) → `reversed` (60 DPD or full cancel in hold window). Never reversed after full repayment.
+- Bonus: 0.5 mi/$ financed, cap 1000, Economy Plus fares only, paid in full over a 12-month reference term and tapered in proportion beyond it (24 months earns half). `pending` → `posted` (when the plan completes) → `held` (30 DPD) → `reversed` (60 DPD or full cancel in hold window). Never reversed after full repayment.
+- Pay-in-4 collects the first instalment at checkout (`dueAtSigning`); the monthly plans stay zero-down.
 - Multi-traveller: base per traveller w/ MileagePlus #; bonus payer-only; missing # → retro-credit 30d prompt.
 - Redeemed-then-cancelled: reverse available balance, shortfall → negative "miles owed" netting future earn. No cash clawback.
 

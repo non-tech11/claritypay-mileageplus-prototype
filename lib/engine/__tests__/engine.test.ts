@@ -5,6 +5,7 @@ import {
   financingMiles,
   previewMiles,
   reverseWithNetting,
+  termMonthsFor,
 } from "../loyalty";
 import { buildPlans, buildSchedule, reamortise } from "../loan";
 import { fullCancellation, partialRefund } from "../refund";
@@ -76,43 +77,54 @@ function entry(
 
 describe("earn rules (1 mi/$ fare base + 0.5 mi/$ financed bonus)", () => {
   it("bonus is 0.5 mi per $ financed on Economy Plus with an APR plan", () => {
-    const funded = financingMiles(416.8, "economy-plus", 14.99, DEFAULT_CONFIG);
+    const funded = financingMiles(416.8, "economy-plus", 14.99, DEFAULT_CONFIG, 12);
     expect(funded.bonus).toBe(208); // floor(416.80 x 0.5)
   });
 
   it("bonus is strictly an Economy Plus benefit — other tiers earn none", () => {
-    expect(financingMiles(337.2, "economy", 14.99, DEFAULT_CONFIG).bonus).toBe(0);
-    expect(financingMiles(262.6, "basic", 14.99, DEFAULT_CONFIG).bonus).toBe(0);
+    expect(financingMiles(337.2, "economy", 14.99, DEFAULT_CONFIG, 12).bonus).toBe(0);
+    expect(financingMiles(262.6, "basic", 14.99, DEFAULT_CONFIG, 12).bonus).toBe(0);
   });
 
   it("a 0% plan earns no reward at all — no bonus and no base", () => {
-    expect(financingMiles(416.8, "economy-plus", 0, DEFAULT_CONFIG).bonus).toBe(0);
+    expect(financingMiles(416.8, "economy-plus", 0, DEFAULT_CONFIG, 12).bonus).toBe(0);
     const preview = previewMiles(
-      372, 416.8, [priya], DEFAULT_CONFIG, true, "economy-plus", 0
+      372, 416.8, [priya], DEFAULT_CONFIG, true, "economy-plus", 0, 12
     );
     expect(preview[0].baseMiles).toBe(0);
     expect(preview[0].bonusMiles).toBe(0);
   });
 
-  it("is term-independent: 12mo and 24mo earn the same", () => {
+  it("tapers with term: 24mo earns half what 12mo earns", () => {
     const prime = buildPlans(416.8, "prime");
     const p12 = prime.find((p) => p.id === "12mo")!;
     const p24 = prime.find((p) => p.id === "24mo")!;
-    const f12 = financingMiles(416.8, "economy-plus", p12.apr, DEFAULT_CONFIG);
-    const f24 = financingMiles(416.8, "economy-plus", p24.apr, DEFAULT_CONFIG);
-    expect(f12).toEqual(f24);
+    const f12 = financingMiles(
+      416.8, "economy-plus", p12.apr, DEFAULT_CONFIG, termMonthsFor(p12)
+    );
+    const f24 = financingMiles(
+      416.8, "economy-plus", p24.apr, DEFAULT_CONFIG, termMonthsFor(p24)
+    );
     expect(f12.bonus).toBe(208);
+    expect(f24.bonus).toBe(104);
+  });
+
+  it("never pays more than the reference term's bonus on a shorter plan", () => {
+    // A 6-week term must not earn a multiplied-up bonus; the taper only
+    // ever reduces. (0% gates it to nothing anyway — test the maths.)
+    const short = financingMiles(416.8, "economy-plus", 14.99, DEFAULT_CONFIG, 1.87);
+    expect(short.bonus).toBe(208);
   });
 
   it("caps the bonus per booking", () => {
-    const funded = financingMiles(4150, "economy-plus", 14.99, DEFAULT_CONFIG);
+    const funded = financingMiles(4150, "economy-plus", 14.99, DEFAULT_CONFIG, 12);
     // floor(4150 x 0.5) = 2075 raw → capped at 1000.
     expect(funded.bonus).toBe(1000);
   });
 
   it("routes the bonus to the payer only; base splits across travellers", () => {
     const preview = previewMiles(
-      744, 833.6, [priya, alex], DEFAULT_CONFIG, true, "economy-plus", 14.99
+      744, 833.6, [priya, alex], DEFAULT_CONFIG, true, "economy-plus", 14.99, 12
     );
     const payer = preview.find((p) => p.travellerId === "priya")!;
     const other = preview.find((p) => p.travellerId === "alex")!;
@@ -265,5 +277,38 @@ describe("plan ladder", () => {
     expect(prime.filter((p) => p.recommended)).toHaveLength(1);
     expect(nearPrime.filter((p) => p.recommended)).toHaveLength(1);
     expect(prime.find((p) => p.recommended)!.id).toBe("12mo");
+  });
+
+  it("pay-in-4 collects at signing; the monthly plans stay zero-down", () => {
+    const prime = buildPlans(416.8, "prime");
+    expect(prime.find((p) => p.id === "6wk")!.dueAtSigning).toBe(true);
+    expect(prime.find((p) => p.id === "12mo")!.dueAtSigning).toBeUndefined();
+    expect(prime.find((p) => p.id === "24mo")!.dueAtSigning).toBeUndefined();
+    // Near-prime gets the same treatment on its 0% plan.
+    expect(
+      buildPlans(416.8, "near-prime").find((p) => p.id === "6wk")!.dueAtSigning
+    ).toBe(true);
+  });
+});
+
+describe("instalment dates", () => {
+  const start = new Date("2026-08-01");
+
+  it("dates the pay-in-4 down payment on the booking date itself", () => {
+    const plan = buildPlans(416.8, "prime").find((p) => p.id === "6wk")!;
+    const schedule = buildSchedule(plan, start);
+    expect(schedule.map((s) => s.dueDate)).toEqual([
+      "2026-08-01", // collected at checkout
+      "2026-08-15",
+      "2026-08-29",
+      "2026-09-12",
+    ]);
+  });
+
+  it("still starts a monthly plan one full interval out", () => {
+    const plan = buildPlans(416.8, "prime").find((p) => p.id === "12mo")!;
+    const schedule = buildSchedule(plan, start);
+    expect(schedule[0].dueDate).toBe("2026-08-31");
+    expect(schedule).toHaveLength(12);
   });
 });

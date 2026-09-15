@@ -31,8 +31,13 @@ const FIELDS: {
   {
     key: "bonusMilesPerDollar",
     label: "Bonus miles per $ financed",
-    hint: "Economy Plus fares on monthly plans only; identical on every term",
+    hint: "Economy Plus fares on monthly plans only; paid in full at the reference term below",
     step: 0.1,
+  },
+  {
+    key: "bonusReferenceTermMonths",
+    label: "Full-bonus reference term (months)",
+    hint: "Longer plans earn in proportion — at 12, a 24-month plan earns half. Steers customers toward shorter debt",
   },
   {
     key: "bonusCapPerBooking",

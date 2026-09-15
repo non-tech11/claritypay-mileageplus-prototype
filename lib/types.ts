@@ -43,6 +43,8 @@ export interface Plan {
   totalCost: number;
   /** One plan per ladder is surfaced as the recommended default. */
   recommended?: boolean;
+  /** First instalment is collected at checkout (pay-in-4), not one interval out. */
+  dueAtSigning?: boolean;
 }
 
 export type Decision = "approved" | "declined";
@@ -145,9 +147,16 @@ export interface MerchantConfig {
   /**
    * Bonus miles per $ financed — Economy Plus fares on APR-bearing plans only
    * (see the `financingMiles` guard in lib/engine/loyalty.ts; a 0% plan earns
-   * nothing at all). Credits when the plan completes.
+   * nothing at all). Paid in full at `bonusReferenceTermMonths` and tapered
+   * beyond it. Credits when the plan completes.
    */
   bonusMilesPerDollar: number;
+  /**
+   * Term that earns the full bonus rate. Longer plans earn in proportion
+   * (24 months at a 12-month reference earns half), so the reward steers
+   * toward shorter debt instead of sitting neutral between terms.
+   */
+  bonusReferenceTermMonths: number;
   /** Ceiling on the bonus per booking, whatever the amount. */
   bonusCapPerBooking: number;
   /** Days after the final instalment clears before the bonus credits. */

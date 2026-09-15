@@ -168,6 +168,12 @@ export default function OfferPage() {
                 <p className="text-[11px] text-slate-500">
                   {p.label} · {p.apr}% APR · ${p.totalCost.toFixed(2)} total
                 </p>
+                {p.dueAtSigning && (
+                  <p className="mt-0.5 text-[11px] font-semibold text-slate-700">
+                    ${p.installmentAmount.toFixed(2)} due today, then{" "}
+                    {p.installments - 1} payments
+                  </p>
+                )}
               </div>
               <span className="flex shrink-0 flex-col items-end gap-0.5">
                 {miles && miles.totalMiles > 0 ? (
@@ -307,13 +313,30 @@ export default function OfferPage() {
           <ErrorRetry message={error} onRetry={signAndBook} />
         </div>
       )}
+      {(() => {
+        const chosen = draft.plans.find((p) => p.id === planId);
+        if (!chosen?.dueAtSigning) return null;
+        // Never let the down payment be a surprise at the button.
+        return (
+          <p className="mt-3 rounded-lg bg-slate-100 px-3 py-2 text-[11px] text-slate-600">
+            You&apos;ll be charged{" "}
+            <strong>${chosen.installmentAmount.toFixed(2)}</strong> today, and
+            the remaining {chosen.installments - 1} payments are taken every 2
+            weeks.
+          </p>
+        );
+      })()}
       <button
         className="btn-primary mt-4 flex items-center justify-center gap-2"
         onClick={signAndBook}
         disabled={signing || !planId}
       >
         {signing && <Loader2 size={14} className="animate-spin" aria-hidden />}
-        {signing ? "Booking…" : "Sign and book"}
+        {signing
+          ? "Booking…"
+          : draft.plans.find((p) => p.id === planId)?.dueAtSigning
+            ? "Pay and book"
+            : "Sign and book"}
       </button>
       <PrototypeNotes screen="offer" />
     </div>

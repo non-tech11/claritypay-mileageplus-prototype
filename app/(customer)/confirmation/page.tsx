@@ -82,6 +82,13 @@ function ConfirmationInner() {
         <section className="card mb-3">
           <h2 className="text-sm font-bold">Payment plan</h2>
           <p className="mt-1 text-xs text-slate-600">{loan.plan.label}</p>
+          {loan.plan.dueAtSigning && (
+            <p className="text-xs font-semibold text-emerald-700">
+              ${loan.schedule[0].amount.toFixed(2)} paid today ·{" "}
+              {loan.schedule.filter((s) => s.status !== "paid").length} payments
+              remaining
+            </p>
+          )}
           {nextDue && (
             <p className="text-xs text-slate-600">
               Next payment: <strong>${nextDue.amount.toFixed(2)}</strong> on{" "}

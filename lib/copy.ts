@@ -55,13 +55,13 @@ export const PROTOTYPE_NOTES: Record<string, string> = {
   search:
     "Discovery placement: one light monthly-price line per fare, and a loyalty chip per fare stating the exclusivity up front — miles are earned only on monthly program plans, at 1 mi/$ of fare, and Economy Plus adds 0.5 bonus mi/$ financed. Discovery earns attention, checkout earns conversion.",
   cart:
-    "The monthly figure matches search (consistency builds trust). In the plan sheet, monthly plans earn 1 mi/$ of fare (+0.5 bonus mi/$ financed on Economy Plus) and every APR term earns the same — we never reward longer debt. The 0% plan earns none: the subsidised rate is the reward, and the row says so plainly. The calculator shows cost vs miles value honestly.",
+    "The monthly figure matches search (consistency builds trust). In the plan sheet, monthly plans earn 1 mi/$ of fare (+0.5 bonus mi/$ financed on Economy Plus) and the bonus tapers with term — 24 months earns half what 12 does, so the currency steers toward shorter debt rather than sitting neutral. The 0% plan earns none: the subsidised rate is the reward, and the row says so plainly. The calculator shows cost vs miles value honestly.",
   checkout:
     "The wallet is the selection moment: several providers, one differentiator. Only the pay-over-time option earns program miles, and it says so with the real numbers for this booking; the other methods say 'No miles' plainly. ClarityPay appears only as a micro-tag — the lender shows up where the law requires, nowhere else.",
   prequal:
     "Inline application, no redirect. Phone + last-4 SSN, soft pull only. The lender disclosure is a shared constant, not free-typed. The persona switcher (header) decides the outcome.",
   offer:
-    "One plan is recommended, and every monthly plan earns the same (0% earns none — its rate is the reward). Timing is explicit: trip miles credit after the flight, the bonus credits when the plan completes — completion rewards repayment. The funder is never named to the customer. Autopay defaults on.",
+    "One plan is recommended, and the bonus tapers with term — the shorter plan earns more (0% earns none — its rate is the reward). Timing is explicit: trip miles credit after the flight, the bonus credits when the plan completes — completion rewards repayment. The funder is never named to the customer. Autopay defaults on.",
   declined:
     "Soft decline: no reason codes beyond the legal minimum, adverse-action notice by mail, and a one-tap fallback to card — nothing re-entered. The loyalty line is honest about the trade-off: miles are a payment-plan benefit, so the card fallback earns none.",
   confirmation:

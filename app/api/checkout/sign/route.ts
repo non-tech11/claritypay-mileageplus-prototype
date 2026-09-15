@@ -3,8 +3,14 @@ import {
   computeBaseMilesPerTraveller,
   financingMiles,
   nextEntryId,
+  termMonthsFor,
 } from "@/lib/engine/loyalty";
 import { findLoan, generatePnr, getStore, replaceLoan } from "@/lib/store";
+import type { Instalment } from "@/lib/types";
+
+/** First instalment still owed — index 0 is already settled on pay-in-4. */
+const nextUnpaid = (schedule: Instalment[]) =>
+  schedule.find((s) => s.status === "due" || s.status === "late");
 
 export async function POST(req: NextRequest) {
   const { loanId } = (await req.json().catch(() => ({}))) as { loanId?: string };
@@ -13,14 +19,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "loan not found" }, { status: 404 });
   }
 
-  // Idempotent: re-signing an already-signed loan must not duplicate miles.
+  // Idempotent: re-signing an already-signed loan must not duplicate miles,
+  // nor collect the pay-in-4 down payment a second time.
   if (loan.pnr && loan.ledger.length > 0) {
+    const due = nextUnpaid(loan.schedule);
     return NextResponse.json({
       pnr: loan.pnr,
       confirmation: {
         loanId: loan.id,
-        nextPaymentDate: loan.schedule[0]?.dueDate,
-        nextPaymentAmount: loan.schedule[0]?.amount,
+        nextPaymentDate: due?.dueDate,
+        nextPaymentAmount: due?.amount,
+        collectedToday: loan.plan.dueAtSigning ? loan.schedule[0]?.amount ?? 0 : 0,
       },
     });
   }
@@ -39,7 +48,9 @@ export async function POST(req: NextRequest) {
     loan.trip.fareId ??
     loan.trip.fareLabel.toLowerCase().replace(/\s+/g, "-").replace("basic-economy", "basic");
   const funded = earns
-    ? financingMiles(loan.principal, fareId, loan.plan.apr, config)
+    ? financingMiles(
+        loan.principal, fareId, loan.plan.apr, config, termMonthsFor(loan.plan)
+      )
     : { bonus: 0 };
 
   const ledger = [...loan.ledger];
@@ -75,21 +86,34 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Pay-in-4 takes the first instalment at the till. Signing is the only
+  // correct point to collect it: selecting a plan is not consent, so
+  // charging any earlier would debit a customer who has agreed to nothing.
+  const collectedToday = loan.plan.dueAtSigning ? loan.schedule[0]?.amount ?? 0 : 0;
+  const schedule = loan.plan.dueAtSigning
+    ? loan.schedule.map((s, i) =>
+        i === 0 ? { ...s, status: "paid" as const, paidAt: today } : s
+      )
+    : loan.schedule;
+
   replaceLoan({
     ...loan,
     pnr,
     ledger,
+    schedule,
     documents: loan.documents.map((d) =>
       d.title === "Loan agreement" ? { ...d, note: `Signed ${today}` } : d
     ),
   });
 
+  const due = nextUnpaid(schedule);
   return NextResponse.json({
     pnr,
     confirmation: {
       loanId: loan.id,
-      nextPaymentDate: loan.schedule[0]?.dueDate,
-      nextPaymentAmount: loan.schedule[0]?.amount,
+      nextPaymentDate: due?.dueDate,
+      nextPaymentAmount: due?.amount,
+      collectedToday,
     },
   });
 }

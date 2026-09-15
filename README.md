@@ -58,7 +58,8 @@ loans `/account` shows.
 2. **`/cart`** — toggle *Add 2nd traveller* (Alex, no MileagePlus #) to arm the
    multi-traveller case. Tap the `or from $XX/mo` line: the plan sheet shows
    the plans with per-plan earn: monthly plans earn 1 mi/$ of fare (Economy
-   Plus adds 0.5 bonus mi/$ financed); the 0% plan earns none — its rate is
+   Plus adds 0.5 bonus mi/$ financed, tapering with term so 24 months earns
+   half of 12); the 0% plan earns none — its rate is
    the reward. One plan
    is **Recommended**, and picking one carries it through checkout. The
    calculator at the bottom shows financing cost vs miles value honestly.
@@ -107,13 +108,13 @@ POST /api/reset
 ```
 
 Handlers are thin; the rules live in `lib/engine/` (`loyalty.ts`, `loan.ts`,
-`refund.ts`) as pure functions with 15 vitest tests: earn on APR plans
+`refund.ts`) as pure functions with 19 vitest tests: earn on APR plans
 only (1 mi/\$ fare; +0.5 bonus mi/\$ financed on Economy Plus, capped; 0%
-earns nothing),
+earns nothing), the term taper (24 months earns half of 12),
 payer-only financing miles, decline → base-only, 30/60 DPD freeze/reverse
 of both financing types, no-clawback-after-repayment, redeemed-then-cancelled
 netting, full/partial cancellation math, re-amortisation, plan-ladder shape
-with one recommended plan.
+with one recommended plan, and pay-in-4 instalment dating.
 
 ## Assumptions (stated, per the brief)
 
@@ -129,7 +130,12 @@ with one recommended plan.
 - **Earn model**: rewards exist only on monthly (APR) plans — a 0% plan
   earns nothing, its subsidised rate is the reward. On APR plans: 1 mi/$ of
   fare (excl. taxes) credited after the flight, plus 0.5 bonus mi/$ financed
-  (Economy Plus only, capped) credited at plan completion.
+  (Economy Plus only, capped) credited at plan completion. The bonus is paid
+  in full over a 12-month reference term and tapers beyond it, so a 24-month
+  plan earns half — the currency steers toward shorter debt.
+- **Down payment**: the 0% pay-in-4 plan collects its first instalment at
+  checkout, as Klarna and Afterpay do; the monthly plans stay zero-down so
+  financing the whole purchase remains the value proposition.
 - **Credit**: three illustrative profiles (prime / near-prime / thin) stand
   in for underwriting; APRs 0–24.99% are illustrative, not priced.
 - **Repeat behaviour**: members who redeem earned miles rebook at ~1.4× the

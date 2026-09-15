@@ -13,7 +13,8 @@ type NumericKey =
   | "dpdFreezeThreshold"
   | "dpdReverseThreshold"
   | "baseMilesPerDollar"
-  | "retroCreditWindowDays";
+  | "retroCreditWindowDays"
+  | "bonusReferenceTermMonths";
 
 const NUMERIC_KEYS: NumericKey[] = [
   "bonusMilesPerDollar",
@@ -23,6 +24,7 @@ const NUMERIC_KEYS: NumericKey[] = [
   "dpdReverseThreshold",
   "baseMilesPerDollar",
   "retroCreditWindowDays",
+  "bonusReferenceTermMonths",
 ];
 
 export async function PUT(req: NextRequest) {
@@ -38,6 +40,13 @@ export async function PUT(req: NextRequest) {
   if (updated.dpdReverseThreshold < updated.dpdFreezeThreshold) {
     return NextResponse.json(
       { error: "reverse threshold must be ≥ freeze threshold" },
+      { status: 400 }
+    );
+  }
+  // A zero reference term would divide the taper by nothing.
+  if (updated.bonusReferenceTermMonths <= 0) {
+    return NextResponse.json(
+      { error: "reference term must be greater than zero" },
       { status: 400 }
     );
   }

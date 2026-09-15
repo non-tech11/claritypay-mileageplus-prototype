@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-09-15)
 
 ## Corpus Check
-- 75 files · ~73,222 words
+- 75 files · ~74,809 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 166 nodes · 136 edges · 56 communities detected
+- 168 nodes · 139 edges · 56 communities detected
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
@@ -69,7 +69,7 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `GET()` - 11 edges
-2. `POST()` - 10 edges
+2. `POST()` - 11 edges
 3. `buildSeedState()` - 5 edges
 4. `getStore()` - 5 edges
 5. `buildTravellers()` - 3 edges
@@ -80,7 +80,8 @@
 10. `applyDelinquency()` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
-- None detected - all connections are within the same source files.
+- `POST()` --calls--> `nextUnpaid()`  [EXTRACTED]
+  app/api/merchant/exceptions/[id]/retry/route.ts → app/api/checkout/sign/route.ts
 
 ## Communities
 
@@ -90,14 +91,14 @@ Nodes (1): GET()
 
 ### Community 1 - "Community 1"
 Cohesion: 0.18
-Nodes (1): POST()
+Nodes (2): nextUnpaid(), POST()
 
 ### Community 2 - "Community 2"
 Cohesion: 0.36
 Nodes (6): findLoan(), freshStore(), getStore(), nextLoanId(), replaceLoan(), resetStore()
 
 ### Community 3 - "Community 3"
-Cohesion: 0.43
+Cohesion: 0.36
 Nodes (7): applyDelinquency(), computeBaseMilesPerTraveller(), financingMiles(), nextEntryId(), previewMiles(), reversalTypeFor(), reverseWithNetting()
 
 ### Community 4 - "Community 4"

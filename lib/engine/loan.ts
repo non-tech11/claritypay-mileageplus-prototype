@@ -27,6 +27,13 @@ export interface PlanTemplate {
   intervalDays: number;
   apr: number;
   recommended?: boolean;
+  /**
+   * Pay-in-4 collects the first instalment at the till, as Klarna and
+   * Afterpay do — on a small ticket the down payment is the underwriting.
+   * The monthly plans stay zero-down: asking for cash there defeats the
+   * reason the customer chose to finance.
+   */
+  dueAtSigning?: boolean;
 }
 
 /** Illustrative plan ladder by credit profile. 12mo is the recommended
@@ -35,12 +42,12 @@ export function planTemplates(profile: CreditProfile): PlanTemplate[] {
   if (profile === "near-prime") {
     // Shorter terms only, higher APR, shown clearly.
     return [
-      { id: "6wk", label: "4 payments / 6 weeks", installments: 4, intervalDays: 14, apr: 0 },
+      { id: "6wk", label: "4 payments / 6 weeks", installments: 4, intervalDays: 14, apr: 0, dueAtSigning: true },
       { id: "12mo", label: "12 monthly payments", installments: 12, intervalDays: 30, apr: 24.99, recommended: true },
     ];
   }
   return [
-    { id: "6wk", label: "4 payments / 6 weeks", installments: 4, intervalDays: 14, apr: 0 },
+    { id: "6wk", label: "4 payments / 6 weeks", installments: 4, intervalDays: 14, apr: 0, dueAtSigning: true },
     { id: "12mo", label: "12 monthly payments", installments: 12, intervalDays: 30, apr: 14.99, recommended: true },
     { id: "24mo", label: "24 monthly payments", installments: 24, intervalDays: 30, apr: 17.99 },
   ];
@@ -64,11 +71,17 @@ export function estimateMonthly(amount: number): number {
   return Math.min(...monthly.map((p) => p.installmentAmount));
 }
 
+/**
+ * Instalment dates from the booking date. A `dueAtSigning` plan puts the
+ * first instalment on the booking date itself (collected at checkout) and
+ * spaces the rest from there; every other plan starts one interval out.
+ */
 export function buildSchedule(plan: Plan, startDate: Date): Instalment[] {
   const schedule: Instalment[] = [];
+  const offset = plan.dueAtSigning ? 0 : 1;
   for (let i = 0; i < plan.installments; i++) {
     const due = new Date(startDate);
-    due.setDate(due.getDate() + plan.intervalDays * (i + 1));
+    due.setDate(due.getDate() + plan.intervalDays * (i + offset));
     schedule.push({
       idx: i,
       dueDate: due.toISOString().slice(0, 10),

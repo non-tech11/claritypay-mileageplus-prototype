@@ -177,7 +177,7 @@ export default function CheckoutPage() {
                   {preview.data
                     ? `Earn ${preview.data.totalBase.toLocaleString()} ${theme.programName} ${theme.unit}${
                         preview.data.maxFinancingMiles > 0
-                          ? ` + ${preview.data.maxFinancingMiles.toLocaleString()} bonus`
+                          ? ` + up to ${preview.data.maxFinancingMiles.toLocaleString()} bonus`
                           : ""
                       } on monthly plans`
                     : `Earn ${theme.programName} ${theme.unit}`}

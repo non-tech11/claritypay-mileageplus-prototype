@@ -18,6 +18,7 @@ export const DEFAULT_CONFIG: MerchantConfig = {
   dpdReverseThreshold: 60,
   baseMilesPerDollar: 1,
   retroCreditWindowDays: 30,
+  bonusReferenceTermMonths: 12,
 };
 
 /** Fare tier that qualifies for the pay-over-time bonus. */
@@ -38,20 +39,39 @@ export function reversalTypeFor(
  * Pay-over-time bonus: 0.5 mi/$ financed (config), capped. Strictly an
  * Economy Plus benefit, and strictly on APR-bearing (monthly) plans — a
  * 0% plan earns no reward at all: the subsidised rate leaves no margin
- * to fund one. Every APR term earns the same (longer debt earns no more).
+ * to fund one.
+ *
+ * The bonus is paid in full on a reference term (config, 12 months) and
+ * decays in proportion beyond it, so a 24-month plan earns half what a
+ * 12-month plan earns on the same booking. Longer debt is more exposure
+ * for the same reward cost and gives the customer longer to default on a
+ * trip already taken; the currency should steer toward the shorter term,
+ * not sit neutral between them.
  */
 export function financingMiles(
   amountFinanced: number,
   fareId: string,
   apr: number,
-  config: MerchantConfig
+  config: MerchantConfig,
+  termMonths: number
 ): { bonus: number } {
   if (apr <= 0 || fareId !== BONUS_FARE_TIER) return { bonus: 0 };
+  const multiplier = termMonths > 0
+    ? Math.min(1, config.bonusReferenceTermMonths / termMonths)
+    : 1;
   const bonus = Math.min(
-    Math.floor(amountFinanced * config.bonusMilesPerDollar),
+    Math.floor(amountFinanced * config.bonusMilesPerDollar * multiplier),
     config.bonusCapPerBooking
   );
   return { bonus };
+}
+
+/** Plan term in months, used for the bonus taper. */
+export function termMonthsFor(plan: {
+  installments: number;
+  intervalDays: number;
+}): number {
+  return (plan.installments * plan.intervalDays) / 30;
 }
 
 /**
@@ -88,14 +108,15 @@ export function previewMiles(
   config: MerchantConfig,
   financed: boolean,
   fareId: string = BONUS_FARE_TIER,
-  apr: number = 0
+  apr: number = 0,
+  termMonths: number = 0
 ): MilesPreviewLine[] {
   const earns = financed && apr > 0;
   const basePer = earns
     ? computeBaseMilesPerTraveller(fareExclTaxes, travellers.length, config)
     : 0;
   const funded = earns
-    ? financingMiles(amountFinanced, fareId, apr, config)
+    ? financingMiles(amountFinanced, fareId, apr, config, termMonths)
     : { bonus: 0 };
   return travellers.map((t) => ({
     travellerId: t.id,

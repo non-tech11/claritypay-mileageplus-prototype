@@ -69,7 +69,7 @@ function FareCard({
               variant="chip"
               tierName=""
               balance={0}
-              chipText={`${theme.programName} exclusive: earn ${preview.data.totalBase.toLocaleString()} ${theme.unit} · +${preview.data.maxFinancingMiles.toLocaleString()} bonus with a monthly plan`}
+              chipText={`${theme.programName} exclusive: earn ${preview.data.totalBase.toLocaleString()} ${theme.unit} · up to +${preview.data.maxFinancingMiles.toLocaleString()} bonus with a monthly plan`}
             />
           </div>
         ) : (
@@ -90,7 +90,7 @@ function FareCard({
               Earn {preview.data.totalBase.toLocaleString()} {theme.unit} with
               a {theme.programName} monthly plan
               {preview.data.maxFinancingMiles > 0 &&
-                ` · +${preview.data.maxFinancingMiles.toLocaleString()} bonus`}
+                ` · up to +${preview.data.maxFinancingMiles.toLocaleString()} bonus`}
             </span>
           </p>
         ))}
