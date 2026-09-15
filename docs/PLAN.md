@@ -101,7 +101,7 @@ Prototype/
 
 0. **Save this plan** as `Prototype/docs/PLAN.md` (user requested copy in Prototype folder).
 1. **Scaffold**: `git init`, package.json (next@15, react@19, typescript, tailwindcss@3, lucide-react, vitest), configs, `.nvmrc`, globals.css with United CSS vars.
-2. **Engine + types + seed + store**: pure functions in `lib/engine/`, shared types, seed data (Priya/Marcus/Dana/Alex personas; 3 loans; merchant config defaults: 500 bonus per booking, cap 1000, base 5 mi/$ fare excl. taxes, 30/60 DPD freeze/reverse).
+2. **Engine + types + seed + store**: pure functions in `lib/engine/`, shared types, seed data (Priya/Marcus/Dana/Alex personas; 3 loans; merchant config defaults: base 1 mi/$ fare excl. taxes, bonus 0.5 mi/$ financed, cap 1000, 30/60 DPD freeze/reverse — bonus on Economy Plus only, and all earn on APR-bearing plans only).
 3. **Tests**: ~10 vitest cases — bonus term-independence, partial refund pro-ration, redeemed-then-cancelled netting (miles-owed, never cash), 30 DPD hold / 60 DPD reverse, decline → base-only, cap enforcement, multi-traveller base split / bonus-to-payer, retro-credit window. Run `npm test`, green before UI.
 4. **API routes**: thin handlers over store + engine; `/api` GET index.
 5. **Shared components**: theme provider, LoyaltyCard (3 sizes), PersonaSwitcher, PrototypeNotes, Toast, skeletons.
@@ -114,8 +114,9 @@ Prototype/
 
 ## Loyalty mechanics encoded (from brief, in lib/engine/loyalty.ts + config)
 
-- Base: 5 mi/$ fare (excl. taxes), posts after travel, reversed only on flight refund. United-owned.
-- Bonus: 500/booking financed, cap 1000, term-independent. `pending` → `posted` (first on-time instalment +1d) → `held` (30 DPD) → `reversed` (60 DPD or full cancel in hold window). Never reversed after full repayment.
+- **Earn exists only on APR-bearing (monthly) plans.** A 0% plan writes no ledger entries at all — the subsidised rate is the reward, and there is no margin to fund miles on top of it.
+- Base: 1 mi/$ fare (excl. taxes), posts after travel, reversed only on flight refund. Delinquency never touches it. ClarityPay-funded, purchased from the airline (the customer sees the airline's brand end to end).
+- Bonus: 0.5 mi/$ financed, cap 1000, Economy Plus fares only, term-independent (every APR term earns the same). `pending` → `posted` (when the plan completes) → `held` (30 DPD) → `reversed` (60 DPD or full cancel in hold window). Never reversed after full repayment.
 - Multi-traveller: base per traveller w/ MileagePlus #; bonus payer-only; missing # → retro-credit 30d prompt.
 - Redeemed-then-cancelled: reverse available balance, shortfall → negative "miles owed" netting future earn. No cash clawback.
 

@@ -42,7 +42,12 @@ const FIELDS: {
   {
     key: "bonusPostDelayDays",
     label: "Posting delay (days after final payment)",
-    hint: "The bonus credits this many days after the plan completes",
+    hint: "The bonus credits this many days after the plan completes (stated policy; the prototype posts on completion)",
+  },
+  {
+    key: "retroCreditWindowDays",
+    label: "Retro-credit window (days)",
+    hint: "A traveller without a program number has this long to add one and still receive their trip miles",
   },
   {
     key: "dpdFreezeThreshold",

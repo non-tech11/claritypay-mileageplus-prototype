@@ -143,8 +143,9 @@ export interface Loan {
 
 export interface MerchantConfig {
   /**
-   * Bonus miles per $ financed — every plan (0% included), every fare.
-   * Credits when the plan completes.
+   * Bonus miles per $ financed — Economy Plus fares on APR-bearing plans only
+   * (see the `financingMiles` guard in lib/engine/loyalty.ts; a 0% plan earns
+   * nothing at all). Credits when the plan completes.
    */
   bonusMilesPerDollar: number;
   /** Ceiling on the bonus per booking, whatever the amount. */

@@ -13,7 +13,7 @@ export interface LoyaltyCardProps {
   balance: number;
   /** Qualifying progress toward the next tier (for the bar + nudge). */
   progress?: number;
-  /** e.g. "1,860 miles pending — post after travel on Oct 12". */
+  /** e.g. "372 miles pending — post after travel on Oct 12". */
   pendingLine?: string | null;
   /** Nudge under the top row; falls back to a keep-tier line. */
   nudge?: string | null;
